@@ -803,16 +803,23 @@
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
-                    <StackPanel Grid.Column="1" Margin="2,0,14,0">
-                        <TextBlock Style="{StaticResource Label}" Margin="0,0,0,4" Text="{x:Static res:Strings.ReputationLabel}" />
-                        <ItemsControl ItemsSource="{Binding ReputationLines}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock FontSize="12" Margin="0,1" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{Binding}" />
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
+                    <!-- The reputation apart, in a card of its own: a standing, not a rank. -->
+                    <Border Grid.Column="1" Margin="2,0,0,14" Padding="12,8,12,10" VerticalAlignment="Top"
+                            Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                            BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                            BorderThickness="1"
+                            CornerRadius="2">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource Label}" Margin="0,0,0,4" Text="{x:Static res:Strings.ReputationLabel}" />
+                            <ItemsControl ItemsSource="{Binding ReputationLines}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontSize="12" Margin="0,1" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{Binding}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
                 </Grid>
             </StackPanel>
         </Grid>
