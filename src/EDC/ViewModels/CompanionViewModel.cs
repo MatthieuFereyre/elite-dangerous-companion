@@ -103,6 +103,10 @@ public sealed partial class CompanionViewModel : ObservableObject
     public ObservableCollection<ChipRow> ExplorationSales { get; } = [];
     public ObservableCollection<RouteRow> RouteRows { get; } = [];
     public ObservableCollection<PanelRow> PanelRows { get; } = [];
+    public ObservableCollection<CommanderRank> PilotRanks { get; } = [];
+    public ObservableCollection<CommanderRank> NavyRanks { get; } = [];
+    public ObservableCollection<string> ReputationLines { get; } = [];
+    [ObservableProperty] private bool _hasRanks;
 
     partial void OnBannerEnabledChanged(bool value)
     {
@@ -369,6 +373,29 @@ public sealed partial class CompanionViewModel : ObservableObject
         SetRoute(state);
         SetPanel(PanelRow.From(Briefing.Panel(state, status, now)));
         Neutron.Refresh(state);
+        SetRanks(state);
+    }
+
+    private void SetRanks(GameState state)
+    {
+        var ranks = Commander.Ranks(state);
+        var reputation = Commander.Reputation(state);
+        var key = string.Join("|", ranks.Select(r => $"{r.Title}{r.Name}{r.Next}")) + string.Join("|", reputation);
+        if (_keys.GetValueOrDefault("ranks") == key)
+            return;
+
+        _keys["ranks"] = key;
+        HasRanks = ranks.Count > 0;
+        Fill(PilotRanks, ranks.Where(r => r.Kind is not (RankKind.Federation or RankKind.Empire)));
+        Fill(NavyRanks, ranks.Where(r => r.Kind is RankKind.Federation or RankKind.Empire));
+        Fill(ReputationLines, reputation);
+    }
+
+    private static void Fill<T>(ObservableCollection<T> rows, IEnumerable<T> items)
+    {
+        rows.Clear();
+        foreach (var item in items)
+            rows.Add(item);
     }
 
     /// <summary>"Depuis 06:13 (1 h 05) · 4 abattus": under the rate of the combat and exploration tabs.</summary>

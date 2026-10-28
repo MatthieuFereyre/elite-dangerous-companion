@@ -351,6 +351,19 @@ public sealed class GameState
 
     public RouteHop? Destination => JumpsLeft > 0 && Route.Count > 0 ? Route[^1] : null;
 
+    private readonly Dictionary<RankKind, int> _ranks = [];
+    private readonly Dictionary<RankKind, int> _rankProgress = [];
+    private readonly Dictionary<string, double> _reputation = [];
+
+    /// <summary>Each rank as the game gives it at its start, then by its promotions.</summary>
+    public IReadOnlyDictionary<RankKind, int> Ranks => _ranks;
+
+    /// <summary>The percent to the next rank.</summary>
+    public IReadOnlyDictionary<RankKind, int> RankProgress => _rankProgress;
+
+    /// <summary>The standing with each superpower, -100 to 100, by its journal name.</summary>
+    public IReadOnlyDictionary<string, double> Reputation => _reputation;
+
     /// <summary>The system the galaxy map points at: the end of the route, or the system targeted without one.</summary>
     public RouteHop? TargetSystem => Destination ?? (FsdTarget is { } target && target.Address != SystemAddress ? target : null);
 
@@ -511,6 +524,29 @@ public sealed class GameState
                 Route = [];
                 FsdTarget = null;
                 FsdTargetRemaining = null;
+                break;
+
+            case "Rank":
+            case "Progress":
+            case "Promotion":
+                foreach (var kind in Enum.GetValues<RankKind>())
+                {
+                    if (Long(e, kind == RankKind.Cqc ? "CQC" : kind.ToString()) is not { } level)
+                        continue;
+                    if (name == "Progress")
+                        _rankProgress[kind] = (int)level;
+                    else
+                        _ranks[kind] = (int)level;
+                    // A promotion starts the next rank from nothing.
+                    if (name == "Promotion")
+                        _rankProgress[kind] = 0;
+                }
+                break;
+
+            case "Reputation":
+                foreach (var power in new[] { "Federation", "Empire", "Alliance", "Independent" })
+                    if (Dbl(e, power) is { } reputation)
+                        _reputation[power] = reputation;
                 break;
 
             case "FSDTarget":

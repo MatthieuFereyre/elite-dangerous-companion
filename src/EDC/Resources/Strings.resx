@@ -762,6 +762,9 @@
   <data name="ModeLabel" xml:space="preserve">
     <value>MODE</value>
   </data>
+  <data name="NavyRanksLabel" xml:space="preserve">
+    <value>Navies</value>
+  </data>
   <data name="Nearest" xml:space="preserve">
     <value>NEAREST</value>
   </data>
@@ -828,6 +831,9 @@
   <data name="NoNewTrack" xml:space="preserve">
     <value>{0}: no new track</value>
   </data>
+  <data name="NoRanksYet" xml:space="preserve">
+    <value>The ranks come when the game starts</value>
+  </data>
   <data name="NoRoute" xml:space="preserve">
     <value>No route plotted</value>
   </data>
@@ -884,6 +890,9 @@
   </data>
   <data name="PerHour" xml:space="preserve">
     <value>{0} / h</value>
+  </data>
+  <data name="PilotRanksLabel" xml:space="preserve">
+    <value>Pilots Federation</value>
   </data>
   <data name="PlanetAmmonia" xml:space="preserve">
     <value>Ammonia world</value>
@@ -978,8 +987,20 @@
   <data name="RangeTip" xml:space="preserve">
     <value>The ship's, with an empty hold; lower it if the real jump is shorter</value>
   </data>
+  <data name="RankCombat" xml:space="preserve">
+    <value>Combat</value>
+  </data>
+  <data name="RankCombatHow" xml:space="preserve">
+    <value>Destroying ships and skimmers; a target of a higher rank counts more</value>
+  </data>
   <data name="RankCompetent" xml:space="preserve">
     <value>competent</value>
+  </data>
+  <data name="RankCqc" xml:space="preserve">
+    <value>CQC</value>
+  </data>
+  <data name="RankCqcHow" xml:space="preserve">
+    <value>CQC matches</value>
   </data>
   <data name="RankDangerous" xml:space="preserve">
     <value>dangerous</value>
@@ -990,11 +1011,32 @@
   <data name="RankElite" xml:space="preserve">
     <value>elite</value>
   </data>
+  <data name="RankEmpire" xml:space="preserve">
+    <value>Imperial Navy</value>
+  </data>
+  <data name="RankExobiologist" xml:space="preserve">
+    <value>Exobiology</value>
+  </data>
+  <data name="RankExobiologistHow" xml:space="preserve">
+    <value>Organic samples sold to Vista Genomics</value>
+  </data>
   <data name="RankExpert" xml:space="preserve">
     <value>expert</value>
   </data>
+  <data name="RankExplore" xml:space="preserve">
+    <value>Exploration</value>
+  </data>
+  <data name="RankExploreHow" xml:space="preserve">
+    <value>Exploration data sold to Universal Cartographics, VIP passengers to far destinations</value>
+  </data>
+  <data name="RankFederation" xml:space="preserve">
+    <value>Federal Navy</value>
+  </data>
   <data name="RankHarmless" xml:space="preserve">
     <value>harmless</value>
+  </data>
+  <data name="RankInvitation" xml:space="preserve">
+    <value>{0}'s invitation</value>
   </data>
   <data name="RankMaster" xml:space="preserve">
     <value>master</value>
@@ -1002,11 +1044,41 @@
   <data name="RankMostlyHarmless" xml:space="preserve">
     <value>mostly harmless</value>
   </data>
+  <data name="RankNavyHow" xml:space="preserve">
+    <value>Missions for the factions aligned with this superpower; at 100 %, a promotion mission from a faction cordial or better</value>
+  </data>
   <data name="RankNovice" xml:space="preserve">
     <value>novice</value>
   </data>
+  <data name="RankPermit" xml:space="preserve">
+    <value>{0} permit</value>
+  </data>
+  <data name="RankProgressTo" xml:space="preserve">
+    <value>{0} % to {1}</value>
+  </data>
+  <data name="RankPromotion" xml:space="preserve">
+    <value>100 %: a promotion mission to become {0}</value>
+  </data>
+  <data name="RankSoldier" xml:space="preserve">
+    <value>Mercenary</value>
+  </data>
+  <data name="RankSoldierHow" xml:space="preserve">
+    <value>On-foot combat: missions, settlement personnel, conflict zones</value>
+  </data>
+  <data name="RankTop" xml:space="preserve">
+    <value>Highest rank</value>
+  </data>
+  <data name="RankTrade" xml:space="preserve">
+    <value>Trade</value>
+  </data>
+  <data name="RankTradeHow" xml:space="preserve">
+    <value>Trade profits, passengers in bulk, sales of what was mined</value>
+  </data>
   <data name="RankUnknown" xml:space="preserve">
     <value>unknown rank</value>
+  </data>
+  <data name="RankUnlocks" xml:space="preserve">
+    <value>{0} unlocks: {1}</value>
   </data>
   <data name="RateWaiting" xml:space="preserve">
     <value>— / h (10 min minimum)</value>
@@ -1019,6 +1091,30 @@
   </data>
   <data name="RemoveFolderTitle" xml:space="preserve">
     <value>Remove a folder</value>
+  </data>
+  <data name="RepAlliance" xml:space="preserve">
+    <value>Alliance</value>
+  </data>
+  <data name="RepAllied" xml:space="preserve">
+    <value>allied</value>
+  </data>
+  <data name="RepCordial" xml:space="preserve">
+    <value>cordial</value>
+  </data>
+  <data name="RepEmpire" xml:space="preserve">
+    <value>Empire</value>
+  </data>
+  <data name="RepFederation" xml:space="preserve">
+    <value>Federation</value>
+  </data>
+  <data name="RepFriendly" xml:space="preserve">
+    <value>friendly</value>
+  </data>
+  <data name="RepHostile" xml:space="preserve">
+    <value>hostile</value>
+  </data>
+  <data name="RepIndependent" xml:space="preserve">
+    <value>Independents</value>
   </data>
   <data name="ReplayCaption" xml:space="preserve">
     <value>{0} — back to calm {1:0} s after the last signal</value>
@@ -1037,6 +1133,15 @@
   </data>
   <data name="ReplayTitle" xml:space="preserve">
     <value>Journal replay</value>
+  </data>
+  <data name="RepNeutral" xml:space="preserve">
+    <value>neutral</value>
+  </data>
+  <data name="RepUnfriendly" xml:space="preserve">
+    <value>unfriendly</value>
+  </data>
+  <data name="ReputationLabel" xml:space="preserve">
+    <value>Reputation</value>
   </data>
   <data name="RightNow" xml:space="preserve">
     <value>RIGHT NOW</value>
@@ -1175,6 +1280,9 @@
   </data>
   <data name="TabCombat" xml:space="preserve">
     <value>COMBAT</value>
+  </data>
+  <data name="TabCommander" xml:space="preserve">
+    <value>Commander</value>
   </data>
   <data name="TabExploration" xml:space="preserve">
     <value>EXPLORATION</value>

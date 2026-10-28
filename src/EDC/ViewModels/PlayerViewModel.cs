@@ -84,7 +84,7 @@ public sealed partial class PlayerViewModel : ObservableObject
     [ObservableProperty] private string _playlistText = "";
     [ObservableProperty] private PadBattery _pad = PadBattery.None;
 
-    public enum Tab { Music, Combat, Exploration, Neutron, Settings }
+    public enum Tab { Music, Combat, Exploration, Neutron, Commander, Settings }
 
     /// <summary>The tab shown.</summary>
     [ObservableProperty]
@@ -92,6 +92,7 @@ public sealed partial class PlayerViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(ShowCombat))]
     [NotifyPropertyChangedFor(nameof(ShowExploration))]
     [NotifyPropertyChangedFor(nameof(ShowNeutron))]
+    [NotifyPropertyChangedFor(nameof(ShowCommander))]
     [NotifyPropertyChangedFor(nameof(ShowSettings))]
     private Tab _shown;
 
@@ -136,6 +137,12 @@ public sealed partial class PlayerViewModel : ObservableObject
     {
         get => Shown == Tab.Neutron;
         set { if (value) Shown = Tab.Neutron; }
+    }
+
+    public bool ShowCommander
+    {
+        get => Shown == Tab.Commander;
+        set { if (value) Shown = Tab.Commander; }
     }
 
     public bool ShowSettings

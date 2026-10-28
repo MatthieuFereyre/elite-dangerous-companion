@@ -4,6 +4,7 @@
                  xmlns:res="clr-namespace:EDC.Resources"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
                  xmlns:vm="clr-namespace:EDC.ViewModels"
+                 xmlns:companion="clr-namespace:EDC.Companion"
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  mc:Ignorable="d"
@@ -91,12 +92,14 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <RadioButton Grid.Column="0" Style="{StaticResource Segment}" GroupName="Tab" Content="{x:Static res:Strings.TabMusic}" IsChecked="{Binding ShowMusic}" />
             <RadioButton Grid.Column="1" Style="{StaticResource Segment}" GroupName="Tab" Content="{x:Static res:Strings.TabCombat}" IsChecked="{Binding ShowCombat}" />
             <RadioButton Grid.Column="2" Style="{StaticResource Segment}" GroupName="Tab" Content="{x:Static res:Strings.TabExploration}" IsChecked="{Binding ShowExploration}" />
             <RadioButton Grid.Column="3" Style="{StaticResource Segment}" GroupName="Tab" Content="{x:Static res:Strings.TabNeutron}" IsChecked="{Binding ShowNeutron}" />
-            <RadioButton Grid.Column="4" Style="{StaticResource Segment}" GroupName="Tab" Content="{x:Static res:Strings.TabSettings}" IsChecked="{Binding ShowSettings}" />
+            <RadioButton Grid.Column="4" Style="{StaticResource Segment}" GroupName="Tab" Content="{x:Static res:Strings.TabCommander}" IsChecked="{Binding ShowCommander}" />
+            <RadioButton Grid.Column="5" Style="{StaticResource Segment}" GroupName="Tab" Content="{x:Static res:Strings.TabSettings}" IsChecked="{Binding ShowSettings}" />
         </Grid>
 
         <!-- The tabs in one cell, the hidden ones keeping their place: the window keeps its height. -->
@@ -754,6 +757,61 @@
             </DockPanel>
         </Grid>
         </Border>
+
+        <!-- The commander: the Pilots Federation's ranks on the left, the navies and the reputation on the right. -->
+        <Grid DataContext="{Binding Companion}" Visibility="{Binding DataContext.ShowCommander, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToHidden}}">
+            <Grid.Resources>
+                <!-- A rank, its progress to the next, and what the next asks and gives. -->
+                <DataTemplate x:Key="RankTemplate" DataType="{x:Type companion:CommanderRank}">
+                    <StackPanel Margin="2,0,16,16">
+                        <TextBlock Style="{StaticResource Label}" Margin="0,0,0,2" Text="{Binding Title}" />
+                        <TextBlock FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{Binding Name}" />
+                        <ProgressBar Margin="0,6,0,4" Height="4" Minimum="0" Maximum="100" Value="{Binding Progress, Mode=OneWay}" />
+                        <TextBlock FontSize="12" Foreground="{DynamicResource EliteOrangeBrush}" TextWrapping="Wrap" Text="{Binding Next}" />
+                        <TextBlock FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{Binding Unlocks}"
+                                   Visibility="{Binding Unlocks, Converter={StaticResource NullToCollapsed}}" />
+                        <TextBlock FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding How}" />
+                    </StackPanel>
+                </DataTemplate>
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.ColumnSpan="2" Margin="22,4,20,0" FontSize="13" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                       Text="{x:Static res:Strings.NoRanksYet}" Visibility="{Binding HasRanks, Converter={StaticResource InvBoolToVis}}" />
+
+            <DockPanel Grid.Column="0" Margin="20,4,8,18" Height="{Binding ActualHeight, ElementName=Body}" Visibility="{Binding HasRanks, Converter={StaticResource BoolToVis}}">
+                <TextBlock DockPanel.Dock="Top" Style="{StaticResource Label}" Margin="2,0,0,8" Text="{x:Static res:Strings.PilotRanksLabel}" />
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding PilotRanks}" ItemTemplate="{StaticResource RankTemplate}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="2" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+            </DockPanel>
+
+            <DockPanel Grid.Column="1" Margin="0,4,20,18" Height="{Binding ActualHeight, ElementName=Body}" Visibility="{Binding HasRanks, Converter={StaticResource BoolToVis}}">
+                <TextBlock DockPanel.Dock="Top" Style="{StaticResource Label}" Margin="2,0,0,8" Text="{x:Static res:Strings.NavyRanksLabel}" />
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <ItemsControl ItemsSource="{Binding NavyRanks}" ItemTemplate="{StaticResource RankTemplate}" />
+                        <TextBlock Style="{StaticResource Label}" Margin="2,4,0,6" Text="{x:Static res:Strings.ReputationLabel}" />
+                        <ItemsControl Margin="2,0,0,0" ItemsSource="{Binding ReputationLines}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="13" Margin="0,1" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{Binding}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </ScrollViewer>
+            </DockPanel>
+        </Grid>
 
         <!-- Settings: the game on the left, the application on the right. -->
         <Grid DataContext="{Binding Companion}" Visibility="{Binding DataContext.ShowSettings, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToHidden}}">
