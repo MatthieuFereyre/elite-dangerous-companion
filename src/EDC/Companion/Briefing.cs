@@ -510,17 +510,21 @@ public static class Briefing
 
         // Here, the planets worth the trip, as the system map lists them; the others are not told, bonus or
         // not. A body with a bonus to take stands out: filled, like the band's loud chips.
-        var here = state.NotableBodies
-            .Select(b => (b.Name, b.Label, b.Distance, Bonus: Bonus(b.FirstDiscovery, state.ScannedHere(b.Name) is { FirstMapping: true })))
-            .OrderBy(b => b.Name, Designation)
+        // In the order that takes the least supercruise from where the ship is, each with the time of its hop.
+        var here = state.VisitPlan(nowUtc)
+            .Select(p => (p.Body.Name, p.Body.Label, p.Body.Distance, p.Seconds,
+                Bonus: Bonus(p.Body.FirstDiscovery, state.ScannedHere(p.Body.Name) is { FirstMapping: true })))
             .ToList();
         if (here.Count > 0)
         {
-            lines.Add(new PanelLine(string.Format(Strings.BHere, here.Count), Tone.Info, Header: true));
+            var total = here.Sum(b => b.Seconds ?? 0);
+            var header = string.Format(Strings.BHere, here.Count);
+            lines.Add(new PanelLine(total > 0 ? $"{header} · {Duration(total)}" : header, Tone.Info, Header: true));
             lines.AddRange(here.Select(b =>
             {
                 var targeted = string.Equals(b.Name, status.Destination, StringComparison.OrdinalIgnoreCase);
-                return new PanelLine($"{(targeted ? "› " : "")}{b.Label} · {ShortName(b.Name, state.System)} · {b.Distance.ToString("N0", Loc.Culture)} ls{b.Bonus}",
+                var hop = b.Seconds is > 0 and var seconds ? $" · {Duration(seconds)}" : "";
+                return new PanelLine($"{(targeted ? "› " : "")}{b.Label} · {ShortName(b.Name, state.System)} · {b.Distance.ToString("N0", Loc.Culture)} ls{hop}{b.Bonus}",
                     targeted ? Tone.Info : Tone.Good, Loud: b.Bonus != "", Targeted: targeted);
             }));
         }
@@ -537,28 +541,10 @@ public static class Briefing
         return lines;
     }
 
-    /// <summary>
-    /// Body names in the order of the system map: word by word, a number by its value, so that « A 5 a »
-    /// comes before « A 10 » and « B 1 ».
-    /// </summary>
-    private static readonly Comparer<string> Designation = Comparer<string>.Create((x, y) =>
-    {
-        var a = x.Split(' ');
-        var b = y.Split(' ');
-        for (var i = 0; i < Math.Min(a.Length, b.Length); i++)
-        {
-            var order = (int.TryParse(a[i], out var m), int.TryParse(b[i], out var n)) switch
-            {
-                (true, true) => m.CompareTo(n),
-                (true, false) => -1,
-                (false, true) => 1,
-                _ => string.Compare(a[i], b[i], StringComparison.OrdinalIgnoreCase),
-            };
-            if (order != 0)
-                return order;
-        }
-        return a.Length.CompareTo(b.Length);
-    });
+    /// <summary>"~40 s", "~3 min": a supercruise time, an estimate.</summary>
+    internal static string Duration(double seconds) => seconds < 60
+        ? string.Format(Strings.BSeconds, Math.Max(5, (int)Math.Round(seconds / 5) * 5))
+        : string.Format(Strings.BMinutes, (int)Math.Round(seconds / 60));
 
     /// <summary>« A 5 » for « LHS 3447 A 5 », as the system map writes it.</summary>
     private static string ShortName(string body, string? system) =>

@@ -238,6 +238,31 @@ public sealed class GameState
     public long MinNotableValue { get; set; }
 
     /// <summary>EDSM's answer, asked with the value; one for a system left since is dropped.</summary>
+    /// <summary>The bodies of the current system as scanned, placed on their orbits.</summary>
+    public SystemOrbits Orbits { get; private set; } = new();
+
+    /// <summary>The star or planet the ship last dropped at, or arrived near; null right after a jump, at the arrival star.</summary>
+    public string? NearBody { get; private set; }
+
+    /// <summary>
+    /// The notable planets in the order that takes the least supercruise, from where the ship is, each
+    /// with the time to reach it from the one before. Those the journal has not placed (known from EDSM
+    /// or Spansh only, or of an unknown ancestry) come last, by distance, without a time.
+    /// </summary>
+    public IReadOnlyList<(NotableBody Body, double? Seconds)> VisitPlan(DateTime nowUtc)
+    {
+        var bodies = NotableBodies;
+        var start = (NearBody ?? Orbits.ArrivalStar) is { } from ? Orbits.Position(from, nowUtc) : null;
+        var placed = bodies.Select(b => (Body: b, At: start is null ? null : Orbits.Position(b.Name, nowUtc))).ToList();
+        var known = placed.Where(p => p.At is not null).ToList();
+
+        var plan = VisitPlanner.Order(start ?? default, known.Select(p => p.At!.Value).ToList())
+            .Select(leg => (known[leg.Index].Body, (double?)leg.Seconds))
+            .ToList();
+        plan.AddRange(placed.Where(p => p.At is null).OrderBy(p => p.Body.Distance).Select(p => (p.Body, (double?)null)));
+        return plan;
+    }
+
     public void SetNotableBodies(long address, IReadOnlyList<NotableBody> bodies)
     {
         if (address == SystemAddress)
@@ -388,6 +413,8 @@ public sealed class GameState
             case "FSDJump":
             case "CarrierJump":
                 EnterSystem(e);
+                // After a jump the ship is at the arrival star; at a load, by the body the game names.
+                NearBody = name == "Location" && Str(e, "BodyType") is "Planet" or "Star" ? Str(e, "Body") : null;
                 if (name == "FSDJump" && Dbl(e, "FuelUsed") is > 0 and var used)
                 {
                     _jumpFuel.Enqueue(used);
@@ -428,6 +455,17 @@ public sealed class GameState
             case "SupercruiseEntry":
                 if (Long(e, "SystemAddress") is { } address && address != SystemAddress)
                     EnterSystem(e);
+                if (name == "SupercruiseExit" && Str(e, "BodyType") is "Planet" or "Star")
+                    NearBody = Str(e, "Body");
+                break;
+
+            case "ApproachBody":
+                NearBody = Str(e, "Body") ?? NearBody;
+                break;
+
+            case "ScanBaryCentre":
+                if (Long(e, "SystemAddress") == SystemAddress)
+                    Orbits.Add(e);
                 break;
 
             case "NavRoute":
@@ -805,6 +843,7 @@ public sealed class GameState
                 }
                 if (Long(e, "SystemAddress") != SystemAddress)
                     break;
+                Orbits.Add(e);
                 if (Companion.NotableBodies.FromScan(e) is { } notable)
                     _scannedNotable[notable.Name] = notable;
                 if (Companion.NotableBodies.Scanned(e) is { } scanned)
@@ -918,6 +957,7 @@ public sealed class GameState
             _scannedNotable.Clear();
             _edsmNotable = [];
             _scannedBodies.Clear();
+            Orbits = new SystemOrbits();
         }
 
         // SupercruiseEntry and SupercruiseExit carry no StarPos.
