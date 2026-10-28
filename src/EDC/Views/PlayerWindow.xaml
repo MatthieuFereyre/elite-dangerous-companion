@@ -326,16 +326,10 @@
                                Text="{Binding Volume}" />
                 </Grid>
 
-                <Grid Margin="2,18,0,0">
-                    <TextBlock FontSize="12"
-                               Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                               Text="{Binding LibraryText}" />
-                    <TextBlock HorizontalAlignment="Right"
-                               FontSize="12"
-                               Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                               ToolTip="{x:Static res:Strings.VersionTip}"
-                               Text="{Binding AppVersion}" />
-                </Grid>
+                <TextBlock Margin="2,18,0,0"
+                           FontSize="12"
+                           Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                           Text="{Binding LibraryText}" />
 
                 <TextBlock Margin="2,6,0,0"
                            FontSize="12"
@@ -852,6 +846,11 @@
                           ToolTip="{x:Static res:Strings.LanguageRestart}" />
             </StackPanel>
 
+            <!-- The version, bottom right, as the settings' last word. -->
+            <TextBlock Grid.Column="1" Margin="0,0,20,18" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                       FontSize="12" Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                       ToolTip="{x:Static res:Strings.VersionTip}"
+                       Text="{Binding DataContext.AppVersion, RelativeSource={RelativeSource AncestorType=Window}}" />
         </Grid>
         </Grid>
     </StackPanel>

@@ -1189,7 +1189,7 @@
     <value>{0} · {1} UP NEXT</value>
   </data>
   <data name="VersionTip" xml:space="preserve">
-    <value>Player version</value>
+    <value>Version of Elite Dangerous Companion</value>
   </data>
   <data name="VolumeLabel" xml:space="preserve">
     <value>VOLUME</value>
