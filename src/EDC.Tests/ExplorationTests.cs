@@ -237,6 +237,25 @@ public sealed class ExplorationTests
 
     private static List<string> Notable(GameState state) => state.NotableBodies.Select(b => b.Name).ToList();
 
+    // In supercruise, the hyperdrive charging (Flags2 bit 19): leaving the system.
+    private static GameStatus Leaving() => new((1L << 24) | (1L << 4) | (1L << 17), 1L << 19, 0, 16, 50_000_000, "Clean");
+
+    [Fact]
+    public void Charging_the_jump_with_a_valuable_planet_not_mapped_warns_that_it_stays_behind()
+    {
+        var state = Replay(Jump("19:00:00", "Itela", 5336236820851), Honk("19:00:10", "Itela", 5336236820851),
+            Scan("19:01:00", "Itela A 4", 5336236820851, "Water world", "Terraformable"));
+
+        var warning = Warning(state, 120, Leaving());
+
+        Assert.Equal(("Planètes de valeur laissées ici", true), (warning?.Title, warning?.Big));
+        Assert.StartsWith("A 4", warning?.Detail);
+        Assert.Null(Warning(state, 120));
+
+        state.Apply(Map("19:05:00", "Itela A 4", 5336236820851));
+        Assert.Null(Warning(state, 400, Leaving()));
+    }
+
     [Fact]
     public void A_scanned_water_world_earth_like_or_terraformable_is_left_to_the_panel_the_most_precious_first_until_mapped()
     {

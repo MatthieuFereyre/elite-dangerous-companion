@@ -600,13 +600,23 @@ public static class Briefing
         var fill = FillHere(state, status, nowUtc);
         if (fill is { Big: true })
             return fill;
-        return shields ?? fill ?? (honk ? Honk(state, status, nowUtc) : null);
+        return shields ?? fill ?? LeavingValuable(state, status) ?? (honk ? Honk(state, status, nowUtc) : null);
     }
 
     /// <summary>
     /// A system the discovery scanner has not sounded in, or whose data went down with the ship: still
     /// while the FSD charges, the last moment to think of it; not in the jump.
     /// </summary>
+    /// <summary>The jump charging while a valuable planet here is still to map: the time to cancel it.</summary>
+    private static Warning? LeavingValuable(GameState state, GameStatus status)
+    {
+        if (!status.HyperdriveCharging || state.NotableBodies is not { Count: > 0 } left)
+            return null;
+
+        var names = string.Join(", ", left.Select(b => ShortName(b.Name, state.System)));
+        return new Warning(Strings.BLeavingValuable, string.Format(Strings.BLeavingValuableTip, names, Credits(left.Sum(b => b.Value))), Big: true, Tone.Warn);
+    }
+
     private static Warning? Honk(GameState state, GameStatus status, DateTime nowUtc)
     {
         if (state.Honked || state.System is null || status.FsdJump)

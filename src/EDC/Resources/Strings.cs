@@ -99,6 +99,8 @@ public static class Strings
     public static string BJump => Get(nameof(BJump));
     public static string BKit => Get(nameof(BKit));
     public static string BKitTip => Get(nameof(BKitTip));
+    public static string BLeavingValuable => Get(nameof(BLeavingValuable));
+    public static string BLeavingValuableTip => Get(nameof(BLeavingValuableTip));
     public static string BLimpets => Get(nameof(BLimpets));
     public static string BLimpetsTip => Get(nameof(BLimpetsTip));
     public static string BLostIfDestroyed => Get(nameof(BLostIfDestroyed));

@@ -30,6 +30,9 @@ public sealed record GameStatus(long Flags, long Flags2, int GuiFocus, double? F
     public bool VeryCold => Has(Flags2, 10);
     public bool VeryHot => Has(Flags2, 11);
 
+    /// <summary>The hyperdrive charging: a jump to another system is under way, still to be cancelled.</summary>
+    public bool HyperdriveCharging => Has(Flags2, 19);
+
     /// <summary>Flags at zero: the main menu, or the game not yet in a ship.</summary>
     public bool InMenu => Flags == 0 && Flags2 == 0;
 

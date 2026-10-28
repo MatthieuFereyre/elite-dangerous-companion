@@ -264,6 +264,12 @@
   <data name="BKitTip" xml:space="preserve">
     <value>Pioneer Supplies: medkits and energy cells</value>
   </data>
+  <data name="BLeavingValuable" xml:space="preserve">
+    <value>Valuable planets left here</value>
+  </data>
+  <data name="BLeavingValuableTip" xml:space="preserve">
+    <value>{0} · {1} to map</value>
+  </data>
   <data name="BLimpets" xml:space="preserve">
     <value>Limpets {0}/{1}</value>
   </data>
