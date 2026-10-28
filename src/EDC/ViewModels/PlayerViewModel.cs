@@ -155,7 +155,7 @@ public sealed partial class PlayerViewModel : ObservableObject
     /// <summary>Raised after the playlist is rebuilt on a new current track, for the view to bring it into sight.</summary>
     public event Action<PlaylistItem>? CurrentTrackShown;
 
-    /// <summary>"v1.1.0": the version of the release, from its tag; "v0.0.0" for a build from the sources.</summary>
+    /// <summary>"v1.0.0": the version of the release, from its tag; "v0.0.0" for a build from the sources.</summary>
     public string AppVersion { get; } = "v" + (typeof(PlayerViewModel).Assembly
         .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion.Split('+')[0] ?? "?");
 

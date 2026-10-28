@@ -28,9 +28,9 @@ public sealed class UpdaterTests
     }
 
     [Theory]
-    [InlineData("1.0.92", "1.1.0", true)]
-    [InlineData("0.0.96", "1.1.0", true)]
-    [InlineData("1.1.0", "1.1.0", false)]
+    [InlineData("0.0.98", "1.0.0", true)]
+    [InlineData("1.0.0", "1.0.1", true)]
+    [InlineData("1.0.0", "1.0.0", false)]
     [InlineData("1.2.0", "1.1.5", false)]
     public void Only_a_newer_release_is_installed(string current, string latest, bool expected)
     {
@@ -40,7 +40,7 @@ public sealed class UpdaterTests
     [Theory]
     [InlineData("0.0.0", true)]
     [InlineData("0.0.0.0", true)]
-    [InlineData("1.1.0", false)]
+    [InlineData("1.0.0", false)]
     public void A_build_from_the_sources_never_updates_itself(string version, bool local)
     {
         Assert.Equal(local, Updater.IsLocalBuild(Version.Parse(version)));

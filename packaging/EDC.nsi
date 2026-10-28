@@ -1,7 +1,7 @@
 ; Installer for Elite Dangerous Companion (EDC: the music player and the companion), compiled by
 ; makensis from packaging/build-installer.sh.
 ;
-; Compiled with: makensis -DVERSION=1.1.0 -DSOURCE_DIR=... -DICON=... -DOUT_FILE=... EDC.nsi
+; Compiled with: makensis -DVERSION=1.0.0 -DSOURCE_DIR=... -DICON=... -DOUT_FILE=... EDC.nsi
 ; On Windows, makensis finds nothing under a "File /r" wildcard written with forward slashes: the
 ; separator follows the system it runs on. Target paths use backslashes.
 
