@@ -1,0 +1,858 @@
+<ui:FluentWindow x:Class="EDC.Views.PlayerWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:res="clr-namespace:EDC.Resources"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 xmlns:vm="clr-namespace:EDC.ViewModels"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 mc:Ignorable="d"
+                 d:DataContext="{d:DesignInstance Type=vm:PlayerViewModel}"
+                 Title="{x:Static res:Strings.AppName}"
+                 Icon="pack://application:,,,/EDC;component/Assets/app.ico"
+                 Width="800"
+                 MinWidth="800"
+                 MaxWidth="800"
+                 SizeToContent="Height"
+                 ResizeMode="CanMinimize"
+                 WindowStartupLocation="CenterScreen"
+                 ExtendsContentIntoTitleBar="True"
+                 WindowBackdropType="None"
+                 WindowCornerPreference="DoNotRound"
+                 FontFamily="{DynamicResource ContentControlThemeFontFamily}"
+                 Background="{DynamicResource ApplicationBackgroundBrush}">
+
+    <ui:FluentWindow.Resources>
+        <SolidColorBrush x:Key="InGameBrush" Color="#2EA043" />
+        <!-- A dot on the dark background: lighter than a fill would be, to stay visible. -->
+        <SolidColorBrush x:Key="OutOfGameBrush" Color="#8B949E" />
+        <SolidColorBrush x:Key="CalmBrush" Color="#2B7CD3" />
+        <SolidColorBrush x:Key="CombatBrush" Color="#D13438" />
+
+        <Style x:Key="StatusText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="9,0,0,0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="Label" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource EliteOrangeBrush}" />
+            <Setter Property="Margin" Value="2,18,0,6" />
+        </Style>
+
+        <!-- Icon above its label, the way a player's transport buttons read. -->
+        <Style x:Key="Transport" TargetType="ui:Button" BasedOn="{StaticResource {x:Type ui:Button}}">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="Height" Value="66" />
+            <Setter Property="Margin" Value="3,0" />
+            <Setter Property="Padding" Value="4,6" />
+        </Style>
+
+        <Style x:Key="Segment" TargetType="RadioButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="Margin" Value="3,0" />
+            <Setter Property="Padding" Value="4,7" />
+            <Setter Property="GroupName" Value="Force" />
+        </Style>
+
+        <!-- A chip of the companion: its label in its colour, the explanation below. -->
+        <DataTemplate x:Key="ChipRowTemplate" DataType="{x:Type vm:ChipRow}">
+            <StackPanel Margin="2,0,0,7">
+                <TextBlock FontSize="15" FontWeight="SemiBold" Foreground="{Binding Foreground}" Text="{Binding Text}" />
+                <TextBlock FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                           Text="{Binding Detail}" Visibility="{Binding Detail, Converter={StaticResource NullToCollapsed}}" />
+            </StackPanel>
+        </DataTemplate>
+    </ui:FluentWindow.Resources>
+
+    <StackPanel>
+        <!-- Minimize goes to the taskbar; close hides to the tray. -->
+        <ui:TitleBar Title="{x:Static res:Strings.AppName}" ShowMaximize="False" />
+
+        <!-- Who and where, above the tabs: seen whichever is open. -->
+        <StackPanel DataContext="{Binding Companion}" Margin="20,0,20,10">
+            <TextBlock FontSize="16" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
+                       Foreground="{DynamicResource EliteOrangeBrush}" Text="{Binding ShipText}" />
+            <TextBlock Margin="0,2,0,0" FontSize="13" TextTrimming="CharacterEllipsis"
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding WhereText}" />
+        </StackPanel>
+
+        <!-- The tabs. -->
+        <Grid Margin="17,0,17,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <RadioButton Grid.Column="0" Style="{StaticResource Segment}" GroupName="Tab" Content="{x:Static res:Strings.TabMusic}" IsChecked="{Binding ShowMusic}" />
+            <RadioButton Grid.Column="1" Style="{StaticResource Segment}" GroupName="Tab" Content="{x:Static res:Strings.TabCombat}" IsChecked="{Binding ShowCombat}" />
+            <RadioButton Grid.Column="2" Style="{StaticResource Segment}" GroupName="Tab" Content="{x:Static res:Strings.TabExploration}" IsChecked="{Binding ShowExploration}" />
+            <RadioButton Grid.Column="3" Style="{StaticResource Segment}" GroupName="Tab" Content="{x:Static res:Strings.TabNeutron}" IsChecked="{Binding ShowNeutron}" />
+            <RadioButton Grid.Column="4" Style="{StaticResource Segment}" GroupName="Tab" Content="{x:Static res:Strings.TabSettings}" IsChecked="{Binding ShowSettings}" />
+        </Grid>
+
+        <!-- The tabs in one cell, the hidden ones keeping their place: the window keeps its height. -->
+        <Grid Margin="0,10,0,0">
+
+        <Grid Visibility="{Binding ShowMusic, Converter={StaticResource BoolToHidden}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="440" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel x:Name="Body" Grid.Column="0" Margin="20,4,20,18">
+
+                <!-- In game or not, and the mode: the two things to read at a glance. -->
+                <!-- A dot and a word, no filled block: a status, which must not read as a button. -->
+                <Grid>
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Width="12" Height="12" VerticalAlignment="Center">
+                            <Ellipse.Style>
+                                <Style TargetType="Ellipse">
+                                    <Setter Property="Fill" Value="{StaticResource OutOfGameBrush}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding InGame}" Value="True">
+                                            <Setter Property="Fill" Value="{StaticResource InGameBrush}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse>
+                        <TextBlock Style="{StaticResource StatusText}" Text="{Binding InGameText}" />
+
+                        <Ellipse Width="12" Height="12" Margin="28,0,0,0" VerticalAlignment="Center">
+                            <Ellipse.Style>
+                                <Style TargetType="Ellipse">
+                                    <Setter Property="Fill" Value="{StaticResource CalmBrush}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsCombat}" Value="True">
+                                            <Setter Property="Fill" Value="{StaticResource CombatBrush}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse>
+                        <TextBlock Style="{StaticResource StatusText}" Text="{Binding ModeText}" />
+                    </StackPanel>
+
+                </Grid>
+
+                <TextBlock Margin="2,8,0,0"
+                           FontSize="12"
+                           TextWrapping="Wrap"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                    <Run Text="{x:Static res:Strings.LastSwitch}" />
+                    <Run Text="{Binding Reason, Mode=OneWay}" />
+                </TextBlock>
+
+                <!-- The track. -->
+                <Border Margin="0,16,0,0"
+                        Padding="18,16"
+                        CornerRadius="2"
+                        Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       FontSize="20"
+                                       FontWeight="SemiBold"
+                                       TextWrapping="Wrap"
+                                       Foreground="{DynamicResource EliteOrangeBrush}"
+                                       Text="{Binding Title}" />
+                            <ui:SymbolIcon Grid.Column="1"
+                                           Symbol="Heart24"
+                                           Filled="True"
+                                           FontSize="20"
+                                           Margin="10,4,0,0"
+                                           VerticalAlignment="Top"
+                                           Foreground="{DynamicResource EliteOrangeBrush}"
+                                           ToolTip="{x:Static res:Strings.LikedTrack}"
+                                           Visibility="{Binding IsLiked, Converter={StaticResource BoolToVis}}" />
+                        </Grid>
+
+                        <TextBlock Margin="0,3,0,0"
+                                   FontSize="13"
+                                   TextWrapping="Wrap"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                   Text="{Binding Section}" />
+
+                        <!-- Clicked to jump in the track; the transparent band makes the thin bar easy to hit. -->
+                        <Border x:Name="SeekBar"
+                                Margin="0,6,0,-8"
+                                Height="20"
+                                Background="Transparent"
+                                Cursor="Hand"
+                                IsEnabled="{Binding HasTrack}"
+                                ToolTip="{x:Static res:Strings.SeekTip}"
+                                MouseLeftButtonDown="OnSeekBarClick">
+                            <!-- Centred in a fixed band: thickening on hover moves nothing around it. -->
+                            <ProgressBar VerticalAlignment="Center" Minimum="0" Maximum="1" Value="{Binding Progress, Mode=OneWay}">
+                                <ProgressBar.Style>
+                                    <Style TargetType="ProgressBar" BasedOn="{StaticResource {x:Type ProgressBar}}">
+                                        <Setter Property="Height" Value="4" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsMouseOver, ElementName=SeekBar}" Value="True">
+                                                <Setter Property="Height" Value="7" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ProgressBar.Style>
+                            </ProgressBar>
+                        </Border>
+
+                        <Grid Margin="0,6,0,0">
+                            <TextBlock HorizontalAlignment="Left"
+                                       FontFamily="Cascadia Mono, Consolas"
+                                       FontSize="12"
+                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                       Text="{Binding PositionText}" />
+                            <TextBlock HorizontalAlignment="Right"
+                                       FontFamily="Cascadia Mono, Consolas"
+                                       FontSize="12"
+                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                       Text="{Binding DurationText}" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Transport. -->
+                <Grid Margin="-3,14,-3,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <ui:Button Grid.Column="0" Style="{StaticResource Transport}" Command="{Binding ToggleLikeCommand}"
+                               IsEnabled="{Binding HasTrack}" ToolTip="{x:Static res:Strings.LikeTip}">
+                        <StackPanel>
+                            <ui:SymbolIcon Symbol="Heart24" FontSize="22" Filled="{Binding IsLiked}" HorizontalAlignment="Center">
+                                <ui:SymbolIcon.Style>
+                                    <Style TargetType="ui:SymbolIcon">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsLiked}" Value="True">
+                                                <Setter Property="Foreground" Value="{DynamicResource EliteOrangeBrush}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ui:SymbolIcon.Style>
+                            </ui:SymbolIcon>
+                            <TextBlock Margin="0,5,0,0" FontSize="12" HorizontalAlignment="Center" Text="{Binding LikeText}" />
+                        </StackPanel>
+                    </ui:Button>
+
+                    <ui:Button Grid.Column="1" Style="{StaticResource Transport}" Command="{Binding DislikeCommand}"
+                               IsEnabled="{Binding HasTrack}" ToolTip="{x:Static res:Strings.ExcludeTip}">
+                        <StackPanel>
+                            <ui:SymbolIcon Symbol="Prohibited24" FontSize="22" HorizontalAlignment="Center" />
+                            <TextBlock Margin="0,5,0,0" FontSize="12" HorizontalAlignment="Center" Text="{x:Static res:Strings.Exclude}" />
+                        </StackPanel>
+                    </ui:Button>
+
+                    <ui:Button Grid.Column="2" Style="{StaticResource Transport}" Appearance="Primary" Command="{Binding TogglePlayCommand}">
+                        <StackPanel>
+                            <Grid HorizontalAlignment="Center">
+                                <ui:SymbolIcon Symbol="Pause24" Filled="True" FontSize="22"
+                                               Visibility="{Binding IsPlaying, Converter={StaticResource BoolToVis}}" />
+                                <ui:SymbolIcon Symbol="Play24" Filled="True" FontSize="22"
+                                               Visibility="{Binding IsPlaying, Converter={StaticResource InvBoolToVis}}" />
+                            </Grid>
+                            <TextBlock Margin="0,5,0,0" FontSize="12" HorizontalAlignment="Center" Text="{Binding PlayPauseText}" />
+                        </StackPanel>
+                    </ui:Button>
+
+                    <ui:Button Grid.Column="3" Style="{StaticResource Transport}" Command="{Binding NextCommand}">
+                        <StackPanel>
+                            <ui:SymbolIcon Symbol="Next24" Filled="True" FontSize="22" HorizontalAlignment="Center" />
+                            <TextBlock Margin="0,5,0,0" FontSize="12" HorizontalAlignment="Center" Text="{x:Static res:Strings.Next}" />
+                        </StackPanel>
+                    </ui:Button>
+                </Grid>
+
+                <ui:ToggleSwitch Margin="2,14,0,0"
+                                 Content="{x:Static res:Strings.CombatTrack}"
+                                 IsChecked="{Binding IsCombatTrack}"
+                                 IsEnabled="{Binding HasTrack}"
+                                 ToolTip="{x:Static res:Strings.CombatTrackTip}" />
+
+                <!-- Forcing the mode. -->
+                <TextBlock Style="{StaticResource Label}" Text="{x:Static res:Strings.ModeLabel}" />
+                <Grid Margin="-3,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <RadioButton Grid.Column="0" Style="{StaticResource Segment}" Content="{x:Static res:Strings.ForceAuto}" IsChecked="{Binding IsForceAuto}"
+                                 ToolTip="{x:Static res:Strings.ForceAutoTip}" />
+                    <RadioButton Grid.Column="1" Style="{StaticResource Segment}" Content="{x:Static res:Strings.ForceCalm}" IsChecked="{Binding IsForceCalm}" />
+                    <RadioButton Grid.Column="2" Style="{StaticResource Segment}" Content="{x:Static res:Strings.ForceCombat}" IsChecked="{Binding IsForceCombat}" />
+                </Grid>
+
+                <!-- Volume. -->
+                <TextBlock Style="{StaticResource Label}" Text="{x:Static res:Strings.VolumeLabel}" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="36" />
+                    </Grid.ColumnDefinitions>
+                    <ui:SymbolIcon Grid.Column="0" Symbol="Speaker224" FontSize="20" Margin="2,0,10,0" VerticalAlignment="Center" />
+                    <Slider Grid.Column="1"
+                            VerticalAlignment="Center"
+                            Minimum="0" Maximum="100"
+                            SmallChange="5" LargeChange="10"
+                            TickFrequency="5" IsSnapToTickEnabled="True"
+                            Value="{Binding Volume}" />
+                    <TextBlock Grid.Column="2"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Right"
+                               FontFamily="Cascadia Mono, Consolas"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                               Text="{Binding Volume}" />
+                </Grid>
+
+                <Grid Margin="2,18,0,0">
+                    <TextBlock FontSize="12"
+                               Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                               Text="{Binding LibraryText}" />
+                    <TextBlock HorizontalAlignment="Right"
+                               FontSize="12"
+                               Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                               ToolTip="{x:Static res:Strings.VersionTip}"
+                               Text="{Binding AppVersion}" />
+                </Grid>
+
+                <TextBlock Margin="2,6,0,0"
+                           FontSize="12"
+                           TextWrapping="Wrap"
+                           Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                           Text="{Binding Notice}"
+                           Visibility="{Binding Notice, Converter={StaticResource NullToCollapsed}}" />
+            </StackPanel>
+
+            <!-- The round: the tracks heard, so the one before can still be liked, the current one, those to come.
+                 As tall as the player beside it; the list scrolls inside. -->
+            <DockPanel Grid.Column="1" Margin="0,4,20,18" Height="{Binding ActualHeight, ElementName=Body}">
+                <!-- What comes next, or the folders the tracks come from. -->
+                <Grid DockPanel.Dock="Top" Margin="-3,0,-3,6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <RadioButton Grid.Column="0" Style="{StaticResource Segment}" GroupName="MusicPane" Padding="4,4"
+                                 Content="{Binding PlaylistText}" IsChecked="{Binding ShowPlaylistPane}" />
+                    <RadioButton Grid.Column="1" Style="{StaticResource Segment}" GroupName="MusicPane" Padding="12,4"
+                                 Content="{x:Static res:Strings.FoldersPane}" IsChecked="{Binding ShowFoldersPane}" />
+                </Grid>
+                <Grid>
+                <Border Visibility="{Binding ShowPlaylistPane, Converter={StaticResource BoolToHidden}}" Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="2">
+                    <ScrollViewer x:Name="PlaylistScroll" VerticalScrollBarVisibility="Auto" Padding="4">
+                        <ItemsControl x:Name="PlaylistItems" ItemsSource="{Binding Playlist}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type vm:PlaylistItem}">
+                                    <Border x:Name="Row"
+                                            Padding="8,1,2,1"
+                                            CornerRadius="2"
+                                            Background="Transparent"
+                                            ToolTip="{x:Static res:Strings.PlayNowTip}"
+                                            MouseLeftButtonDown="OnPlaylistRowClick">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="18" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <ui:SymbolIcon x:Name="NowPlaying"
+                                                           Grid.Column="0"
+                                                           Symbol="Play24"
+                                                           Filled="True"
+                                                           FontSize="12"
+                                                           VerticalAlignment="Center"
+                                                           Foreground="{DynamicResource EliteOrangeBrush}"
+                                                           Visibility="Collapsed" />
+                                            <TextBlock x:Name="RowTitle"
+                                                       Grid.Column="1"
+                                                       VerticalAlignment="Center"
+                                                       FontSize="13"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                       Text="{Binding Title}" />
+                                            <TextBlock Grid.Column="2"
+                                                       VerticalAlignment="Center"
+                                                       Margin="6,0,2,0"
+                                                       FontSize="12"
+                                                       Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                       Text="{Binding Duration}" />
+                                            <ui:Button Grid.Column="3"
+                                                       Appearance="Transparent"
+                                                       BorderThickness="0"
+                                                       Padding="6,4"
+                                                       Command="{Binding DataContext.ToggleLikeOfCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                       CommandParameter="{Binding File}"
+                                                       ToolTip="{x:Static res:Strings.LikeRowTip}">
+                                                <ui:SymbolIcon x:Name="Heart"
+                                                               Symbol="Heart24"
+                                                               FontSize="16"
+                                                               Filled="{Binding IsLiked}"
+                                                               Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                                            </ui:Button>
+                                        </Grid>
+                                    </Border>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding IsLiked}" Value="True">
+                                            <Setter TargetName="Heart" Property="Foreground" Value="{DynamicResource EliteOrangeBrush}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsCurrent}" Value="True">
+                                            <Setter TargetName="NowPlaying" Property="Visibility" Value="Visible" />
+                                            <Setter TargetName="RowTitle" Property="Foreground" Value="{DynamicResource EliteOrangeBrush}" />
+                                            <Setter TargetName="RowTitle" Property="FontWeight" Value="SemiBold" />
+                                        </DataTrigger>
+                                        <!-- Only the title fades: the heart stays plain, to be clicked. -->
+                                        <DataTrigger Binding="{Binding IsPlayed}" Value="True">
+                                            <Setter TargetName="RowTitle" Property="Opacity" Value="0.45" />
+                                        </DataTrigger>
+                                        <Trigger SourceName="Row" Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Row" Property="Background" Value="{DynamicResource SubtleFillColorSecondaryBrush}" />
+                                        </Trigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+                <!-- The music folders: each played or not, how its tracks are sorted; a folder added brings its music in, sorted by ear. -->
+                <DockPanel Visibility="{Binding ShowFoldersPane, Converter={StaticResource BoolToHidden}}">
+                    <ui:Button DockPanel.Dock="Top" HorizontalAlignment="Stretch" Padding="10,5" Margin="0,0,0,6" Click="OnAddFolderClick"
+                               ToolTip="{x:Static res:Strings.AddFolderTip}">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="FolderAdd24" FontSize="16" Margin="0,0,6,0" />
+                            <TextBlock Text="{x:Static res:Strings.AddFolder}" />
+                        </StackPanel>
+                    </ui:Button>
+                    <Border Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                            BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                            BorderThickness="1"
+                            CornerRadius="2">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="4">
+                            <ItemsControl ItemsSource="{Binding Folders}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type vm:FolderRow}">
+                                        <Grid Margin="4,5,0,5">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <CheckBox Grid.Column="0" VerticalAlignment="Top" MinWidth="0"
+                                                      IsChecked="{Binding Enabled, Mode=OneWay}"
+                                                      Command="{Binding DataContext.ToggleFolderCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                      CommandParameter="{Binding}"
+                                                      ToolTip="{x:Static res:Strings.FolderEnabledTip}" />
+                                            <StackPanel x:Name="Text" Grid.Column="1" Margin="2,0,4,0" VerticalAlignment="Center">
+                                                <TextBlock FontSize="13" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" Text="{Binding Name}" ToolTip="{Binding Path}" />
+                                                <TextBlock FontSize="11" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding Summary}" />
+                                            </StackPanel>
+                                            <ui:Button Grid.Column="2" VerticalAlignment="Center" Appearance="Transparent" BorderThickness="0" Padding="6,4"
+                                                       Click="OnRemoveFolderClick" ToolTip="{x:Static res:Strings.RemoveFolderTip}">
+                                                <ui:SymbolIcon Symbol="Delete24" FontSize="16" />
+                                            </ui:Button>
+                                        </Grid>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding Enabled}" Value="False">
+                                                <Setter TargetName="Text" Property="Opacity" Value="0.45" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Border>
+                </DockPanel>
+                </Grid>
+            </DockPanel>
+        </Grid>
+
+        <!-- Combat: what fighting pays this session, what to cash in, the target and the station on the left;
+             where to hunt and where to dock on the right, each behind a button of its own. -->
+        <Grid DataContext="{Binding Companion}" Visibility="{Binding DataContext.ShowCombat, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToHidden}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="440" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <ScrollViewer Grid.Column="0" Margin="20,4,8,18" Height="{Binding ActualHeight, ElementName=Body}" VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="2,0,12,0">
+                    <TextBlock Style="{StaticResource Label}" Margin="0,0,0,6" Text="{x:Static res:Strings.CombatSessionLabel}" />
+                    <TextBlock FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource EliteOrangeBrush}" Text="{Binding RateText}" />
+                    <TextBlock Margin="0,2,0,0" FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding SessionText}" />
+
+                    <TextBlock Style="{StaticResource Label}" Text="{x:Static res:Strings.ToCashIn}" />
+                    <ItemsControl ItemsSource="{Binding CombatSales}" ItemTemplate="{StaticResource ChipRowTemplate}" />
+
+                    <TextBlock Style="{StaticResource Label}" Text="{x:Static res:Strings.TargetLabel}" />
+                    <ItemsControl ItemsSource="{Binding TargetRows}" ItemTemplate="{StaticResource ChipRowTemplate}" />
+
+                    <TextBlock Style="{StaticResource Label}" Text="{x:Static res:Strings.AtStation}" />
+                    <ItemsControl ItemsSource="{Binding Reminders}" ItemTemplate="{StaticResource ChipRowTemplate}" />
+                </StackPanel>
+            </ScrollViewer>
+
+            <ScrollViewer Grid.Column="1" Margin="0,4,20,18" Height="{Binding ActualHeight, ElementName=Body}" VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="2,0,0,0">
+                    <TextBlock Style="{StaticResource Label}" Margin="0,0,0,6" Text="{x:Static res:Strings.BountyHunting}" />
+                    <ui:Button HorizontalAlignment="Stretch" Padding="12,9" Appearance="Primary" Command="{Binding SearchHuntCommand}"
+                               ToolTip="{x:Static res:Strings.SearchHuntTip}">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="Target24" FontSize="18" Margin="0,0,8,0" />
+                            <TextBlock VerticalAlignment="Center" Text="{x:Static res:Strings.SearchHunt}" />
+                        </StackPanel>
+                    </ui:Button>
+                    <TextBlock Margin="2,6,0,0" FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding HuntText}" />
+                    <ui:Button Margin="0,8,0,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="10,5"
+                               Command="{Binding CopySystemCommand}" CommandParameter="{Binding HuntNearest}"
+                               Visibility="{Binding HuntNearest, Converter={StaticResource NullToCollapsed}}" ToolTip="{x:Static res:Strings.CopySystemTip}">
+                        <StackPanel>
+                            <TextBlock FontSize="10" FontWeight="SemiBold" Foreground="{DynamicResource EliteOrangeBrush}" Text="{x:Static res:Strings.Nearest}" />
+                            <TextBlock FontSize="14" TextTrimming="CharacterEllipsis" Text="{Binding HuntNearest.System}" />
+                            <TextBlock FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding HuntNearestTrip}" />
+                            <TextBlock FontSize="12" TextWrapping="Wrap" Text="{Binding HuntNearest.Where}"
+                                       Visibility="{Binding HuntNearest.Where, Converter={StaticResource NullToCollapsed}}" />
+                        </StackPanel>
+                    </ui:Button>
+                    <ui:Button Margin="0,6,0,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="10,5"
+                               Command="{Binding CopySystemCommand}" CommandParameter="{Binding HuntOfPower}"
+                               Visibility="{Binding HuntOfPower, Converter={StaticResource NullToCollapsed}}" ToolTip="{x:Static res:Strings.CopySystemTip}">
+                        <StackPanel>
+                            <TextBlock FontSize="10" FontWeight="SemiBold" Foreground="{DynamicResource EliteOrangeBrush}" Text="{Binding HuntPowerCaption}" />
+                            <TextBlock FontSize="14" TextTrimming="CharacterEllipsis" Text="{Binding HuntOfPower.System}" />
+                            <TextBlock FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding HuntOfPowerTrip}" />
+                            <TextBlock FontSize="12" TextWrapping="Wrap" Text="{Binding HuntOfPower.Where}"
+                                       Visibility="{Binding HuntOfPower.Where, Converter={StaticResource NullToCollapsed}}" />
+                        </StackPanel>
+                    </ui:Button>
+
+                    <TextBlock Style="{StaticResource Label}" Text="{x:Static res:Strings.StationLabel}" />
+                    <ui:Button HorizontalAlignment="Stretch" Padding="12,9" Appearance="Primary" Command="{Binding SearchStationCommand}"
+                               ToolTip="{x:Static res:Strings.StationTip}">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="BuildingRetail24" FontSize="18" Margin="0,0,8,0" />
+                            <TextBlock VerticalAlignment="Center" Text="{x:Static res:Strings.SearchStation}" />
+                        </StackPanel>
+                    </ui:Button>
+                    <TextBlock Margin="2,6,0,0" FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding StationText}" />
+                    <ui:Button Margin="0,8,0,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="10,5"
+                               Command="{Binding CopyStationCommand}" CommandParameter="{Binding Station}"
+                               Visibility="{Binding Station, Converter={StaticResource NullToCollapsed}}" ToolTip="{x:Static res:Strings.CopySystemTip}">
+                        <StackPanel>
+                            <TextBlock FontSize="14" TextTrimming="CharacterEllipsis" Text="{Binding Station.Station}" />
+                            <TextBlock FontSize="12" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource EliteOrangeBrush}" Text="{Binding Station.System}" />
+                            <TextBlock FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding StationTrip}" />
+                        </StackPanel>
+                    </ui:Button>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+
+        <!-- Exploration: what the panel over the game says on the left; the route and its stars on the right. -->
+        <Grid DataContext="{Binding Companion}" Visibility="{Binding DataContext.ShowExploration, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToHidden}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="440" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <DockPanel Grid.Column="0" Margin="20,4,8,18" Height="{Binding ActualHeight, ElementName=Body}">
+                <StackPanel DockPanel.Dock="Top" Margin="2,0,12,0">
+                    <TextBlock Style="{StaticResource Label}" Margin="0,0,0,6" Text="{x:Static res:Strings.ExplorationSessionLabel}" />
+                    <TextBlock FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource EliteOrangeBrush}" Text="{Binding ExplorationRateText}" />
+                    <TextBlock Margin="0,2,0,0" FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding ExplorationSessionText}" />
+                    <TextBlock Style="{StaticResource Label}" Text="{x:Static res:Strings.ToSell}" />
+                    <ItemsControl ItemsSource="{Binding ExplorationSales}" ItemTemplate="{StaticResource ChipRowTemplate}" />
+                </StackPanel>
+                <StackPanel DockPanel.Dock="Bottom" Margin="0,10,12,0">
+                    <TextBlock Margin="2,0,0,0" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                               ToolTip="{x:Static res:Strings.PlanetThresholdTip}">
+                        <Run Text="{x:Static res:Strings.PlanetThreshold}" />
+                        <Run Text="{Binding PanelMinValueK, Mode=OneWay}" />
+                        <Run Text="{x:Static res:Strings.ThousandCredits}" />
+                    </TextBlock>
+                    <Slider Minimum="0" Maximum="3000" SmallChange="100" LargeChange="500"
+                            TickFrequency="100" IsSnapToTickEnabled="True" Value="{Binding PanelMinValueK}" />
+                </StackPanel>
+                <TextBlock DockPanel.Dock="Top" Style="{StaticResource Label}" Margin="2,0,0,6" Text="{x:Static res:Strings.SystemAndRoute}" />
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl Margin="2,0,12,0" ItemsSource="{Binding PanelRows}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type vm:PanelRow}">
+                                <TextBlock x:Name="Line" FontSize="13" TextWrapping="Wrap" Margin="0,1" Foreground="{Binding Foreground}" Text="{Binding Text}" />
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding Header}" Value="True">
+                                        <Setter TargetName="Line" Property="FontSize" Value="11" />
+                                        <Setter TargetName="Line" Property="FontWeight" Value="SemiBold" />
+                                        <Setter TargetName="Line" Property="Margin" Value="0,10,0,3" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Loud}" Value="True">
+                                        <Setter TargetName="Line" Property="FontWeight" Value="SemiBold" />
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </DockPanel>
+
+            <DockPanel Grid.Column="1" Margin="0,4,20,18" Height="{Binding ActualHeight, ElementName=Body}">
+                <TextBlock DockPanel.Dock="Top" Style="{StaticResource Label}" Margin="2,0,0,6" Text="{x:Static res:Strings.RouteLabel}" />
+                <TextBlock DockPanel.Dock="Top" Margin="2,0,0,8" FontSize="13" TextWrapping="Wrap"
+                           Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{Binding RouteText}" />
+                <Border Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="2">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="4">
+                        <ItemsControl ItemsSource="{Binding RouteRows}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type vm:RouteRow}">
+                                    <Grid Margin="6,2,4,2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="24" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" FontSize="12" VerticalAlignment="Center"
+                                                   Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding Number}" />
+                                        <TextBlock Grid.Column="1" FontSize="13" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+                                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{Binding System}" />
+                                        <TextBlock Grid.Column="2" FontSize="12" Margin="8,0,0,0" VerticalAlignment="Center" Foreground="{Binding Foreground}">
+                                            <Run Text="{Binding StarClass, Mode=OneWay}" FontWeight="SemiBold" />
+                                            <Run Text="{Binding Note, Mode=OneWay}" />
+                                        </TextBlock>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+            </DockPanel>
+        </Grid>
+
+        <!-- The neutron route: where from, where to and the range on the left, with the next step; every step on the right. -->
+        <Border Visibility="{Binding ShowNeutron, Converter={StaticResource BoolToHidden}}">
+        <Grid DataContext="{Binding Companion.Neutron}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="440" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <DockPanel Grid.Column="0" Margin="20,4,20,18" Height="{Binding ActualHeight, ElementName=Body}">
+                <StackPanel DockPanel.Dock="Top">
+                    <TextBlock Style="{StaticResource Label}" Margin="2,0,0,6" Text="{x:Static res:Strings.From}" />
+                    <ui:TextBox Text="{Binding From, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="{x:Static res:Strings.FromPlaceholder}" />
+                    <TextBlock Style="{StaticResource Label}" Text="{x:Static res:Strings.To}" />
+                    <ui:TextBox Text="{Binding To, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="{x:Static res:Strings.ToPlaceholder}" />
+                    <Grid Margin="0,14,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="90" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" VerticalAlignment="Center" Margin="2,0,10,0" FontSize="13" Text="{x:Static res:Strings.Range}"
+                                   ToolTip="{x:Static res:Strings.RangeTip}" />
+                        <ui:TextBox Grid.Column="1" Text="{Binding RangeText, UpdateSourceTrigger=PropertyChanged}" />
+                        <ui:Button Grid.Column="2" HorizontalAlignment="Right" Padding="16,6" Appearance="Primary" Content="{x:Static res:Strings.Plot}"
+                                   Command="{Binding PlotCommand}" ToolTip="{x:Static res:Strings.PlotTip}" />
+                    </Grid>
+                    <TextBlock Margin="2,10,0,0" FontSize="12" TextWrapping="Wrap"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding StatusText}" />
+                </StackPanel>
+
+                <StackPanel DockPanel.Dock="Bottom">
+                    <CheckBox Content="{x:Static res:Strings.AutoCopy}" IsChecked="{Binding AutoCopy}"
+                              ToolTip="{x:Static res:Strings.AutoCopyTip}" />
+                    <Grid Margin="0,8,0,0" Visibility="{Binding Summary, Converter={StaticResource NullToCollapsed}}">
+                        <TextBlock VerticalAlignment="Center" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{Binding Summary}" />
+                        <ui:Button HorizontalAlignment="Right" Padding="10,4" Content="{x:Static res:Strings.Clear}" Command="{Binding ClearCommand}" />
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel Visibility="{Binding Next, Converter={StaticResource NullToCollapsed}}">
+                    <TextBlock Style="{StaticResource Label}" Text="{x:Static res:Strings.NextStep}" />
+                    <ui:Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="14,10"
+                               Command="{Binding CopyStepCommand}" CommandParameter="{Binding Next}" ToolTip="{x:Static res:Strings.CopySystemTip}">
+                        <StackPanel>
+                            <TextBlock FontSize="20" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
+                                       Foreground="{DynamicResource EliteOrangeBrush}" Text="{Binding Next.System}" />
+                            <TextBlock Margin="0,3,0,0" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding Next.Detail}" />
+                        </StackPanel>
+                    </ui:Button>
+                </StackPanel>
+            </DockPanel>
+
+            <DockPanel Grid.Column="1" Margin="0,4,20,18" Height="{Binding ActualHeight, ElementName=Body}">
+                <TextBlock DockPanel.Dock="Top" Style="{StaticResource Label}" Margin="2,0,0,6" Text="{x:Static res:Strings.StepsLabel}" />
+                <Border Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="2">
+                    <ScrollViewer x:Name="NeutronScroll" VerticalScrollBarVisibility="Auto" Padding="4">
+                        <ItemsControl x:Name="NeutronItems" ItemsSource="{Binding Steps}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type vm:NeutronRow}">
+                                    <Border x:Name="Row" Padding="6,3,4,3" CornerRadius="2" Background="Transparent" Cursor="Hand"
+                                            ToolTip="{Binding Detail}" MouseLeftButtonUp="OnNeutronRowClick">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="30" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" FontSize="12" VerticalAlignment="Center"
+                                                       Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding Number}" />
+                                            <TextBlock x:Name="RowSystem" Grid.Column="1" FontSize="13" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+                                                       Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{Binding System}" />
+                                            <TextBlock x:Name="RowStar" Grid.Column="2" FontSize="12" Margin="8,0,0,0" VerticalAlignment="Center"
+                                                       Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="" />
+                                        </Grid>
+                                    </Border>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding Neutron}" Value="True">
+                                            <Setter TargetName="RowStar" Property="Text" Value="neutrons" />
+                                            <Setter TargetName="RowStar" Property="Foreground" Value="{DynamicResource EliteOrangeBrush}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Done}" Value="True">
+                                            <Setter TargetName="Row" Property="Opacity" Value="0.45" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsNext}" Value="True">
+                                            <Setter TargetName="RowSystem" Property="Foreground" Value="{DynamicResource EliteOrangeBrush}" />
+                                            <Setter TargetName="RowSystem" Property="FontWeight" Value="SemiBold" />
+                                        </DataTrigger>
+                                        <Trigger SourceName="Row" Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Row" Property="Background" Value="{DynamicResource SubtleFillColorSecondaryBrush}" />
+                                        </Trigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+            </DockPanel>
+        </Grid>
+        </Border>
+
+        <!-- Settings: the game on the left, the application on the right. -->
+        <Grid DataContext="{Binding Companion}" Visibility="{Binding DataContext.ShowSettings, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToHidden}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="440" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- The game on the left, the application on the right. -->
+            <StackPanel Grid.Column="0" Margin="20,4,20,18">
+                <TextBlock Style="{StaticResource StatusText}" Margin="2,0,0,0" Text="{x:Static res:Strings.SettingsGame}" />
+
+                <TextBlock Style="{StaticResource Label}" Text="{x:Static res:Strings.PowerLabel}" />
+                <ComboBox ItemsSource="{Binding Powers}" DisplayMemberPath="Value" SelectedValuePath="Key"
+                          SelectedValue="{Binding Power}" HorizontalAlignment="Left" MinWidth="200"
+                          ToolTip="{x:Static res:Strings.PowerTip}" />
+
+                <TextBlock Style="{StaticResource Label}" Text="{x:Static res:Strings.OnGameScreen}" />
+                <CheckBox Content="{x:Static res:Strings.BannerSetting}" IsChecked="{Binding BannerEnabled}"
+                          ToolTip="{x:Static res:Strings.BannerSettingTip}" />
+                <CheckBox Margin="0,6,0,0" Content="{x:Static res:Strings.PanelSetting}" IsChecked="{Binding ExplorationPanel}"
+                          ToolTip="{x:Static res:Strings.PanelSettingTip}" />
+                <CheckBox Margin="0,6,0,0" Content="{x:Static res:Strings.HonkSetting}" IsChecked="{Binding HonkReminder}"
+                          ToolTip="{x:Static res:Strings.HonkSettingTip}" />
+                <CheckBox Margin="0,6,0,0" Content="{x:Static res:Strings.TrackToastSetting}" IsChecked="{Binding TrackToast}"
+                          ToolTip="{x:Static res:Strings.TrackToastSettingTip}" />
+
+                <TextBlock Style="{StaticResource Label}" Text="{x:Static res:Strings.ControllerLabel}" />
+                <CheckBox Margin="0,0,0,6" Content="{x:Static res:Strings.ControllerInBanner}" IsChecked="{Binding ControllerInBanner}"
+                          ToolTip="{x:Static res:Strings.ControllerInBannerTip}" />
+                <!-- Red at 20 % and below, faded when no controller is connected. -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="2,0,0,0"
+                            DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}"
+                            ToolTip="{x:Static res:Strings.ControllerTip}">
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Pad.Link}" Value="None">
+                                    <Setter Property="Opacity" Value="0.5" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                    <ui:SymbolIcon Symbol="{Binding PadSymbol}" FontSize="20" VerticalAlignment="Center">
+                        <ui:SymbolIcon.Style>
+                            <Style TargetType="ui:SymbolIcon">
+                                <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding PadLow}" Value="True">
+                                        <Setter Property="Foreground" Value="{StaticResource CombatBrush}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:SymbolIcon.Style>
+                    </ui:SymbolIcon>
+                    <TextBlock Text="{Binding PadText}">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource StatusText}">
+                                <Setter Property="Margin" Value="6,0,0,0" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding PadLow}" Value="True">
+                                        <Setter Property="Foreground" Value="{StaticResource CombatBrush}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Margin="0,4,20,18">
+                <TextBlock Style="{StaticResource StatusText}" Margin="2,0,0,0" Text="{x:Static res:Strings.SettingsApp}" />
+
+                <TextBlock Style="{StaticResource Label}" Text="{x:Static res:Strings.WindowsLabel}" />
+                <CheckBox Content="{x:Static res:Strings.StartWithWindows}" IsChecked="{Binding StartWithWindows}"
+                          ToolTip="{x:Static res:Strings.StartWithWindowsTip}" />
+                <CheckBox Margin="0,6,0,0" Content="{x:Static res:Strings.LaunchEdmc}" IsChecked="{Binding LaunchEdmc}"
+                          ToolTip="{x:Static res:Strings.LaunchEdmcTip}"
+                          Visibility="{Binding EdmcInstalled, Converter={StaticResource BoolToVis}}" />
+
+                <TextBlock Style="{StaticResource Label}" Text="{x:Static res:Strings.UpdatesLabel}" />
+                <CheckBox Content="{x:Static res:Strings.AutoUpdate}" IsChecked="{Binding AutoUpdate}"
+                          ToolTip="{x:Static res:Strings.AutoUpdateTip}" />
+                <!-- The button under its checkbox, the result of the last check right of it. -->
+                <DockPanel Margin="0,8,0,0">
+                    <ui:Button DockPanel.Dock="Left" Padding="10,4" Content="{x:Static res:Strings.Check}" Command="{Binding CheckUpdateCommand}" />
+                    <TextBlock VerticalAlignment="Center" Margin="10,0,0,0" FontSize="12" TextWrapping="Wrap"
+                               Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding UpdateText}" />
+                </DockPanel>
+
+                <TextBlock Style="{StaticResource Label}" Text="{x:Static res:Strings.LanguageLabel}" />
+                <ComboBox ItemsSource="{Binding Languages}" DisplayMemberPath="Value" SelectedValuePath="Key"
+                          SelectedValue="{Binding Language}" HorizontalAlignment="Left" MinWidth="200"
+                          ToolTip="{x:Static res:Strings.LanguageRestart}" />
+            </StackPanel>
+
+        </Grid>
+        </Grid>
+    </StackPanel>
+</ui:FluentWindow>

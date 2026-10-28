@@ -1,0 +1,39 @@
+# A tag vX.Y.Z builds the installer of that version and publishes it as a release, which the
+# installed companions find and install on their own.
+name: Release
+
+on:
+  push:
+    tags: ['v*.*.*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Test
+        run: dotnet test src/EDC.sln --configuration Release
+
+      - name: Install NSIS
+        shell: pwsh
+        run: |
+          if (-not (Test-Path 'C:\Program Files (x86)\NSIS\makensis.exe')) { choco install nsis -y --no-progress }
+          'C:\Program Files (x86)\NSIS' | Out-File -FilePath $env:GITHUB_PATH -Append -Encoding utf8
+
+      - name: Build the installer
+        shell: bash
+        run: bash packaging/build-installer.sh "${GITHUB_REF_NAME#v}" artifacts
+
+      - name: Publish the release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" artifacts/*.exe --title "$GITHUB_REF_NAME" --generate-notes

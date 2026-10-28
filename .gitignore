@@ -1,0 +1,6 @@
+*.log
+*.settings.json
+tracks.json.tmp
+app/
+artifacts/
+tracks.json

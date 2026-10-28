@@ -1,0 +1,38 @@
+{
+  "musicRoot": "E:\\Music\\Space",
+  "likeWeight": 2,
+  "tracks": [
+    {
+      "file": "01 Opening.mp3",
+      "section": "Themes",
+      "mode": "calm"
+    },
+    {
+      "file": "02 Drift.mp3",
+      "section": "Ambient",
+      "mode": "calm",
+      "like": true
+    },
+    {
+      "file": "03 Pilot's Lament.mp3",
+      "section": "Ambient",
+      "mode": "calm"
+    },
+    {
+      "file": "04 Broadside.mp3",
+      "section": "Battle",
+      "mode": "combat"
+    },
+    {
+      "file": "05 Last Stand.mp3",
+      "section": "Battle",
+      "mode": "combat",
+      "like": true
+    },
+    {
+      "file": "06 Static.mp3",
+      "section": "Ambient",
+      "mode": "off"
+    }
+  ]
+}

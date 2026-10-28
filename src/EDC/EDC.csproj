@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows10.0.19041.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>EDC</RootNamespace>
+    <AssemblyName>EDC</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- Drawn by IconRenderer.WriteIco: the calm tray icon. -->
+    <ApplicationIcon>Assets\app.ico</ApplicationIcon>
+    <!-- A build from the sources is 0.0.0, which never updates itself; a release takes the version of its
+         tag (vX.Y.Z), passed by packaging/build-installer.sh. -->
+    <Version>0.0.0</Version>
+    <Product>Elite Dangerous Companion</Product>
+    <!-- What the Task Manager shows. -->
+    <AssemblyTitle>Elite Dangerous Companion</AssemblyTitle>
+    <Company>Matthieu Fereyre</Company>
+    <!-- Declared so the RID-specific publish of the installer restores without an extra pass. -->
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="H.NotifyIcon.Wpf" Version="2.3.2" />
+    <PackageReference Include="NAudio.Wasapi" Version="3.1.0" />
+    <PackageReference Include="NAudio.WinMM" Version="3.1.0" />
+    <PackageReference Include="System.Drawing.Common" Version="9.0.8" />
+    <PackageReference Include="WPF-UI" Version="4.3.0" />
+  </ItemGroup>
+
+  <!-- Also inside, for the window: WPF does not give the taskbar the executable's icon on its own. -->
+  <ItemGroup>
+    <Resource Include="Assets\app.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="EDC.Tests" />
+  </ItemGroup>
+</Project>

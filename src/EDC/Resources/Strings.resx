@@ -1,0 +1,1200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AddFolder" xml:space="preserve">
+    <value>Add a folder…</value>
+  </data>
+  <data name="AddFolderDialog" xml:space="preserve">
+    <value>Music folder to add</value>
+  </data>
+  <data name="AddFolderTip" xml:space="preserve">
+    <value>Its MP3, WAV, FLAC, M4A and WMA files, subfolders included, sorted calm or combat by their sound and title: fix them by ear. A folder already there only gets its new files.</value>
+  </data>
+  <data name="AmmoCannons" xml:space="preserve">
+    <value>cannons</value>
+  </data>
+  <data name="AmmoChaff" xml:space="preserve">
+    <value>chaff</value>
+  </data>
+  <data name="AmmoFlak" xml:space="preserve">
+    <value>flak launchers</value>
+  </data>
+  <data name="AmmoFlechettes" xml:space="preserve">
+    <value>flechettes</value>
+  </data>
+  <data name="AmmoFragmentCannons" xml:space="preserve">
+    <value>fragment cannons</value>
+  </data>
+  <data name="AmmoHeatSinks" xml:space="preserve">
+    <value>heat sinks</value>
+  </data>
+  <data name="AmmoMines" xml:space="preserve">
+    <value>mines</value>
+  </data>
+  <data name="AmmoMiningCharges" xml:space="preserve">
+    <value>mining charges</value>
+  </data>
+  <data name="AmmoMissiles" xml:space="preserve">
+    <value>missiles</value>
+  </data>
+  <data name="AmmoMulticannons" xml:space="preserve">
+    <value>multicannons</value>
+  </data>
+  <data name="AmmoOther" xml:space="preserve">
+    <value>ammunition</value>
+  </data>
+  <data name="AmmoPlasma" xml:space="preserve">
+    <value>plasma accelerators</value>
+  </data>
+  <data name="AmmoRailguns" xml:space="preserve">
+    <value>railguns</value>
+  </data>
+  <data name="AmmoTorpedoes" xml:space="preserve">
+    <value>torpedoes</value>
+  </data>
+  <data name="AppName" xml:space="preserve">
+    <value>Elite Dangerous Companion</value>
+  </data>
+  <data name="AtStation" xml:space="preserve">
+    <value>TO DO AT THE STATION</value>
+  </data>
+  <data name="AutoCopy" xml:space="preserve">
+    <value>Copy the next step on reaching each step</value>
+  </data>
+  <data name="AutoCopyTip" xml:space="preserve">
+    <value>The clipboard ready for the galaxy map, on arrival</value>
+  </data>
+  <data name="AutoUpdate" xml:space="preserve">
+    <value>Automatic updates</value>
+  </data>
+  <data name="AutoUpdateTip" xml:space="preserve">
+    <value>From the releases published on GitHub, installed as soon as found, game running or not</value>
+  </data>
+  <data name="BAgainst" xml:space="preserve">
+    <value>{0} {1} against your {2}: threat ×{3}</value>
+  </data>
+  <data name="BannerSetting" xml:space="preserve">
+    <value>Banner and warnings</value>
+  </data>
+  <data name="BannerSettingTip" xml:space="preserve">
+    <value>At the top of the screen: route, next star, target, bounties… Seen in borderless fullscreen only, game in front, maps closed</value>
+  </data>
+  <data name="BatteryEmpty" xml:space="preserve">
+    <value>Battery almost empty, plug it in now.</value>
+  </data>
+  <data name="BatteryLow" xml:space="preserve">
+    <value>Battery low, charge it soon.</value>
+  </data>
+  <data name="BAvoid" xml:space="preserve">
+    <value>{0}, avoid it</value>
+  </data>
+  <data name="BBagWithout" xml:space="preserve">
+    <value>Bag without {0}</value>
+  </data>
+  <data name="BBodyAt" xml:space="preserve">
+    <value>{0} at {1} ls</value>
+  </data>
+  <data name="BBonds" xml:space="preserve">
+    <value>Bonds {0}</value>
+  </data>
+  <data name="BBondsMany" xml:space="preserve">
+    <value>{0} combat bonds</value>
+  </data>
+  <data name="BBondsOne" xml:space="preserve">
+    <value>{0} combat bond</value>
+  </data>
+  <data name="BBondsTip" xml:space="preserve">
+    <value>{0} to cash in: {1}</value>
+  </data>
+  <data name="BBoostNeeded" xml:space="preserve">
+    <value>{0} · boost needed</value>
+  </data>
+  <data name="BBoostNeededTip" xml:space="preserve">
+    <value>Go through the neutron star's jet: range ×4</value>
+  </data>
+  <data name="BBounties" xml:space="preserve">
+    <value>Bounties {0}</value>
+  </data>
+  <data name="BBountiesOverRebuy" xml:space="preserve">
+    <value>More than the rebuy ({0}): cash them in</value>
+  </data>
+  <data name="BCareful" xml:space="preserve">
+    <value>{0}, careful</value>
+  </data>
+  <data name="BCashIn" xml:space="preserve">
+    <value>Cash in {0}</value>
+  </data>
+  <data name="BCashInBonds" xml:space="preserve">
+    <value>Cash in {0} of bonds</value>
+  </data>
+  <data name="BCashInTip" xml:space="preserve">
+    <value>{0} bounties pending, lost if destroyed</value>
+  </data>
+  <data name="BCellsMany" xml:space="preserve">
+    <value>Battery flat: {0} energy cells in the bag</value>
+  </data>
+  <data name="BCellsOne" xml:space="preserve">
+    <value>Battery flat: {0} energy cell in the bag</value>
+  </data>
+  <data name="BDanger" xml:space="preserve">
+    <value>{0} · danger</value>
+  </data>
+  <data name="BEnergyCell" xml:space="preserve">
+    <value>energy cell</value>
+  </data>
+  <data name="BExobio" xml:space="preserve">
+    <value>Exobio {0} to sell</value>
+  </data>
+  <data name="BExobioTipMany" xml:space="preserve">
+    <value>{0} species analysed, lost on death: Vista Genomics</value>
+  </data>
+  <data name="BExobioTipOne" xml:space="preserve">
+    <value>{0} species analysed, lost on death: Vista Genomics</value>
+  </data>
+  <data name="BExobioUnknown" xml:space="preserve">
+    <value>Exobio to sell</value>
+  </data>
+  <data name="BExploRate" xml:space="preserve">
+    <value>Explo {0}/h</value>
+  </data>
+  <data name="BExploRateTip" xml:space="preserve">
+    <value>What the bodies scanned since the game started are worth, sold or not</value>
+  </data>
+  <data name="BExploration" xml:space="preserve">
+    <value>Exploration {0}</value>
+  </data>
+  <data name="BExplorationTipMany" xml:space="preserve">
+    <value>Estimate: {0} bodies scanned, lost if destroyed: Universal Cartographics</value>
+  </data>
+  <data name="BExplorationTipOne" xml:space="preserve">
+    <value>Estimate: {0} body scanned, lost if destroyed: Universal Cartographics</value>
+  </data>
+  <data name="BFillHere" xml:space="preserve">
+    <value>Refuel here</value>
+  </data>
+  <data name="BFillHereTip" xml:space="preserve">
+    <value>Tank {0}: ~{1} for {2} to a scoopable star</value>
+  </data>
+  <data name="BFirstBoth" xml:space="preserve">
+    <value> · 1st discovery, 1st mapping</value>
+  </data>
+  <data name="BFirstDiscovery" xml:space="preserve">
+    <value> · 1st discovery</value>
+  </data>
+  <data name="BFirstDiscoveryMaybe" xml:space="preserve">
+    <value>Maybe a first discovery</value>
+  </data>
+  <data name="BFirstMapping" xml:space="preserve">
+    <value> · 1st mapping</value>
+  </data>
+  <data name="BFuelJumps" xml:space="preserve">
+    <value>Fuel ~{0}</value>
+  </data>
+  <data name="BFuelJumpsTip" xml:space="preserve">
+    <value>{0} jumps before a scoopable star</value>
+  </data>
+  <data name="BFuelLow" xml:space="preserve">
+    <value>Fuel low</value>
+  </data>
+  <data name="BFuelLowScoop" xml:space="preserve">
+    <value>Fuel low · scoop</value>
+  </data>
+  <data name="BGrade" xml:space="preserve">
+    <value>Grade {0}</value>
+  </data>
+  <data name="BHeal" xml:space="preserve">
+    <value>heal</value>
+  </data>
+  <data name="BHealth" xml:space="preserve">
+    <value>Health {0}</value>
+  </data>
+  <data name="BHere" xml:space="preserve">
+    <value>Here ({0})</value>
+  </data>
+  <data name="BHge" xml:space="preserve">
+    <value>HGE · grade 5</value>
+  </data>
+  <data name="BHgeMany" xml:space="preserve">
+    <value>HGE ×{0} · grade 5</value>
+  </data>
+  <data name="BHgeTip" xml:space="preserve">
+    <value>High grade emissions in the system, {0} min left: grade 5 materials possible</value>
+  </data>
+  <data name="BHonk" xml:space="preserve">
+    <value>Honk</value>
+  </data>
+  <data name="BHonkTip" xml:space="preserve">
+    <value>System not scanned yet</value>
+  </data>
+  <data name="BHostile" xml:space="preserve">
+    <value>Hostile here</value>
+  </data>
+  <data name="BHull" xml:space="preserve">
+    <value>Hull {0}</value>
+  </data>
+  <data name="BHullHit" xml:space="preserve">
+    <value>The hull is taking hits</value>
+  </data>
+  <data name="BIllegalCargo" xml:space="preserve">
+    <value>Illegal cargo</value>
+  </data>
+  <data name="BInterdiction" xml:space="preserve">
+    <value>Interdiction!</value>
+  </data>
+  <data name="BInterdictionTip" xml:space="preserve">
+    <value>A ship is trying to pull you out of supercruise</value>
+  </data>
+  <data name="BJump" xml:space="preserve">
+    <value>Jump {0} / {1} ly</value>
+  </data>
+  <data name="BKit" xml:space="preserve">
+    <value>Medkits {0} · cells {1}</value>
+  </data>
+  <data name="BKitTip" xml:space="preserve">
+    <value>Pioneer Supplies: medkits and energy cells</value>
+  </data>
+  <data name="BLimpets" xml:space="preserve">
+    <value>Limpets {0}/{1}</value>
+  </data>
+  <data name="BLimpetsTip" xml:space="preserve">
+    <value>{0} to buy back to leave as usual</value>
+  </data>
+  <data name="BLostIfDestroyed" xml:space="preserve">
+    <value>{0}, lost if destroyed</value>
+  </data>
+  <data name="BMaterials" xml:space="preserve">
+    <value>Materials ({0})</value>
+  </data>
+  <data name="BMedkit" xml:space="preserve">
+    <value>medkit</value>
+  </data>
+  <data name="BMedkitsMany" xml:space="preserve">
+    <value>{0} medkits in the bag</value>
+  </data>
+  <data name="BMedkitsOne" xml:space="preserve">
+    <value>{0} medkit in the bag</value>
+  </data>
+  <data name="BNeutronNext" xml:space="preserve">
+    <value>Neutron star next</value>
+  </data>
+  <data name="BNextHazard" xml:space="preserve">
+    <value>Next {0}</value>
+  </data>
+  <data name="BNextNotScoopable" xml:space="preserve">
+    <value>Next {0} not scoopable</value>
+  </data>
+  <data name="BNextSample" xml:space="preserve">
+    <value>Next sample more than {0} m from the previous ones</value>
+  </data>
+  <data name="BNextScoopable" xml:space="preserve">
+    <value>Next {0} scoopable</value>
+  </data>
+  <data name="BNoCell" xml:space="preserve">
+    <value>Battery flat, no energy cell: get back to shelter</value>
+  </data>
+  <data name="BNoLimpets" xml:space="preserve">
+    <value>No limpets</value>
+  </data>
+  <data name="BNoLimpetsTip" xml:space="preserve">
+    <value>Limpet controller fitted, no limpets in the hold</value>
+  </data>
+  <data name="BNoMedkit" xml:space="preserve">
+    <value>No medkit: take cover</value>
+  </data>
+  <data name="BNor" xml:space="preserve">
+    <value>nor</value>
+  </data>
+  <data name="BNorFor" xml:space="preserve">
+    <value>nor to</value>
+  </data>
+  <data name="BNothingFor" xml:space="preserve">
+    <value>Nothing to {0} during the trip</value>
+  </data>
+  <data name="BNotScoopableDetail" xml:space="preserve">
+    <value>{0}, not scoopable</value>
+  </data>
+  <data name="BOnFootMission" xml:space="preserve">
+    <value>On-foot mission without {0}</value>
+  </data>
+  <data name="BOnRoute" xml:space="preserve">
+    <value>Along the route</value>
+  </data>
+  <data name="BountiesToCash" xml:space="preserve">
+    <value>{0} of bounties to cash in ({1})</value>
+  </data>
+  <data name="BountyHunting" xml:space="preserve">
+    <value>BOUNTY HUNTING</value>
+  </data>
+  <data name="BOutOfRange" xml:space="preserve">
+    <value>{0} · out of range</value>
+  </data>
+  <data name="BOutOfRangeTip" xml:space="preserve">
+    <value>{0} is too far for the FSD</value>
+  </data>
+  <data name="BOverheat" xml:space="preserve">
+    <value>Overheating</value>
+  </data>
+  <data name="BOverheatTip" xml:space="preserve">
+    <value>Above 100% heat, modules get damaged</value>
+  </data>
+  <data name="BOxygen" xml:space="preserve">
+    <value>Oxygen {0}</value>
+  </data>
+  <data name="BPad" xml:space="preserve">
+    <value>Controller {0}</value>
+  </data>
+  <data name="BPassengerWanted" xml:space="preserve">
+    <value>Wanted passenger</value>
+  </data>
+  <data name="BPickupFull" xml:space="preserve">
+    <value>{0} {1}/{2} · full</value>
+  </data>
+  <data name="BPickupFullTip" xml:space="preserve">
+    <value>{0}: picking up more is useless</value>
+  </data>
+  <data name="BPioneerAtStation" xml:space="preserve">
+    <value>Pioneer Supplies, at the station</value>
+  </data>
+  <data name="BRangeTip" xml:space="preserve">
+    <value>Range {0} ly at most, empty hold</value>
+  </data>
+  <data name="BRate" xml:space="preserve">
+    <value>{0}/h</value>
+  </data>
+  <data name="BReady" xml:space="preserve">
+    <value>Ready to leave</value>
+  </data>
+  <data name="BRearm" xml:space="preserve">
+    <value>Rearm</value>
+  </data>
+  <data name="BRearmTip" xml:space="preserve">
+    <value>{0}: used since the last restock</value>
+  </data>
+  <data name="BRebuyTip" xml:space="preserve">
+    <value>Rebuy {0}, balance {1}</value>
+  </data>
+  <data name="BRebuyUncovered" xml:space="preserve">
+    <value>Rebuy not covered</value>
+  </data>
+  <data name="BRecharge" xml:space="preserve">
+    <value>recharge the battery</value>
+  </data>
+  <data name="BRefuel" xml:space="preserve">
+    <value>Refuel {0}</value>
+  </data>
+  <data name="BRefuelHere" xml:space="preserve">
+    <value>{0} · refuel</value>
+  </data>
+  <data name="BRefuelHereTip" xml:space="preserve">
+    <value>{0}; tank {1}, the star here is scoopable</value>
+  </data>
+  <data name="BRefuelTip" xml:space="preserve">
+    <value>Tank not full</value>
+  </data>
+  <data name="BRepairTip" xml:space="preserve">
+    <value>To repair</value>
+  </data>
+  <data name="BScannedMapped" xml:space="preserve">
+    <value>Scanned {0}, mapped {1}</value>
+  </data>
+  <data name="BShieldsDown" xml:space="preserve">
+    <value>Shields down</value>
+  </data>
+  <data name="BSince" xml:space="preserve">
+    <value>{0} · for {1} s</value>
+  </data>
+  <data name="BSpeeding" xml:space="preserve">
+    <value>Speeding</value>
+  </data>
+  <data name="BSuitDamage" xml:space="preserve">
+    <value>The suit is taking damage</value>
+  </data>
+  <data name="BSupercharged" xml:space="preserve">
+    <value>FSD supercharged ×{0}</value>
+  </data>
+  <data name="BSuperchargedTip" xml:space="preserve">
+    <value>Boost from the jet: range ×{0} for the next jump</value>
+  </data>
+  <data name="BSystemValue" xml:space="preserve">
+    <value>System {0}</value>
+  </data>
+  <data name="BTank" xml:space="preserve">
+    <value>{0} · tank {1}</value>
+  </data>
+  <data name="BTankFilled" xml:space="preserve">
+    <value>{0} · tank filled</value>
+  </data>
+  <data name="BTarget" xml:space="preserve">
+    <value>Target {0} · {1}</value>
+  </data>
+  <data name="BTargetClean" xml:space="preserve">
+    <value>Target {0} · clean</value>
+  </data>
+  <data name="BTargetCleanTip" xml:space="preserve">
+    <value>No bounty: shooting it makes you wanted</value>
+  </data>
+  <data name="BTargetScanning" xml:space="preserve">
+    <value>Target {0} · scanning…</value>
+  </data>
+  <data name="BTargetTooDangerous" xml:space="preserve">
+    <value>Target too dangerous</value>
+  </data>
+  <data name="BTargetWantedTip" xml:space="preserve">
+    <value>{0} ({1}), wanted, {2}</value>
+  </data>
+  <data name="BThreatFor" xml:space="preserve">
+    <value>{0} {1}: threat ×{2} for your {3}</value>
+  </data>
+  <data name="BTough" xml:space="preserve">
+    <value>{0} · tough</value>
+  </data>
+  <data name="BUnknownSystem" xml:space="preserve">
+    <value>System unknown to EDSM</value>
+  </data>
+  <data name="BUsualLimpets" xml:space="preserve">
+    <value>Usually {0} aboard</value>
+  </data>
+  <data name="BVeryCold" xml:space="preserve">
+    <value>Very cold</value>
+  </data>
+  <data name="BVeryHot" xml:space="preserve">
+    <value>Very hot</value>
+  </data>
+  <data name="BWanted" xml:space="preserve">
+    <value>Wanted here</value>
+  </data>
+  <data name="BWarrant" xml:space="preserve">
+    <value>Warrant out</value>
+  </data>
+  <data name="CalmMany" xml:space="preserve">
+    <value>{0} calm</value>
+  </data>
+  <data name="CalmOne" xml:space="preserve">
+    <value>{0} calm</value>
+  </data>
+  <data name="Check" xml:space="preserve">
+    <value>Check</value>
+  </data>
+  <data name="CheckForUpdate" xml:space="preserve">
+    <value>Check for an update</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="ClickToCopy" xml:space="preserve">
+    <value>Click to copy, then paste into the galaxy map</value>
+  </data>
+  <data name="ClipboardBusy" xml:space="preserve">
+    <value>Clipboard busy: click again</value>
+  </data>
+  <data name="CombatCount" xml:space="preserve">
+    <value>{0} combat</value>
+  </data>
+  <data name="CombatSessionLabel" xml:space="preserve">
+    <value>COMBAT THIS SESSION</value>
+  </data>
+  <data name="CombatSince" xml:space="preserve">
+    <value>Since {0:HH:mm} ({1} h {2:00}) · {3}</value>
+  </data>
+  <data name="CombatTrack" xml:space="preserve">
+    <value>Combat track</value>
+  </data>
+  <data name="CombatTrackTip" xml:space="preserve">
+    <value>On: played in combat. Off: played in calm. The current track goes on.</value>
+  </data>
+  <data name="ControllerInBanner" xml:space="preserve">
+    <value>Battery in the banner</value>
+  </data>
+  <data name="ControllerInBannerTip" xml:space="preserve">
+    <value>The wireless controller's level at the end of the banner over the game; the low battery warnings stay</value>
+  </data>
+  <data name="ControllerLabel" xml:space="preserve">
+    <value>CONTROLLER</value>
+  </data>
+  <data name="ControllerTip" xml:space="preserve">
+    <value>Read every 30 s. A chime at 20 % then at 10 %.</value>
+  </data>
+  <data name="Copied" xml:space="preserve">
+    <value>“{0}” copied: paste it into the galaxy map</value>
+  </data>
+  <data name="CopySystemTip" xml:space="preserve">
+    <value>Copy the system name</value>
+  </data>
+  <data name="CreditsBillion" xml:space="preserve">
+    <value>{0} bn Cr</value>
+  </data>
+  <data name="CreditsMillion" xml:space="preserve">
+    <value>{0} M Cr</value>
+  </data>
+  <data name="CreditsThousand" xml:space="preserve">
+    <value>{0} k Cr</value>
+  </data>
+  <data name="CreditsUnit" xml:space="preserve">
+    <value>{0} Cr</value>
+  </data>
+  <data name="Exclude" xml:space="preserve">
+    <value>Exclude</value>
+  </data>
+  <data name="ExcludedMany" xml:space="preserve">
+    <value>{0} excluded</value>
+  </data>
+  <data name="ExcludedOne" xml:space="preserve">
+    <value>{0} excluded</value>
+  </data>
+  <data name="ExcludeTip" xml:space="preserve">
+    <value>Take it out of the playlist for good, and skip to the next one</value>
+  </data>
+  <data name="ExplorationLabel" xml:space="preserve">
+    <value>EXPLORATION</value>
+  </data>
+  <data name="ExplorationSessionLabel" xml:space="preserve">
+    <value>EXPLORATION THIS SESSION</value>
+  </data>
+  <data name="FolderEnabledTip" xml:space="preserve">
+    <value>Checked: its tracks are played. Unchecked: kept and sorted, but no longer played.</value>
+  </data>
+  <data name="FolderMissing" xml:space="preserve">
+    <value>Folder not found · {0}</value>
+  </data>
+  <data name="FoldersPane" xml:space="preserve">
+    <value>FOLDERS</value>
+  </data>
+  <data name="FolderUnreadable" xml:space="preserve">
+    <value>Folder unreadable: {0}</value>
+  </data>
+  <data name="ForceAuto" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="ForceAutoTip" xml:space="preserve">
+    <value>Follows the game: combat according to its journal</value>
+  </data>
+  <data name="ForceCalm" xml:space="preserve">
+    <value>Forced calm</value>
+  </data>
+  <data name="ForceCombat" xml:space="preserve">
+    <value>Forced combat</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>FROM</value>
+  </data>
+  <data name="FromPlaceholder" xml:space="preserve">
+    <value>Current system</value>
+  </data>
+  <data name="HonkSetting" xml:space="preserve">
+    <value>Honk reminder on entering a system</value>
+  </data>
+  <data name="HonkSettingTip" xml:space="preserve">
+    <value>In the middle of the screen, while the system has not been scanned with the discovery scanner</value>
+  </data>
+  <data name="HuntIntro" xml:space="preserve">
+    <value>Hazardous RES near here, anarchies left out</value>
+  </data>
+  <data name="HuntNone" xml:space="preserve">
+    <value>No hazardous RES known around {0}</value>
+  </data>
+  <data name="HuntNoPower" xml:space="preserve">
+    <value>No allegiance, so no power system. Click to copy</value>
+  </data>
+  <data name="HuntNoPowerRes" xml:space="preserve">
+    <value>No RES of {0} among the 100 nearest. Click to copy</value>
+  </data>
+  <data name="HuntNoSystem" xml:space="preserve">
+    <value>Current system unknown: no journal read</value>
+  </data>
+  <data name="HuntPlanet" xml:space="preserve">
+    <value>Planet {0}</value>
+  </data>
+  <data name="HuntPlanets" xml:space="preserve">
+    <value>Planets {0}</value>
+  </data>
+  <data name="HuntSearching" xml:space="preserve">
+    <value>Searching around {0}…</value>
+  </data>
+  <data name="HuntTrip" xml:space="preserve">
+    <value>{0} · ~{1}</value>
+  </data>
+  <data name="InGame" xml:space="preserve">
+    <value>IN GAME</value>
+  </data>
+  <data name="JournalNotFound" xml:space="preserve">
+    <value>Journal not found: {0}</value>
+  </data>
+  <data name="JumpsMany" xml:space="preserve">
+    <value>{0} jumps</value>
+  </data>
+  <data name="JumpsOne" xml:space="preserve">
+    <value>{0} jump</value>
+  </data>
+  <data name="KillsMany" xml:space="preserve">
+    <value>{0} kills</value>
+  </data>
+  <data name="KillsOne" xml:space="preserve">
+    <value>{0} kill</value>
+  </data>
+  <data name="LanguageAuto" xml:space="preserve">
+    <value>Same as Windows</value>
+  </data>
+  <data name="LanguageLabel" xml:space="preserve">
+    <value>LANGUAGE</value>
+  </data>
+  <data name="LanguageRestart" xml:space="preserve">
+    <value>Applies on the next start of the player</value>
+  </data>
+  <data name="LargePad" xml:space="preserve">
+    <value>large pad</value>
+  </data>
+  <data name="LastSwitch" xml:space="preserve">
+    <value>Last switch:</value>
+  </data>
+  <data name="LaunchEdmc" xml:space="preserve">
+    <value>Launch EDMarketConnector with the game</value>
+  </data>
+  <data name="LaunchEdmcTip" xml:space="preserve">
+    <value>Started when the game starts, unless already running: it sends your journal to EDDN (and so to Spansh), EDSM and Inara</value>
+  </data>
+  <data name="LibraryMissingTrack" xml:space="preserve">
+    <value>{0} is not in the library</value>
+  </data>
+  <data name="LibraryNotChanged" xml:space="preserve">
+    <value>Library not changed: {0}</value>
+  </data>
+  <data name="LibraryNotJson" xml:space="preserve">
+    <value>the library is not a JSON object</value>
+  </data>
+  <data name="LibrarySummary" xml:space="preserve">
+    <value>{0} calm · {1} combat · {2} liked · {3} excluded</value>
+  </data>
+  <data name="LightYears" xml:space="preserve">
+    <value>{0} ly</value>
+  </data>
+  <data name="Like" xml:space="preserve">
+    <value>Like</value>
+  </data>
+  <data name="Liked" xml:space="preserve">
+    <value>Liked</value>
+  </data>
+  <data name="LikedMany" xml:space="preserve">
+    <value>{0} liked</value>
+  </data>
+  <data name="LikedOne" xml:space="preserve">
+    <value>{0} liked</value>
+  </data>
+  <data name="LikedTrack" xml:space="preserve">
+    <value>Liked track</value>
+  </data>
+  <data name="LikeRowTip" xml:space="preserve">
+    <value>Like: it comes back more often</value>
+  </data>
+  <data name="LikeTip" xml:space="preserve">
+    <value>The track comes back more often</value>
+  </data>
+  <data name="Listening" xml:space="preserve">
+    <value>{0}: listening to {1}…</value>
+  </data>
+  <data name="ListeningProgress" xml:space="preserve">
+    <value>{0}: listening, {1} / {2}</value>
+  </data>
+  <data name="MediumPad" xml:space="preserve">
+    <value>medium pad at most</value>
+  </data>
+  <data name="MenuMode" xml:space="preserve">
+    <value>Mode</value>
+  </data>
+  <data name="ModeCalm" xml:space="preserve">
+    <value>CALM</value>
+  </data>
+  <data name="ModeCombat" xml:space="preserve">
+    <value>COMBAT</value>
+  </data>
+  <data name="ModeLabel" xml:space="preserve">
+    <value>MODE</value>
+  </data>
+  <data name="Nearest" xml:space="preserve">
+    <value>NEAREST</value>
+  </data>
+  <data name="NeutronArrival" xml:space="preserve">
+    <value> · arrival</value>
+  </data>
+  <data name="NeutronClickStep" xml:space="preserve">
+    <value>Click a step to copy it, then paste it into the galaxy map</value>
+  </data>
+  <data name="NeutronFailed" xml:space="preserve">
+    <value>Plotting failed: {0}</value>
+  </data>
+  <data name="NeutronFrom" xml:space="preserve">
+    <value>{0} from {1}</value>
+  </data>
+  <data name="NeutronLeft" xml:space="preserve">
+    <value> · {0} left</value>
+  </data>
+  <data name="NeutronNeedFrom" xml:space="preserve">
+    <value>Enter the starting system</value>
+  </data>
+  <data name="NeutronNeedRange" xml:space="preserve">
+    <value>Range in light years: 25.5 for instance</value>
+  </data>
+  <data name="NeutronNeedTo" xml:space="preserve">
+    <value>Enter the destination system</value>
+  </data>
+  <data name="NeutronNoEnd" xml:space="preserve">
+    <value>Destination system not found</value>
+  </data>
+  <data name="NeutronNoGain" xml:space="preserve">
+    <value>No neutron star shortens this trip: plot {0} in the galaxy map, the game gets there in {1}</value>
+  </data>
+  <data name="NeutronNoStart" xml:space="preserve">
+    <value>Starting system not found</value>
+  </data>
+  <data name="NeutronPlotting" xml:space="preserve">
+    <value>Plotting from {0} to {1}…</value>
+  </data>
+  <data name="NeutronStar" xml:space="preserve">
+    <value> · neutron star</value>
+  </data>
+  <data name="NeutronStart" xml:space="preserve">
+    <value>start · {0}</value>
+  </data>
+  <data name="NeutronTimeout" xml:space="preserve">
+    <value>Spansh did not answer in time</value>
+  </data>
+  <data name="NeutronUnreadable" xml:space="preserve">
+    <value>Unreadable answer from Spansh</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="NextStep" xml:space="preserve">
+    <value>NEXT STEP</value>
+  </data>
+  <data name="NoBounty" xml:space="preserve">
+    <value>No bounty pending</value>
+  </data>
+  <data name="NoGameRead" xml:space="preserve">
+    <value>No game read yet</value>
+  </data>
+  <data name="NoNewTrack" xml:space="preserve">
+    <value>{0}: no new track</value>
+  </data>
+  <data name="NoRoute" xml:space="preserve">
+    <value>No route plotted</value>
+  </data>
+  <data name="NoSession" xml:space="preserve">
+    <value>No session</value>
+  </data>
+  <data name="NoTarget" xml:space="preserve">
+    <value>No target</value>
+  </data>
+  <data name="NothingHere" xml:space="preserve">
+    <value>Nothing to report here or along the route</value>
+  </data>
+  <data name="NothingToCash" xml:space="preserve">
+    <value>Nothing to cash in</value>
+  </data>
+  <data name="NothingToDo" xml:space="preserve">
+    <value>Nothing to plan</value>
+  </data>
+  <data name="NothingToSell" xml:space="preserve">
+    <value>Nothing to sell</value>
+  </data>
+  <data name="NoTrack" xml:space="preserve">
+    <value>No track</value>
+  </data>
+  <data name="NotScoopable" xml:space="preserve">
+    <value>not scoopable</value>
+  </data>
+  <data name="OnGameScreen" xml:space="preserve">
+    <value>ON THE GAME SCREEN</value>
+  </data>
+  <data name="OpenPlayer" xml:space="preserve">
+    <value>Open the player</value>
+  </data>
+  <data name="OutOfGame" xml:space="preserve">
+    <value>OUT OF GAME</value>
+  </data>
+  <data name="PadAbsent" xml:space="preserve">
+    <value>absent</value>
+  </data>
+  <data name="PadWired" xml:space="preserve">
+    <value>wired</value>
+  </data>
+  <data name="PanelSetting" xml:space="preserve">
+    <value>Valuable planets and materials of the route</value>
+  </data>
+  <data name="PanelSettingTip" xml:space="preserve">
+    <value>The exploration panel: the planets worth mapping and the material sources, here and along the current route</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="Percent" xml:space="preserve">
+    <value>{0}%</value>
+  </data>
+  <data name="PerHour" xml:space="preserve">
+    <value>{0} / h</value>
+  </data>
+  <data name="PlanetAmmonia" xml:space="preserve">
+    <value>Ammonia world</value>
+  </data>
+  <data name="PlanetEarthLike" xml:space="preserve">
+    <value>Earth-like world</value>
+  </data>
+  <data name="PlanetTerraformable" xml:space="preserve">
+    <value>Terraformable</value>
+  </data>
+  <data name="PlanetThreshold" xml:space="preserve">
+    <value>Planets shown from</value>
+  </data>
+  <data name="PlanetThresholdTip" xml:space="preserve">
+    <value>What the planet pays once mapped efficiently; below it, the panel leaves it out</value>
+  </data>
+  <data name="PlanetWater" xml:space="preserve">
+    <value>Water world</value>
+  </data>
+  <data name="PlanetWaterTerraformable" xml:space="preserve">
+    <value>Terraformable water world</value>
+  </data>
+  <data name="Play" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="PlayNowTip" xml:space="preserve">
+    <value>Double-click: play now</value>
+  </data>
+  <data name="Plot" xml:space="preserve">
+    <value>Plot</value>
+  </data>
+  <data name="PlotTip" xml:space="preserve">
+    <value>Route through neutron stars, plotted by Spansh</value>
+  </data>
+  <data name="PowerFromGame" xml:space="preserve">
+    <value>The game's ({0})</value>
+  </data>
+  <data name="PowerFromGameNone" xml:space="preserve">
+    <value>The game's (none)</value>
+  </data>
+  <data name="PowerLabel" xml:space="preserve">
+    <value>POWERPLAY</value>
+  </data>
+  <data name="PowerNone" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="PowerTip" xml:space="preserve">
+    <value>The power whose systems the hazardous RES search looks for</value>
+  </data>
+  <data name="Quit" xml:space="preserve">
+    <value>Quit</value>
+  </data>
+  <data name="Range" xml:space="preserve">
+    <value>Range (ly)</value>
+  </data>
+  <data name="RangeTip" xml:space="preserve">
+    <value>The ship's, with an empty hold; lower it if the real jump is shorter</value>
+  </data>
+  <data name="RankCompetent" xml:space="preserve">
+    <value>competent</value>
+  </data>
+  <data name="RankDangerous" xml:space="preserve">
+    <value>dangerous</value>
+  </data>
+  <data name="RankDeadly" xml:space="preserve">
+    <value>deadly</value>
+  </data>
+  <data name="RankElite" xml:space="preserve">
+    <value>elite</value>
+  </data>
+  <data name="RankExpert" xml:space="preserve">
+    <value>expert</value>
+  </data>
+  <data name="RankHarmless" xml:space="preserve">
+    <value>harmless</value>
+  </data>
+  <data name="RankMaster" xml:space="preserve">
+    <value>master</value>
+  </data>
+  <data name="RankMostlyHarmless" xml:space="preserve">
+    <value>mostly harmless</value>
+  </data>
+  <data name="RankNovice" xml:space="preserve">
+    <value>novice</value>
+  </data>
+  <data name="RankUnknown" xml:space="preserve">
+    <value>unknown rank</value>
+  </data>
+  <data name="RateWaiting" xml:space="preserve">
+    <value>— / h (10 min minimum)</value>
+  </data>
+  <data name="RemoveFolderAsk" xml:space="preserve">
+    <value>Remove “{0}”? Its tracks leave the library, with their likes and their sorting.</value>
+  </data>
+  <data name="RemoveFolderTip" xml:space="preserve">
+    <value>Remove the folder, with the sorting of its tracks</value>
+  </data>
+  <data name="RemoveFolderTitle" xml:space="preserve">
+    <value>Remove a folder</value>
+  </data>
+  <data name="ReplayCaption" xml:space="preserve">
+    <value>{0} — back to calm {1:0} s after the last signal</value>
+  </data>
+  <data name="ReplayFilter" xml:space="preserve">
+    <value>Elite Dangerous journals|Journal.*.log|All files|*.*</value>
+  </data>
+  <data name="ReplayJournal" xml:space="preserve">
+    <value>Replay a journal…</value>
+  </data>
+  <data name="ReplayPick" xml:space="preserve">
+    <value>Journal to replay</value>
+  </data>
+  <data name="ReplayStart" xml:space="preserve">
+    <value>start of the journal, {0:HH:mm:ss}</value>
+  </data>
+  <data name="ReplayTitle" xml:space="preserve">
+    <value>Journal replay</value>
+  </data>
+  <data name="RightNow" xml:space="preserve">
+    <value>RIGHT NOW</value>
+  </data>
+  <data name="RouteLabel" xml:space="preserve">
+    <value>ROUTE</value>
+  </data>
+  <data name="RouteTo" xml:space="preserve">
+    <value>{0} · {1}</value>
+  </data>
+  <data name="ScannedMany" xml:space="preserve">
+    <value>{0} bodies scanned</value>
+  </data>
+  <data name="ScannedOne" xml:space="preserve">
+    <value>{0} body scanned</value>
+  </data>
+  <data name="Scoopable" xml:space="preserve">
+    <value>scoopable</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SearchFailed" xml:space="preserve">
+    <value>Search failed: {0}</value>
+  </data>
+  <data name="SearchHunt" xml:space="preserve">
+    <value>Search for a hazardous RES</value>
+  </data>
+  <data name="SearchHuntTip" xml:space="preserve">
+    <value>The nearest hazardous RES, anarchies left out (edtools.cc and Spansh)</value>
+  </data>
+  <data name="SearchStation" xml:space="preserve">
+    <value>Search for the nearest full station</value>
+  </data>
+  <data name="SeekTip" xml:space="preserve">
+    <value>Click to jump to this point of the track</value>
+  </data>
+  <data name="SessionLabel" xml:space="preserve">
+    <value>SESSION</value>
+  </data>
+  <data name="SessionSince" xml:space="preserve">
+    <value>Session since {0:HH:mm} ({1} h {2:00}): {3} earned, {4}</value>
+  </data>
+  <data name="SettingsApp" xml:space="preserve">
+    <value>APPLICATION</value>
+  </data>
+  <data name="SettingsGame" xml:space="preserve">
+    <value>GAME</value>
+  </data>
+  <data name="SignalDegraded" xml:space="preserve">
+    <value>Degraded emissions</value>
+  </data>
+  <data name="SignalEncoded" xml:space="preserve">
+    <value>Encoded emissions</value>
+  </data>
+  <data name="SignalHighGrade" xml:space="preserve">
+    <value>High grade emissions</value>
+  </data>
+  <data name="SignalSalvage" xml:space="preserve">
+    <value>Salvageable wreckage</value>
+  </data>
+  <data name="StarBlackHole" xml:space="preserve">
+    <value>black hole</value>
+  </data>
+  <data name="StarGiant" xml:space="preserve">
+    <value>{0} giant</value>
+  </data>
+  <data name="StarNeutron" xml:space="preserve">
+    <value>neutron star</value>
+  </data>
+  <data name="StarSupergiant" xml:space="preserve">
+    <value>{0} supergiant</value>
+  </data>
+  <data name="StartWithWindows" xml:space="preserve">
+    <value>Start with Windows</value>
+  </data>
+  <data name="StartWithWindowsTip" xml:space="preserve">
+    <value>Started at log on, it waits for the game in the notification area</value>
+  </data>
+  <data name="StarWhiteDwarf" xml:space="preserve">
+    <value>white dwarf</value>
+  </data>
+  <data name="StationFound" xml:space="preserve">
+    <value>Click to copy the system, then paste into the galaxy map</value>
+  </data>
+  <data name="StationHere" xml:space="preserve">
+    <value>here</value>
+  </data>
+  <data name="StationIntro" xml:space="preserve">
+    <value>Every service but the material trader</value>
+  </data>
+  <data name="StationLabel" xml:space="preserve">
+    <value>NEAREST FULL STATION</value>
+  </data>
+  <data name="StationNone" xml:space="preserve">
+    <value>No station with all these services found around {0}</value>
+  </data>
+  <data name="StationTip" xml:space="preserve">
+    <value>Refuel, repair, restock, market, outfitting, shipyard, Universal Cartographics, Vista Genomics, Interstellar Factors, search and rescue (Spansh). Carriers left out.</value>
+  </data>
+  <data name="StationTrip" xml:space="preserve">
+    <value>{0} · {1} ls · {2}</value>
+  </data>
+  <data name="StepsLabel" xml:space="preserve">
+    <value>STEPS · CLICK TO COPY</value>
+  </data>
+  <data name="StepsMany" xml:space="preserve">
+    <value>{0} steps</value>
+  </data>
+  <data name="StepsOne" xml:space="preserve">
+    <value>{0} step</value>
+  </data>
+  <data name="SwitchAt" xml:space="preserve">
+    <value>{0}, at {1:HH:mm:ss}</value>
+  </data>
+  <data name="SwitchBackAuto" xml:space="preserve">
+    <value>back to automatic, {0}</value>
+  </data>
+  <data name="SwitchForcedCalm" xml:space="preserve">
+    <value>forced calm</value>
+  </data>
+  <data name="SwitchForcedCombat" xml:space="preserve">
+    <value>forced combat</value>
+  </data>
+  <data name="SwitchNoSignal" xml:space="preserve">
+    <value>{0} s without a signal</value>
+  </data>
+  <data name="SwitchOutOfGame" xml:space="preserve">
+    <value>out of game</value>
+  </data>
+  <data name="SwitchStart" xml:space="preserve">
+    <value>start</value>
+  </data>
+  <data name="SystemAndRoute" xml:space="preserve">
+    <value>THIS SYSTEM AND THE ROUTE</value>
+  </data>
+  <data name="TabCombat" xml:space="preserve">
+    <value>COMBAT</value>
+  </data>
+  <data name="TabExploration" xml:space="preserve">
+    <value>EXPLORATION</value>
+  </data>
+  <data name="TabMusic" xml:space="preserve">
+    <value>MUSIC</value>
+  </data>
+  <data name="TabNeutron" xml:space="preserve">
+    <value>NEUTRON ROUTE</value>
+  </data>
+  <data name="TabSettings" xml:space="preserve">
+    <value>SETTINGS</value>
+  </data>
+  <data name="TargetLabel" xml:space="preserve">
+    <value>TARGET</value>
+  </data>
+  <data name="ThousandCredits" xml:space="preserve">
+    <value>k Cr</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>TO</value>
+  </data>
+  <data name="ToCashIn" xml:space="preserve">
+    <value>TO CASH IN</value>
+  </data>
+  <data name="ToPlaceholder" xml:space="preserve">
+    <value>Colonia, Sagittarius A*…</value>
+  </data>
+  <data name="ToSell" xml:space="preserve">
+    <value>TO SELL</value>
+  </data>
+  <data name="TracksAdded" xml:space="preserve">
+    <value>{0}: {1} more, {2} in combat by their sound and title</value>
+  </data>
+  <data name="TracksMany" xml:space="preserve">
+    <value>{0} tracks</value>
+  </data>
+  <data name="TracksOne" xml:space="preserve">
+    <value>{0} track</value>
+  </data>
+  <data name="TrackToastSetting" xml:space="preserve">
+    <value>Title of the track that starts</value>
+  </data>
+  <data name="TrackToastSettingTip" xml:space="preserve">
+    <value>A few seconds at the top right, with its heart and its mode</value>
+  </data>
+  <data name="TrayCalm" xml:space="preserve">
+    <value>calm</value>
+  </data>
+  <data name="TrayCombat" xml:space="preserve">
+    <value>combat</value>
+  </data>
+  <data name="TrayController" xml:space="preserve">
+    <value>Controller: {0}</value>
+  </data>
+  <data name="TrayInGame" xml:space="preserve">
+    <value>in game</value>
+  </data>
+  <data name="TrayNoTrack" xml:space="preserve">
+    <value>no track</value>
+  </data>
+  <data name="TrayOutOfGame" xml:space="preserve">
+    <value>out of game</value>
+  </data>
+  <data name="TrayPaused" xml:space="preserve">
+    <value>paused</value>
+  </data>
+  <data name="UpdateCheckFailed" xml:space="preserve">
+    <value>check failed ({0:HH:mm})</value>
+  </data>
+  <data name="UpdateInstallFailed" xml:space="preserve">
+    <value>installation failed, see the log</value>
+  </data>
+  <data name="UpdateInstalling" xml:space="preserve">
+    <value>version {0} being installed</value>
+  </data>
+  <data name="UpdateLocalBuild" xml:space="preserve">
+    <value>local build, no automatic update</value>
+  </data>
+  <data name="UpdateLocalLatest" xml:space="preserve">
+    <value>local build; latest release: {0}</value>
+  </data>
+  <data name="UpdatesLabel" xml:space="preserve">
+    <value>UPDATES</value>
+  </data>
+  <data name="UpdateUpToDate" xml:space="preserve">
+    <value>up to date (checked at {0:HH:mm})</value>
+  </data>
+  <data name="UpNext" xml:space="preserve">
+    <value>{0} · {1} UP NEXT</value>
+  </data>
+  <data name="VersionTip" xml:space="preserve">
+    <value>Player version</value>
+  </data>
+  <data name="VolumeLabel" xml:space="preserve">
+    <value>VOLUME</value>
+  </data>
+  <data name="WindowsLabel" xml:space="preserve">
+    <value>WINDOWS</value>
+  </data>
+</root>
