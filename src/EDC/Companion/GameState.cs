@@ -201,22 +201,8 @@ public sealed class GameState
     /// <summary>The discovery scanner sounded here, and what it found not lost since with the ship.</summary>
     public bool Honked => System is { } system && _honked.ContainsKey(system);
 
-    /// <summary>What EDSM reckons the current system pays, once <see cref="SetSystemValue"/> has brought it.</summary>
-    public SystemValue? SystemValue { get; private set; }
-
-    /// <summary>Raised on entering a new system: the caller asks EDSM and calls <see cref="SetSystemValue"/>.</summary>
-    public bool SystemValueWanted { get; set; }
-
-    /// <summary>The bodies of the current system worth mapping and not mapped yet, nearest first.</summary>
-    public IReadOnlyList<ValuableBody> BodiesToMap =>
-        SystemValue?.Bodies.Where(b => !_mappedBodies.ContainsKey(b.Name)).ToList() ?? [];
-
-    /// <summary>An answer for a system left since is dropped.</summary>
-    public void SetSystemValue(long address, SystemValue value)
-    {
-        if (address == SystemAddress)
-            SystemValue = value;
-    }
+    /// <summary>Raised on entering a new system: the caller asks EDSM and Spansh for its planets.</summary>
+    public bool SystemBodiesWanted { get; set; }
 
     /// <summary>
     /// The planets of the current system not mapped yet that are worth telling: mapping them pays the
@@ -1017,8 +1003,7 @@ public sealed class GameState
         {
             _signals.Clear();
             Target = null;
-            SystemValue = null;
-            SystemValueWanted = true;
+            SystemBodiesWanted = true;
             _scannedNotable.Clear();
             _edsmNotable = [];
             _scannedBodies.Clear();

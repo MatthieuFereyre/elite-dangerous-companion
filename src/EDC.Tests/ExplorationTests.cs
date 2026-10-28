@@ -105,92 +105,27 @@ public sealed class ExplorationTests
         Assert.Equal("Boucliers tombés", Warning(state, 60)?.Title);
     }
 
-    // Two systems as EDSM's api-system-v1/estimated-value gives them.
-    private const string Valuable = """
-        {"id":13153,"id64":5306465653474,"name":"LHS 3447","estimatedValue":353968,"estimatedValueMapped":1164029,
-         "valuableBodies":[{"bodyId":3195879,"bodyName":"LHS 3447 A 5","distance":92190,"valueMax":879114},
-                           {"bodyId":3195880,"bodyName":"LHS 3447 B 1","distance":1200,"valueMax":512000}]}
-        """;
-
-    private const string Plain = """{"id":18179,"id64":5336236820851,"name":"Itela","estimatedValue":17072,"estimatedValueMapped":53189,"valuableBodies":[]}""";
-
     [Fact]
-    public void EDSM_gives_the_value_of_a_system_and_its_bodies_worth_mapping()
-    {
-        Assert.Equal(new SystemValue(353968, 1164029, [new ValuableBody("LHS 3447 B 1", 1200, 512000), new ValuableBody("LHS 3447 A 5", 92190, 879114)]),
-            SystemValues.Parse(Valuable), new SystemValueComparer());
-        Assert.Equal(new SystemValue(17072, 53189, []), SystemValues.Parse(Plain), new SystemValueComparer());
-        // A system EDSM has never seen, or seen without its bodies.
-        Assert.Equal(SystemValue.Unknown, SystemValues.Parse("{}"), new SystemValueComparer());
-        Assert.Equal(SystemValue.Unknown, SystemValues.Parse("""{"id":1,"estimatedValue":0,"estimatedValueMapped":0,"valuableBodies":[]}"""), new SystemValueComparer());
-        Assert.Equal(SystemValue.Unknown, SystemValues.Parse("[]"), new SystemValueComparer());
-    }
-
-    [Fact]
-    public void Each_new_system_asks_for_its_value_and_a_late_answer_for_another_is_dropped()
+    public void Each_new_system_asks_for_its_planets()
     {
         var state = Replay(Jump("19:00:00", "LHS 3447", 5306465653474));
-        Assert.True(state.SystemValueWanted);
-        state.SystemValueWanted = false;
+        Assert.True(state.SystemBodiesWanted);
+        state.SystemBodiesWanted = false;
 
         state.Apply(Line("19:01:00", "\"event\":\"SupercruiseExit\", \"StarSystem\":\"LHS 3447\", \"SystemAddress\":5306465653474"));
-        Assert.False(state.SystemValueWanted);
-
-        state.SetSystemValue(5306465653474, SystemValues.Parse(Valuable));
-        Assert.NotNull(state.SystemValue);
+        Assert.False(state.SystemBodiesWanted);
 
         state.Apply(Jump("19:05:00", "Itela", 5336236820851));
-        Assert.True(state.SystemValueWanted);
-        Assert.Null(state.SystemValue);
-        state.SetSystemValue(5306465653474, SystemValues.Parse(Valuable));
-        Assert.Null(state.SystemValue);
+        Assert.True(state.SystemBodiesWanted);
     }
 
-    private static Chip? ValueChip(GameState state, GameStatus? status = null) =>
-        Briefing.Banner(state, status ?? Flying(), PadBattery.None, Arrival.AddSeconds(5)).SingleOrDefault(c => c.Text.StartsWith("Système"));
-
     [Fact]
-    public void The_banner_gives_the_value_and_the_nearest_planet_to_map_until_mapped()
+    public void The_banner_tells_neither_the_value_of_the_system_nor_its_planets_the_panel_lists_them()
     {
         var state = Replay(Jump("19:00:00", "LHS 3447", 5306465653474));
-        state.SetSystemValue(5306465653474, SystemValues.Parse(Valuable));
-
-        Assert.Equal(new Chip($"Système 354 k Cr · B 1 à {Ls(1200)} ls +1", Tone.Info,
-                $"Scanné 354 k Cr, cartographié 1,2 M Cr · B 1 à {Ls(1200)} ls : 512 k Cr · A 5 à {Ls(92190)} ls : 879 k Cr"),
-            ValueChip(state));
-        Assert.Null(ValueChip(state, Docked()));
-
-        // Honked, the system is known: what is left is the planets to map.
-        state.Apply(Honk("19:01:00", "LHS 3447", 5306465653474));
-        state.Apply(Map("19:10:00", "LHS 3447 B 1", 5306465653474));
-        Assert.Equal($"Système 354 k Cr · A 5 à {Ls(92190)} ls", ValueChip(state)?.Text);
-
-        state.Apply(Map("19:30:00", "LHS 3447 A 5", 5306465653474));
-        Assert.Null(ValueChip(state));
-    }
-
-    [Fact]
-    public void A_system_without_a_planet_to_map_shows_its_value_until_honked()
-    {
-        var state = Replay(Jump("19:00:00", "Itela", 5336236820851));
-        state.SetSystemValue(5336236820851, SystemValues.Parse(Plain));
-        Assert.Equal(new Chip("Système 17 k Cr", Tone.Info, "Scanné 17 k Cr, cartographié 53 k Cr"), ValueChip(state));
-
-        state.Apply(Honk("19:01:00", "Itela", 5336236820851));
-        Assert.Null(ValueChip(state));
-    }
-
-    [Fact]
-    public void A_system_EDSM_does_not_know_may_be_a_first_discovery()
-    {
-        var state = Replay(Jump("19:00:00", "Praea Euq TY-S b3-1", 2869977687585));
-        Assert.Null(ValueChip(state));
-
-        state.SetSystemValue(2869977687585, SystemValue.Unknown);
-        Assert.Equal(new Chip("Système inconnu d'EDSM", Tone.Good, "Peut-être une première découverte"), ValueChip(state));
-
-        state.Apply(Honk("19:01:00", "Praea Euq TY-S b3-1", 2869977687585));
-        Assert.Null(ValueChip(state));
+        state.SetNotableBodies(5306465653474, NotableBodies.Parse(Bodies));
+        Assert.NotEmpty(Notable(state));
+        Assert.DoesNotContain(Briefing.Banner(state, Flying(), PadBattery.None, Arrival.AddSeconds(5)), c => c.Text.StartsWith("Système"));
     }
 
     [Fact]
@@ -201,8 +136,8 @@ public sealed class ExplorationTests
             Map("18:10:00", "LHS 3447 B 1", 5306465653474), Map("18:20:00", "LHS 3447 A 5", 5306465653474),
             Line("18:40:00", "\"event\":\"Died\""),
             Jump("19:00:00", "LHS 3447", 5306465653474));
-        state.SetSystemValue(5306465653474, SystemValues.Parse(Valuable));
-        Assert.Equal($"Système 354 k Cr · B 1 à {Ls(1200)} ls +1", ValueChip(state)?.Text);
+        state.SetNotableBodies(5306465653474, NotableBodies.Parse(Bodies));
+        Assert.Equal(["LHS 3447 B 1", "LHS 3447 B 2", "LHS 3447 A 5"], Notable(state));
     }
 
     [Fact]
@@ -213,8 +148,8 @@ public sealed class ExplorationTests
             Map("18:10:00", "LHS 3447 B 1", 5306465653474),
             Line("18:40:00", "\"event\":\"Died\""),
             Jump("19:00:00", "LHS 3447", 5306465653474));
-        state.SetSystemValue(5306465653474, SystemValues.Parse(Valuable));
-        Assert.Equal($"Système 354 k Cr · B 1 à {Ls(1200)} ls +1", ValueChip(state)?.Text);
+        state.SetNotableBodies(5306465653474, NotableBodies.Parse(Bodies));
+        Assert.Equal(["LHS 3447 B 1", "LHS 3447 B 2", "LHS 3447 A 5"], Notable(state));
         Assert.Null(Warning(state, 5));
     }
 
@@ -227,8 +162,8 @@ public sealed class ExplorationTests
             Honk("18:31:00", "LHS 3447", 5306465653474), Map("18:32:00", "LHS 3447 B 1", 5306465653474),
             Line("18:40:00", "\"event\":\"Died\""),
             Jump("19:00:00", "LHS 3447", 5306465653474));
-        state.SetSystemValue(5306465653474, SystemValues.Parse(Valuable));
-        Assert.Equal($"Système 354 k Cr · A 5 à {Ls(92190)} ls", ValueChip(state)?.Text);
+        state.SetNotableBodies(5306465653474, NotableBodies.Parse(Bodies));
+        Assert.Equal(["LHS 3447 B 2", "LHS 3447 A 5"], Notable(state));
         Assert.Null(Warning(state, 5));
     }
 
@@ -315,11 +250,8 @@ public sealed class ExplorationTests
 
         var state = Replay(Jump("19:00:00", "LHS 3447", 5306465653474));
         state.SetNotableBodies(5306465653474, NotableBodies.Parse(Bodies));
-        state.SetSystemValue(5306465653474, SystemValues.Parse(Valuable));
         // Without their mass, their value is not known: all told, the nearest first.
         Assert.Equal(["LHS 3447 B 1", "LHS 3447 B 2", "LHS 3447 A 5"], Notable(state));
-        // Both are in the panel: the value's chip leaves them out.
-        Assert.Equal("Système 354 k Cr", ValueChip(state)?.Text);
 
         // A late answer for a system left is dropped.
         state.Apply(Jump("19:05:00", "Itela", 5336236820851));
@@ -606,14 +538,5 @@ public sealed class ExplorationTests
 
         state.Apply(Loadout("19:03:00", "int_fuelscoop_size5_class5"));
         Assert.Empty(Briefing.Panel(state, Flying(), Arrival));
-    }
-
-    /// <summary>Records compare their lists by reference: the bodies are compared one by one.</summary>
-    private sealed class SystemValueComparer : IEqualityComparer<SystemValue>
-    {
-        public bool Equals(SystemValue? x, SystemValue? y) =>
-            x is not null && y is not null && x.Scan == y.Scan && x.Mapped == y.Mapped && x.Bodies.SequenceEqual(y.Bodies);
-
-        public int GetHashCode(SystemValue value) => value.Scan.GetHashCode();
     }
 }

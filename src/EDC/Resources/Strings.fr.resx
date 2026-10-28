@@ -102,9 +102,6 @@
   <data name="BBagWithout" xml:space="preserve">
     <value>Sac sans {0}</value>
   </data>
-  <data name="BBodyAt" xml:space="preserve">
-    <value>{0} à {1} ls</value>
-  </data>
   <data name="BBonds" xml:space="preserve">
     <value>Obligations {0}</value>
   </data>
@@ -191,9 +188,6 @@
   </data>
   <data name="BFirstDiscovery" xml:space="preserve">
     <value> · 1re découverte</value>
-  </data>
-  <data name="BFirstDiscoveryMaybe" xml:space="preserve">
-    <value>Peut-être une première découverte</value>
   </data>
   <data name="BFirstMapping" xml:space="preserve">
     <value> · 1re cartographie</value>
@@ -420,9 +414,6 @@
   <data name="BRepairTip" xml:space="preserve">
     <value>À réparer</value>
   </data>
-  <data name="BScannedMapped" xml:space="preserve">
-    <value>Scanné {0}, cartographié {1}</value>
-  </data>
   <data name="BShieldsDown" xml:space="preserve">
     <value>Boucliers tombés</value>
   </data>
@@ -440,9 +431,6 @@
   </data>
   <data name="BSuperchargedTip" xml:space="preserve">
     <value>Élan pris dans le jet : portée ×{0} pour le prochain saut</value>
-  </data>
-  <data name="BSystemValue" xml:space="preserve">
-    <value>Système {0}</value>
   </data>
   <data name="BTank" xml:space="preserve">
     <value>{0} · réservoir {1}</value>
@@ -479,9 +467,6 @@
   </data>
   <data name="BUndiscovered" xml:space="preserve">
     <value>Jamais découvert</value>
-  </data>
-  <data name="BUnknownSystem" xml:space="preserve">
-    <value>Système inconnu d'EDSM</value>
   </data>
   <data name="BUsualLimpets" xml:space="preserve">
     <value>D'habitude {0} à bord</value>

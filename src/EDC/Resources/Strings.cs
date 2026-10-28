@@ -45,7 +45,6 @@ public static class Strings
     public static string BatteryLow => Get(nameof(BatteryLow));
     public static string BAvoid => Get(nameof(BAvoid));
     public static string BBagWithout => Get(nameof(BBagWithout));
-    public static string BBodyAt => Get(nameof(BBodyAt));
     public static string BBonds => Get(nameof(BBonds));
     public static string BBondsMany => Get(nameof(BBondsMany));
     public static string BBondsOne => Get(nameof(BBondsOne));
@@ -75,7 +74,6 @@ public static class Strings
     public static string BFillHereTip => Get(nameof(BFillHereTip));
     public static string BFirstBoth => Get(nameof(BFirstBoth));
     public static string BFirstDiscovery => Get(nameof(BFirstDiscovery));
-    public static string BFirstDiscoveryMaybe => Get(nameof(BFirstDiscoveryMaybe));
     public static string BFirstMapping => Get(nameof(BFirstMapping));
     public static string BFuelJumps => Get(nameof(BFuelJumps));
     public static string BFuelJumpsTip => Get(nameof(BFuelJumpsTip));
@@ -151,14 +149,12 @@ public static class Strings
     public static string BRefuelHereTip => Get(nameof(BRefuelHereTip));
     public static string BRefuelTip => Get(nameof(BRefuelTip));
     public static string BRepairTip => Get(nameof(BRepairTip));
-    public static string BScannedMapped => Get(nameof(BScannedMapped));
     public static string BShieldsDown => Get(nameof(BShieldsDown));
     public static string BSince => Get(nameof(BSince));
     public static string BSpeeding => Get(nameof(BSpeeding));
     public static string BSuitDamage => Get(nameof(BSuitDamage));
     public static string BSupercharged => Get(nameof(BSupercharged));
     public static string BSuperchargedTip => Get(nameof(BSuperchargedTip));
-    public static string BSystemValue => Get(nameof(BSystemValue));
     public static string BTank => Get(nameof(BTank));
     public static string BTankFilled => Get(nameof(BTankFilled));
     public static string BTarget => Get(nameof(BTarget));
@@ -171,7 +167,6 @@ public static class Strings
     public static string BThreatFor => Get(nameof(BThreatFor));
     public static string BTough => Get(nameof(BTough));
     public static string BUndiscovered => Get(nameof(BUndiscovered));
-    public static string BUnknownSystem => Get(nameof(BUnknownSystem));
     public static string BUsualLimpets => Get(nameof(BUsualLimpets));
     public static string BValueUnknown => Get(nameof(BValueUnknown));
     public static string BVeryCold => Get(nameof(BVeryCold));

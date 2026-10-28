@@ -9,8 +9,8 @@ never touches the game itself and asks no account.
 
 ![In flight: the banner at the top, the exploration panel on the left](docs/screenshots/in-flight.png)
 
-*In flight, with the interface in French: the banner at the top (route, next star, jump range, what
-the system is worth, exploration data, controller battery), the planets worth mapping here and along
+*In flight, with the interface in French: the banner at the top (route, next star, jump range, exploration
+data, controller battery), the planets worth mapping here and along
 the route on the left.*
 
 ## Features

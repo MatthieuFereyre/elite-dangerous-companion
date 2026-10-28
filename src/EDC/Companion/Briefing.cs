@@ -72,8 +72,6 @@ public static class Briefing
                 chips.Add(pickup);
             if (Target(state) is { } target)
                 chips.Add(target);
-            if (Exploration(state) is { } exploration)
-                chips.Add(exploration);
             if (Organic(state) is { } organic)
                 chips.Add(organic);
             chips.AddRange(Earned(state));
@@ -445,32 +443,6 @@ public static class Briefing
         return new Warning(Strings.BFillHere,
             string.Format(Strings.BFillHereTip, Percent(fuel / state.FuelCapacity), Loc.Plural(reach, Strings.JumpsOne, Strings.JumpsMany), needed),
             big, Tone.Warn);
-    }
-
-    /// <summary>
-    /// What EDSM says the system pays, and its nearest planet worth mapping: until the system is honked,
-    /// then while a planet is left to map.
-    /// </summary>
-    public static Chip? Exploration(GameState state)
-    {
-        if (state.SystemValue is not { } value)
-            return null;
-        if (!value.Known)
-            return state.Honked ? null : new Chip(Strings.BUnknownSystem, Tone.Good, Strings.BFirstDiscoveryMaybe);
-
-        // The Earth-like, ammonia, water and terraformable worlds are in the panel.
-        var notable = state.NotableBodies.Select(b => b.Name).ToHashSet(StringComparer.OrdinalIgnoreCase);
-        var bodies = state.BodiesToMap.Where(b => !notable.Contains(b.Name)).ToList();
-        if (state.Honked && bodies.Count == 0)
-            return null;
-
-        string Body(ValuableBody body) => string.Format(Strings.BBodyAt, ShortName(body.Name, state.System), body.Distance.ToString("N0", Loc.Culture));
-        var text = string.Format(Strings.BSystemValue, Credits(value.Scan))
-                   + (bodies.Count > 0 ? $" · {Body(bodies[0])}" : "")
-                   + (bodies.Count > 1 ? $" +{bodies.Count - 1}" : "");
-        var detail = string.Format(Strings.BScannedMapped, Credits(value.Scan), Credits(value.Mapped))
-                     + string.Concat(bodies.Select(b => $" · {Body(b)} : {Credits(b.Value)}"));
-        return new Chip(text, Tone.Info, detail);
     }
 
     /// <summary>The systems of the route the panel names at most: it must not run down the screen.</summary>

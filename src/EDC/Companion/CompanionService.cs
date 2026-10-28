@@ -85,12 +85,11 @@ public sealed class CompanionService : IDisposable
                     State.SetRoute(GameState.ParseRoute(hops));
             }
 
-            if (State.SystemValueWanted)
+            if (State.SystemBodiesWanted)
             {
-                State.SystemValueWanted = false;
+                State.SystemBodiesWanted = false;
                 if (State.SystemAddress != 0)
                 {
-                    AskSystemValue(State, State.SystemAddress);
                     AskNotableBodies(State, State.SystemAddress);
                     // Spansh too: EDSM often knows a system without its planets, and the route may be gone.
                     AskRouteNotable(State, [State.SystemAddress]);
@@ -151,19 +150,6 @@ public sealed class CompanionService : IDisposable
 
         // Each pass, read or not: the rate and the signals' time left move on their own.
         Changed?.Invoke();
-    }
-
-    /// <summary>EDSM's answer comes back on the UI thread; without it the banner only lacks the value.</summary>
-    private static async void AskSystemValue(GameState state, long address)
-    {
-        try
-        {
-            state.SetSystemValue(address, await SystemValues.FetchAsync(address));
-        }
-        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or JsonException)
-        {
-            AppLog.Write($"compagnon : valeur du système indisponible ({ex.Message})");
-        }
     }
 
     /// <summary>What the galaxy map's target holds; without it, the panel says nothing there.</summary>
