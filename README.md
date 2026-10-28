@@ -30,9 +30,14 @@ the route on the left.*
   fuel, the target with its bounty and threat, pending bounties and bonds, high grade emissions,
   credits per hour for combat and exploration, controller battery.
 - Warnings in the middle of the screen: shields down, interdiction, overheating, refuel here before
-  a run of unscoopable stars, low health or oxygen on foot.
-- An exploration panel: the planets worth mapping here and along the route (with first discovery and
-  first mapping bonuses), and the material sources the journal reports.
+  a run of unscoopable stars, jumping away with valuable planets left unmapped, low health or oxygen
+  on foot.
+- An exploration panel: the planets paying above the threshold you choose (or a first discovery or
+  first mapping, if you ask), each with its value, here in the visit order that takes the least
+  supercruise, worked out from their orbits, and along the route system by system; and the material
+  sources the journal reports.
+- On the galaxy map: whether the system targeted was never discovered, is known in part or fully
+  scanned, and its planets above the threshold.
 - At a station: what not to forget — rearm, refuel, repair, limpets, bounties to cash in, data to
   sell.
 
@@ -43,6 +48,8 @@ the route on the left.*
 - Exploration: credits per hour from the bodies scanned this session, data to sell, valuable planets.
 - Neutron route: plotted by Spansh from your ship's range, the next step copied to the clipboard as
   you reach each one.
+- Commander: every rank with its progress to the next and how to earn it, what the next navy rank
+  unlocks, and your reputation with each superpower.
 - English and French.
 
 ## Install
@@ -72,7 +79,8 @@ Everything EDC writes is in `Saved Games\Elite Dangerous Companion`, next to the
 
 EDC asks public sites, sending system names only — nothing about you:
 
-- on its own: [EDSM](https://www.edsm.net) for what each new system is worth, and
+- on its own: [EDSM](https://www.edsm.net) for what each new system and the system targeted on the
+  galaxy map hold, and
   [Spansh](https://spansh.co.uk) for the valuable planets along each new route;
 - from a button of the window: Spansh for neutron routes and the nearest full station,
   [edtools.cc](https://edtools.cc) with Spansh for hazardous resource sites.
