@@ -423,7 +423,7 @@ public sealed class ExplorationTests
         Assert.True(Briefing.PanelVisible(Focus(7)));
         Assert.False(Briefing.BannerVisible(Focus(7)));
         Assert.True(Briefing.PanelVisible(Flying()));
-        Assert.False(Briefing.PanelVisible(Focus(6)));
+        Assert.False(Briefing.PanelVisible(Focus(8)));
         Assert.Equal(new[] { "Ici (1)", "Monde aquatique · 2 · 300 ls · valeur inconnue" }, Briefing.Panel(state, Focus(7), Arrival).Select(l => l.Text));
     }
 

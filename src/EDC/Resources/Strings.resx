@@ -210,6 +210,9 @@
   <data name="BFuelLowScoop" xml:space="preserve">
     <value>Fuel low · scoop</value>
   </data>
+  <data name="BFullyScanned" xml:space="preserve">
+    <value>Fully scanned · {0} bodies</value>
+  </data>
   <data name="BGrade" xml:space="preserve">
     <value>Grade {0}</value>
   </data>
@@ -263,6 +266,12 @@
   </data>
   <data name="BKitTip" xml:space="preserve">
     <value>Pioneer Supplies: medkits and energy cells</value>
+  </data>
+  <data name="BKnownInPart" xml:space="preserve">
+    <value>Known, incomplete · {0}/{1} bodies</value>
+  </data>
+  <data name="BKnownInPartNoCount" xml:space="preserve">
+    <value>Known, incomplete · {0} bodies logged</value>
   </data>
   <data name="BLeavingValuable" xml:space="preserve">
     <value>Valuable planets left here</value>
@@ -459,6 +468,9 @@
   <data name="BTargetScanning" xml:space="preserve">
     <value>Target {0} · scanning…</value>
   </data>
+  <data name="BTargetSystem" xml:space="preserve">
+    <value>Target · {0}</value>
+  </data>
   <data name="BTargetTooDangerous" xml:space="preserve">
     <value>Target too dangerous</value>
   </data>
@@ -470,6 +482,9 @@
   </data>
   <data name="BTough" xml:space="preserve">
     <value>{0} · tough</value>
+  </data>
+  <data name="BUndiscovered" xml:space="preserve">
+    <value>Never discovered</value>
   </data>
   <data name="BUnknownSystem" xml:space="preserve">
     <value>System unknown to EDSM</value>
@@ -899,6 +914,12 @@
   </data>
   <data name="PlanetRockyIce" xml:space="preserve">
     <value>Rocky ice body</value>
+  </data>
+  <data name="PlanetsMany" xml:space="preserve">
+    <value>{0} planets</value>
+  </data>
+  <data name="PlanetsOne" xml:space="preserve">
+    <value>{0} planet</value>
   </data>
   <data name="PlanetTerraformable" xml:space="preserve">
     <value>Terraformable</value>

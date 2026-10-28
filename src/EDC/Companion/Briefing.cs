@@ -40,9 +40,9 @@ public static class Briefing
     public static bool BannerVisible(GameStatus status) =>
         !status.InMenu && (status.InMainShip || status.InSrv || status.OnFoot) && !status.FullScreenView;
 
-    /// <summary>Whether the panel on the left shows: where the banner does, and on the system map.</summary>
+    /// <summary>Whether the panel on the left shows: where the banner does, and on the system and galaxy maps.</summary>
     public static bool PanelVisible(GameStatus status) =>
-        !status.InMenu && (status.InMainShip || status.InSrv || status.OnFoot) && (!status.FullScreenView || status.SystemMap);
+        !status.InMenu && (status.InMainShip || status.InSrv || status.OnFoot) && (!status.FullScreenView || status.SystemMap || status.GalaxyMap);
 
     /// <summary>The banner, most important first: what does not fit on the right is left out.</summary>
     public static List<Chip> Banner(GameState state, GameStatus status, PadBattery pad, DateTime nowUtc)
@@ -484,6 +484,8 @@ public static class Briefing
     public static List<PanelLine> Panel(GameState state, GameStatus status, DateTime nowUtc)
     {
         var lines = new List<PanelLine>();
+        if (status.GalaxyMap)
+            return GalaxyTarget(state);
         if (status.OnFoot || status.Docked)
             return lines;
 
@@ -538,6 +540,29 @@ public static class Briefing
             lines.Add(new PanelLine($"{Loc.Plural(jumps, Strings.JumpsOne, Strings.JumpsMany)} · {hop.System} ({bodies.Count}) · {Worth(bodies)}", Tone.Good, Loud: bodies.Any(b => b.FirstDiscovery)));
         }
 
+        return lines;
+    }
+
+    /// <summary>On the galaxy map, what EDSM knows of the system targeted, and its planets worth the trip.</summary>
+    private static List<PanelLine> GalaxyTarget(GameState state)
+    {
+        if (state.TargetSystem is not { } target || state.TargetSurvey is not { } survey)
+            return [];
+
+        var lines = new List<PanelLine>
+        {
+            new(string.Format(Strings.BTargetSystem, target.System), Tone.Info, Header: true),
+            survey.Kind switch
+            {
+                SurveyKind.Undiscovered => new PanelLine(Strings.BUndiscovered, Tone.Good, Loud: true),
+                SurveyKind.Complete => new PanelLine(string.Format(Strings.BFullyScanned, survey.Known), Tone.Info),
+                _ when survey.Count is { } count => new PanelLine(string.Format(Strings.BKnownInPart, survey.Known, count), Tone.Good),
+                _ => new PanelLine(string.Format(Strings.BKnownInPartNoCount, survey.Known), Tone.Good),
+            },
+        };
+        var planets = state.WorthTelling(survey.Planets);
+        if (planets.Count > 0)
+            lines.Add(new PanelLine($"{Loc.Plural(planets.Count, Strings.PlanetsOne, Strings.PlanetsMany)} · {Worth(planets)}", Tone.Good));
         return lines;
     }
 

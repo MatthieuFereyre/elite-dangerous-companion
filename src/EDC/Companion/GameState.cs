@@ -351,6 +351,24 @@ public sealed class GameState
 
     public RouteHop? Destination => JumpsLeft > 0 && Route.Count > 0 ? Route[^1] : null;
 
+    /// <summary>The system the galaxy map points at: the end of the route, or the system targeted without one.</summary>
+    public RouteHop? TargetSystem => Destination ?? (FsdTarget is { } target && target.Address != SystemAddress ? target : null);
+
+    // What EDSM said of each system targeted, null while it has not answered: asked once.
+    private readonly Dictionary<long, SystemSurvey?> _surveys = [];
+
+    /// <summary>The target not asked of EDSM yet: the caller calls <see cref="SurveyAsked"/>, then <see cref="SetSurvey"/>.</summary>
+    public long? TargetSurveyWanted => TargetSystem is { Address: not 0 } target && !_surveys.ContainsKey(target.Address) ? target.Address : null;
+
+    public void SurveyAsked(long address) => _surveys.TryAdd(address, null);
+
+    public void SetSurvey(long address, SystemSurvey survey) => _surveys[address] = survey;
+
+    public SystemSurvey? TargetSurvey => TargetSystem is { } target && _surveys.TryGetValue(target.Address, out var survey) ? survey : null;
+
+    /// <summary>Those of <paramref name="planets"/> worth telling, as <see cref="NotableBodies"/> are.</summary>
+    public IReadOnlyList<NotableBody> WorthTelling(IEnumerable<NotableBody> planets) => planets.Where(Worth).ToList();
+
     /// <summary>The hops still to make, the next first.</summary>
     public IReadOnlyList<RouteHop> HopsAhead
     {

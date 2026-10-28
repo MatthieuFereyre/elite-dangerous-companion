@@ -41,6 +41,7 @@ public sealed record GameStatus(long Flags, long Flags2, int GuiFocus, double? F
 
     /// <summary>The map of a system, where the panel stays to tell which planets to map.</summary>
     public bool SystemMap => GuiFocus == 7;
+    public bool GalaxyMap => GuiFocus == 6;
 
     private static bool Has(long flags, int bit) => (flags & (1L << bit)) != 0;
 

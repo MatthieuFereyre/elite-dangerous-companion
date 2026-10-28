@@ -97,6 +97,12 @@ public sealed class CompanionService : IDisposable
                 }
             }
 
+            if (State.TargetSurveyWanted is { } target)
+            {
+                State.SurveyAsked(target);
+                AskSurvey(State, target);
+            }
+
             if (State.RouteNotableWanted)
             {
                 State.RouteNotableWanted = false;
@@ -157,6 +163,19 @@ public sealed class CompanionService : IDisposable
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or JsonException)
         {
             AppLog.Write($"compagnon : valeur du système indisponible ({ex.Message})");
+        }
+    }
+
+    /// <summary>What the galaxy map's target holds; without it, the panel says nothing there.</summary>
+    private static async void AskSurvey(GameState state, long address)
+    {
+        try
+        {
+            state.SetSurvey(address, await SystemSurvey.FetchAsync(address));
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or JsonException)
+        {
+            AppLog.Write($"compagnon : système ciblé indisponible ({ex.Message})");
         }
     }
 

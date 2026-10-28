@@ -81,6 +81,7 @@ public static class Strings
     public static string BFuelJumpsTip => Get(nameof(BFuelJumpsTip));
     public static string BFuelLow => Get(nameof(BFuelLow));
     public static string BFuelLowScoop => Get(nameof(BFuelLowScoop));
+    public static string BFullyScanned => Get(nameof(BFullyScanned));
     public static string BGrade => Get(nameof(BGrade));
     public static string BHeal => Get(nameof(BHeal));
     public static string BHealth => Get(nameof(BHealth));
@@ -99,6 +100,8 @@ public static class Strings
     public static string BJump => Get(nameof(BJump));
     public static string BKit => Get(nameof(BKit));
     public static string BKitTip => Get(nameof(BKitTip));
+    public static string BKnownInPart => Get(nameof(BKnownInPart));
+    public static string BKnownInPartNoCount => Get(nameof(BKnownInPartNoCount));
     public static string BLeavingValuable => Get(nameof(BLeavingValuable));
     public static string BLeavingValuableTip => Get(nameof(BLeavingValuableTip));
     public static string BLimpets => Get(nameof(BLimpets));
@@ -164,10 +167,12 @@ public static class Strings
     public static string BTargetClean => Get(nameof(BTargetClean));
     public static string BTargetCleanTip => Get(nameof(BTargetCleanTip));
     public static string BTargetScanning => Get(nameof(BTargetScanning));
+    public static string BTargetSystem => Get(nameof(BTargetSystem));
     public static string BTargetTooDangerous => Get(nameof(BTargetTooDangerous));
     public static string BTargetWantedTip => Get(nameof(BTargetWantedTip));
     public static string BThreatFor => Get(nameof(BThreatFor));
     public static string BTough => Get(nameof(BTough));
+    public static string BUndiscovered => Get(nameof(BUndiscovered));
     public static string BUnknownSystem => Get(nameof(BUnknownSystem));
     public static string BUsualLimpets => Get(nameof(BUsualLimpets));
     public static string BValueUnknown => Get(nameof(BValueUnknown));
@@ -311,6 +316,8 @@ public static class Strings
     public static string PlanetMetalRich => Get(nameof(PlanetMetalRich));
     public static string PlanetRocky => Get(nameof(PlanetRocky));
     public static string PlanetRockyIce => Get(nameof(PlanetRockyIce));
+    public static string PlanetsMany => Get(nameof(PlanetsMany));
+    public static string PlanetsOne => Get(nameof(PlanetsOne));
     public static string PlanetTerraformable => Get(nameof(PlanetTerraformable));
     public static string PlanetTerraformableOf => Get(nameof(PlanetTerraformableOf));
     public static string PlanetThreshold => Get(nameof(PlanetThreshold));
