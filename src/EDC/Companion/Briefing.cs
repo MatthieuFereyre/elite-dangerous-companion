@@ -512,21 +512,19 @@ public static class Briefing
 
         // Here, the planets worth the trip, as the system map lists them; the others are not told, bonus or
         // not. A body with a bonus to take stands out: filled, like the band's loud chips.
-        // In the order that takes the least supercruise from where the ship is, each with the time of its hop.
+        // In the order that takes the least supercruise from where the ship is; without its time, which the
+        // FSD's engineering, or an overcharged one, puts beyond any estimate.
         var here = state.VisitPlan(nowUtc)
-            .Select(p => (p.Body.Name, p.Body.Label, p.Body.Distance, p.Body.Value, p.Seconds,
+            .Select(p => (p.Body.Name, p.Body.Label, p.Body.Distance, p.Body.Value,
                 Bonus: Bonus(p.Body.FirstDiscovery, state.ScannedHere(p.Body.Name) is { FirstMapping: true })))
             .ToList();
         if (here.Count > 0)
         {
-            var total = here.Sum(b => b.Seconds ?? 0);
-            var header = string.Format(Strings.BHere, here.Count);
-            lines.Add(new PanelLine(total > 0 ? $"{header} · {Duration(total)}" : header, Tone.Info, Header: true));
+            lines.Add(new PanelLine(string.Format(Strings.BHere, here.Count), Tone.Info, Header: true));
             lines.AddRange(here.Select(b =>
             {
                 var targeted = string.Equals(b.Name, status.Destination, StringComparison.OrdinalIgnoreCase);
-                var hop = b.Seconds is > 0 and var seconds ? $" · {Duration(seconds)}" : "";
-                return new PanelLine($"{(targeted ? "› " : "")}{b.Label} · {ShortName(b.Name, state.System)} · {b.Distance.ToString("N0", Loc.Culture)} ls · {Worth(b.Value)}{hop}{b.Bonus}",
+                return new PanelLine($"{(targeted ? "› " : "")}{b.Label} · {ShortName(b.Name, state.System)} · {b.Distance.ToString("N0", Loc.Culture)} ls · {Worth(b.Value)}{b.Bonus}",
                     targeted ? Tone.Info : Tone.Good, Loud: b.Bonus != "", Targeted: targeted);
             }));
         }
@@ -576,11 +574,6 @@ public static class Briefing
         return bodies.All(b => b.Value is null) ? Strings.BValueUnknown
             : bodies.Any(b => b.Value is null) ? Credits(known) + " +" : Credits(known);
     }
-
-    /// <summary>"~40 s", "~3 min": a supercruise time, an estimate.</summary>
-    internal static string Duration(double seconds) => seconds < 60
-        ? string.Format(Strings.BSeconds, Math.Max(5, (int)Math.Round(seconds / 5) * 5))
-        : string.Format(Strings.BMinutes, (int)Math.Round(seconds / 60));
 
     /// <summary>« A 5 » for « LHS 3447 A 5 », as the system map writes it.</summary>
     private static string ShortName(string body, string? system) =>

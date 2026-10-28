@@ -45,7 +45,9 @@ public sealed class VisitPlanTests
         var lines = Briefing.Panel(state, Flying(), Now).Select(l => l.Text).ToList();
 
         var here = lines.FindIndex(l => l.StartsWith("Ici"));
-        Assert.Matches(@"^Ici \(3\) · ~\d+ min$", lines[here]);
+        // No supercruise time: the FSD's engineering, or an overcharged one, changes it beyond any estimate.
+        Assert.Equal("Ici (3)", lines[here]);
+        Assert.DoesNotContain(lines, l => l.Contains(" min") || l.Contains(" s ·") || l.EndsWith(" s"));
         Assert.Contains("B 1", lines[here + 1] + lines[here + 2]);
         Assert.Contains("A 2", lines[here + 1] + lines[here + 2]);
         Assert.Contains("A 1", lines[here + 3]);

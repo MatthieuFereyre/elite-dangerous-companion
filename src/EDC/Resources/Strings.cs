@@ -111,7 +111,6 @@ public static class Strings
     public static string BMedkit => Get(nameof(BMedkit));
     public static string BMedkitsMany => Get(nameof(BMedkitsMany));
     public static string BMedkitsOne => Get(nameof(BMedkitsOne));
-    public static string BMinutes => Get(nameof(BMinutes));
     public static string BNeutronNext => Get(nameof(BNeutronNext));
     public static string BNextHazard => Get(nameof(BNextHazard));
     public static string BNextNotScoopable => Get(nameof(BNextNotScoopable));
@@ -153,7 +152,6 @@ public static class Strings
     public static string BRefuelTip => Get(nameof(BRefuelTip));
     public static string BRepairTip => Get(nameof(BRepairTip));
     public static string BScannedMapped => Get(nameof(BScannedMapped));
-    public static string BSeconds => Get(nameof(BSeconds));
     public static string BShieldsDown => Get(nameof(BShieldsDown));
     public static string BSince => Get(nameof(BSince));
     public static string BSpeeding => Get(nameof(BSpeeding));

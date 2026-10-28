@@ -300,9 +300,6 @@
   <data name="BMedkitsOne" xml:space="preserve">
     <value>{0} medkit in the bag</value>
   </data>
-  <data name="BMinutes" xml:space="preserve">
-    <value>~{0} min</value>
-  </data>
   <data name="BNeutronNext" xml:space="preserve">
     <value>Neutron star next</value>
   </data>
@@ -425,9 +422,6 @@
   </data>
   <data name="BScannedMapped" xml:space="preserve">
     <value>Scanned {0}, mapped {1}</value>
-  </data>
-  <data name="BSeconds" xml:space="preserve">
-    <value>~{0} s</value>
   </data>
   <data name="BShieldsDown" xml:space="preserve">
     <value>Shields down</value>
