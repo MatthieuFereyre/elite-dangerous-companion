@@ -18,7 +18,6 @@ SETUP_NAME="EliteDangerousCompanion-Setup-${VERSION}.exe"
 cd "$(dirname "$0")/.."
 # Windows programs (dotnet, makensis) want C:/... where Git Bash says /c/...
 native() { if command -v cygpath >/dev/null; then cygpath -m "$1"; else printf '%s' "$1"; fi; }
-# makensis on Windows finds nothing under a "File /r" wildcard written with forward slashes.
 backslashed() { if command -v cygpath >/dev/null; then cygpath -w "$1"; else printf '%s' "$1"; fi; }
 ROOT="$(native "$PWD")"
 mkdir -p "$OUT_DIR"

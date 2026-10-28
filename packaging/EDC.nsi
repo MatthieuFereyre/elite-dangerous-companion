@@ -2,8 +2,8 @@
 ; makensis from packaging/build-installer.sh.
 ;
 ; Compiled with: makensis -DVERSION=1.1.0 -DSOURCE_DIR=... -DICON=... -DOUT_FILE=... EDC.nsi
-; SOURCE_DIR comes with the separators of the system makensis runs on: on Windows, a "File /r" wildcard
-; under forward slashes finds nothing. Target paths use backslashes.
+; On Windows, makensis finds nothing under a "File /r" wildcard written with forward slashes: the
+; separator follows the system it runs on. Target paths use backslashes.
 
 Unicode true
 
@@ -86,7 +86,11 @@ Section "Install"
   ${EndIf}
 
   SetOutPath "$INSTDIR"
-  File /r "${SOURCE_DIR}/*"
+  !ifdef NSIS_WIN32_MAKENSIS
+    File /r "${SOURCE_DIR}\*"
+  !else
+    File /r "${SOURCE_DIR}/*"
+  !endif
 
   CreateShortcut "$SMPROGRAMS\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}" "" "$INSTDIR\${APP_EXE}" 0
 
