@@ -2,7 +2,8 @@
 ; makensis from packaging/build-installer.sh.
 ;
 ; Compiled with: makensis -DVERSION=1.1.0 -DSOURCE_DIR=... -DICON=... -DOUT_FILE=... EDC.nsi
-; Source paths use forward slashes (they work on Linux and Windows), target paths use backslashes.
+; SOURCE_DIR comes with the separators of the system makensis runs on: on Windows, a "File /r" wildcard
+; under forward slashes finds nothing. Target paths use backslashes.
 
 Unicode true
 

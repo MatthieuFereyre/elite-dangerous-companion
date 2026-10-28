@@ -18,6 +18,8 @@ SETUP_NAME="EliteDangerousCompanion-Setup-${VERSION}.exe"
 cd "$(dirname "$0")/.."
 # Windows programs (dotnet, makensis) want C:/... where Git Bash says /c/...
 native() { if command -v cygpath >/dev/null; then cygpath -m "$1"; else printf '%s' "$1"; fi; }
+# makensis on Windows finds nothing under a "File /r" wildcard written with forward slashes.
+backslashed() { if command -v cygpath >/dev/null; then cygpath -w "$1"; else printf '%s' "$1"; fi; }
 ROOT="$(native "$PWD")"
 mkdir -p "$OUT_DIR"
 OUT_DIR="$(native "$(cd "$OUT_DIR" && pwd)")"
@@ -40,7 +42,7 @@ echo ">>> Packaging $SETUP_NAME from $FILE_COUNT files"
 # only account of what went in, and the checks below read it.
 makensis -V4 \
     "-DVERSION=$VERSION" \
-    "-DSOURCE_DIR=$ROOT/$PUBLISH_DIR" \
+    "-DSOURCE_DIR=$(backslashed "$ROOT/$PUBLISH_DIR")" \
     "-DICON=$ROOT/$ICON" \
     "-DOUT_FILE=$SETUP" \
     packaging/EDC.nsi \
