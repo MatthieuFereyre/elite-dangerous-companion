@@ -178,7 +178,7 @@ public sealed class CompanionService : IDisposable
     {
         try
         {
-            var bodies = await NotableBodies.FetchRouteAsync(addresses);
+            var bodies = await NotableBodies.FetchRouteAsync(addresses, state.MinNotableValue);
             state.SetRouteNotable(bodies);
             AppLog.Write($"compagnon : {bodies.Count} système(s) de la route avec une planète à cartographier, d'après Spansh");
         }

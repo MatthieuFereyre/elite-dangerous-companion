@@ -75,6 +75,8 @@ public sealed partial class CompanionViewModel : ObservableObject
     [ObservableProperty] private bool _bannerEnabled;
     [ObservableProperty] private bool _autoUpdate;
     [ObservableProperty] private bool _explorationPanel;
+    [ObservableProperty] private bool _firstDiscoveries;
+    [ObservableProperty] private bool _firstMappings;
     [ObservableProperty] private bool _controllerInBanner;
     [ObservableProperty] private bool _honkReminder;
     [ObservableProperty] private bool _launchEdmc;
@@ -124,6 +126,24 @@ public sealed partial class CompanionViewModel : ObservableObject
         if (_refreshing || _settings is null)
             return;
         _settings.PanelMinValue = value * 1000L;
+        _saveSettings?.Invoke();
+        Refresh();
+    }
+
+    partial void OnFirstDiscoveriesChanged(bool value)
+    {
+        if (_refreshing || _settings is null)
+            return;
+        _settings.PanelFirstDiscoveries = value;
+        _saveSettings?.Invoke();
+        Refresh();
+    }
+
+    partial void OnFirstMappingsChanged(bool value)
+    {
+        if (_refreshing || _settings is null)
+            return;
+        _settings.PanelFirstMappings = value;
         _saveSettings?.Invoke();
         Refresh();
     }
@@ -288,9 +308,13 @@ public sealed partial class CompanionViewModel : ObservableObject
         try
         {
             _service.State.MinNotableValue = _settings?.PanelMinValue ?? 700_000;
+            _service.State.FirstDiscoveries = _settings?.PanelFirstDiscoveries ?? false;
+            _service.State.FirstMappings = _settings?.PanelFirstMappings ?? false;
             Show(_service.State, _service.Status, _pad?.Invoke() ?? PadBattery.None, DateTime.UtcNow);
             BannerEnabled = _settings?.CompanionBanner ?? true;
             ExplorationPanel = _settings?.ExplorationPanel ?? true;
+            FirstDiscoveries = _settings?.PanelFirstDiscoveries ?? false;
+            FirstMappings = _settings?.PanelFirstMappings ?? false;
             ControllerInBanner = _settings?.ControllerInBanner ?? true;
             HonkReminder = _settings?.HonkReminder ?? true;
             LaunchEdmc = _settings?.LaunchEdmc ?? false;

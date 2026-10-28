@@ -512,7 +512,7 @@ public static class Briefing
         // not. A body with a bonus to take stands out: filled, like the band's loud chips.
         // In the order that takes the least supercruise from where the ship is, each with the time of its hop.
         var here = state.VisitPlan(nowUtc)
-            .Select(p => (p.Body.Name, p.Body.Label, p.Body.Distance, p.Seconds,
+            .Select(p => (p.Body.Name, p.Body.Label, p.Body.Distance, p.Body.Value, p.Seconds,
                 Bonus: Bonus(p.Body.FirstDiscovery, state.ScannedHere(p.Body.Name) is { FirstMapping: true })))
             .ToList();
         if (here.Count > 0)
@@ -524,7 +524,7 @@ public static class Briefing
             {
                 var targeted = string.Equals(b.Name, status.Destination, StringComparison.OrdinalIgnoreCase);
                 var hop = b.Seconds is > 0 and var seconds ? $" · {Duration(seconds)}" : "";
-                return new PanelLine($"{(targeted ? "› " : "")}{b.Label} · {ShortName(b.Name, state.System)} · {b.Distance.ToString("N0", Loc.Culture)} ls{hop}{b.Bonus}",
+                return new PanelLine($"{(targeted ? "› " : "")}{b.Label} · {ShortName(b.Name, state.System)} · {b.Distance.ToString("N0", Loc.Culture)} ls · {Worth(b.Value)}{hop}{b.Bonus}",
                     targeted ? Tone.Info : Tone.Good, Loud: b.Bonus != "", Targeted: targeted);
             }));
         }
@@ -535,10 +535,21 @@ public static class Briefing
             lines.Add(new PanelLine(Strings.BOnRoute, Tone.Info, Header: true));
         foreach (var (jumps, hop, bodies) in route)
         {
-            lines.Add(new PanelLine($"{Loc.Plural(jumps, Strings.JumpsOne, Strings.JumpsMany)} · {hop.System} ({bodies.Count})", Tone.Good, Loud: bodies.Any(b => b.FirstDiscovery)));
+            lines.Add(new PanelLine($"{Loc.Plural(jumps, Strings.JumpsOne, Strings.JumpsMany)} · {hop.System} ({bodies.Count}) · {Worth(bodies)}", Tone.Good, Loud: bodies.Any(b => b.FirstDiscovery)));
         }
 
         return lines;
+    }
+
+    /// <summary>What mapping a planet pays, or that nobody knows.</summary>
+    private static string Worth(long? value) => value is { } v ? Credits(v) : Strings.BValueUnknown;
+
+    /// <summary>What mapping the planets of a system pays, « + » when some are not known.</summary>
+    private static string Worth(IReadOnlyList<NotableBody> bodies)
+    {
+        var known = bodies.Where(b => b.Value is not null).Sum(b => b.Value!.Value);
+        return bodies.All(b => b.Value is null) ? Strings.BValueUnknown
+            : bodies.Any(b => b.Value is null) ? Credits(known) + " +" : Credits(known);
     }
 
     /// <summary>"~40 s", "~3 min": a supercruise time, an estimate.</summary>
@@ -600,7 +611,7 @@ public static class Briefing
             return null;
 
         var names = string.Join(", ", left.Select(b => ShortName(b.Name, state.System)));
-        return new Warning(Strings.BLeavingValuable, string.Format(Strings.BLeavingValuableTip, names, Credits(left.Sum(b => b.Value))), Big: true, Tone.Warn);
+        return new Warning(Strings.BLeavingValuable, string.Format(Strings.BLeavingValuableTip, names, Credits(left.Sum(b => b.Value ?? 0))), Big: true, Tone.Warn);
     }
 
     private static Warning? Honk(GameState state, GameStatus status, DateTime nowUtc)

@@ -477,6 +477,9 @@
   <data name="BUsualLimpets" xml:space="preserve">
     <value>Usually {0} aboard</value>
   </data>
+  <data name="BValueUnknown" xml:space="preserve">
+    <value>value unknown</value>
+  </data>
   <data name="BVeryCold" xml:space="preserve">
     <value>Very cold</value>
   </data>
@@ -572,6 +575,18 @@
   </data>
   <data name="ExplorationSessionLabel" xml:space="preserve">
     <value>EXPLORATION THIS SESSION</value>
+  </data>
+  <data name="FirstDiscoveriesSetting" xml:space="preserve">
+    <value>Also the first discoveries</value>
+  </data>
+  <data name="FirstDiscoveriesSettingTip" xml:space="preserve">
+    <value>A planet nobody had found is told whatever it pays</value>
+  </data>
+  <data name="FirstMappingsSetting" xml:space="preserve">
+    <value>Also the first mappings</value>
+  </data>
+  <data name="FirstMappingsSettingTip" xml:space="preserve">
+    <value>A planet nobody had mapped is told whatever it pays</value>
   </data>
   <data name="FolderEnabledTip" xml:space="preserve">
     <value>Checked: its tracks are played. Unchecked: kept and sorted, but no longer played.</value>
@@ -861,17 +876,47 @@
   <data name="PlanetEarthLike" xml:space="preserve">
     <value>Earth-like world</value>
   </data>
+  <data name="PlanetGasGiant" xml:space="preserve">
+    <value>Gas giant</value>
+  </data>
+  <data name="PlanetGasGiantLife" xml:space="preserve">
+    <value>Gas giant with life</value>
+  </data>
+  <data name="PlanetHeliumGiant" xml:space="preserve">
+    <value>Helium gas giant</value>
+  </data>
+  <data name="PlanetHighMetal" xml:space="preserve">
+    <value>High metal content body</value>
+  </data>
+  <data name="PlanetIcy" xml:space="preserve">
+    <value>Icy body</value>
+  </data>
+  <data name="PlanetMetalRich" xml:space="preserve">
+    <value>Metal-rich body</value>
+  </data>
+  <data name="PlanetRocky" xml:space="preserve">
+    <value>Rocky body</value>
+  </data>
+  <data name="PlanetRockyIce" xml:space="preserve">
+    <value>Rocky ice body</value>
+  </data>
   <data name="PlanetTerraformable" xml:space="preserve">
     <value>Terraformable</value>
+  </data>
+  <data name="PlanetTerraformableOf" xml:space="preserve">
+    <value>{0}, terraformable</value>
   </data>
   <data name="PlanetThreshold" xml:space="preserve">
     <value>Planets shown from</value>
   </data>
   <data name="PlanetThresholdTip" xml:space="preserve">
-    <value>What the planet pays once mapped efficiently; below it, the panel leaves it out</value>
+    <value>What the planet pays once mapped efficiently; below it, the panel leaves it out. A planet whose value is not known is always shown</value>
   </data>
   <data name="PlanetWater" xml:space="preserve">
     <value>Water world</value>
+  </data>
+  <data name="PlanetWaterGiant" xml:space="preserve">
+    <value>Water giant</value>
   </data>
   <data name="PlanetWaterTerraformable" xml:space="preserve">
     <value>Terraformable water world</value>

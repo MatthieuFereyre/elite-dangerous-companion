@@ -60,6 +60,12 @@ public sealed class PlayerSettings
     /// <summary>Below what mapping it well pays, in credits, a notable planet is left out of the panel.</summary>
     public long PanelMinValue { get; set; } = 700_000;
 
+    /// <summary>The planets nobody had found, told whatever they pay.</summary>
+    public bool PanelFirstDiscoveries { get; set; }
+
+    /// <summary>The planets nobody had mapped, told whatever they pay.</summary>
+    public bool PanelFirstMappings { get; set; }
+
     /// <summary>EDMarketConnector started with the game, when installed: it sends the journal to EDDN, EDSM and Inara.</summary>
     public bool LaunchEdmc { get; set; }
 

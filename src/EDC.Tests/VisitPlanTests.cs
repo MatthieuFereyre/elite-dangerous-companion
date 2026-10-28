@@ -70,7 +70,7 @@ public sealed class VisitPlanTests
     public void A_planet_known_only_from_edsm_comes_last_by_its_distance()
     {
         var state = Replay(Star(), World(2, "Delta A 2", 1000, 2));
-        state.SetNotableBodies(Address, [new NotableBody("Delta C 1", PlanetKind.EarthLike, false, 50, Value: 3_000_000)]);
+        state.SetNotableBodies(Address, [new NotableBody("Delta C 1", PlanetClass.EarthLike, false, 50, Value: 3_000_000)]);
 
         var plan = state.VisitPlan(Now);
 

@@ -590,6 +590,10 @@
                     </TextBlock>
                     <Slider Minimum="0" Maximum="3000" SmallChange="100" LargeChange="500"
                             TickFrequency="100" IsSnapToTickEnabled="True" Value="{Binding PanelMinValueK}" />
+                    <CheckBox Margin="0,4,0,0" Content="{x:Static res:Strings.FirstDiscoveriesSetting}" IsChecked="{Binding FirstDiscoveries}"
+                              ToolTip="{x:Static res:Strings.FirstDiscoveriesSettingTip}" />
+                    <CheckBox Margin="0,4,0,0" Content="{x:Static res:Strings.FirstMappingsSetting}" IsChecked="{Binding FirstMappings}"
+                              ToolTip="{x:Static res:Strings.FirstMappingsSettingTip}" />
                 </StackPanel>
                 <TextBlock DockPanel.Dock="Top" Style="{StaticResource Label}" Margin="2,0,0,6" Text="{x:Static res:Strings.SystemAndRoute}" />
                 <ScrollViewer VerticalScrollBarVisibility="Auto">

@@ -25,9 +25,10 @@ public sealed class ExplorationTests
     private static string Map(string time, string body, long address) =>
         Line(time, $"\"event\":\"SAAScanComplete\", \"BodyName\":\"{body}\", \"SystemAddress\":{address}, \"BodyID\":12, \"ProbesUsed\":5, \"EfficiencyTarget\":7");
 
+    // The app's default threshold.
     private static GameState Replay(params string[] lines)
     {
-        var state = new GameState();
+        var state = new GameState { MinNotableValue = 700_000 };
         foreach (var line in lines)
             state.Apply(line);
         return state;
@@ -231,9 +232,10 @@ public sealed class ExplorationTests
         Assert.Null(Warning(state, 5));
     }
 
-    private static string Scan(string time, string body, long address, string planetClass, string terraform = "", bool discovered = true, int ls = 1200) =>
+    private static string Scan(string time, string body, long address, string planetClass, string terraform = "", bool discovered = true, int ls = 1200, double mass = 1) =>
         Line(time, $"\"event\":\"Scan\", \"ScanType\":\"Detailed\", \"BodyName\":\"{body}\", \"BodyID\":3, \"SystemAddress\":{address}, " +
-                   $"\"DistanceFromArrivalLS\":{ls}, \"TerraformState\":\"{terraform}\", \"PlanetClass\":\"{planetClass}\", \"WasDiscovered\":{(discovered ? "true" : "false")}, \"WasMapped\":false");
+                   $"\"DistanceFromArrivalLS\":{ls}, \"TerraformState\":\"{terraform}\", \"PlanetClass\":\"{planetClass}\", \"MassEM\":{mass.ToString(CultureInfo.InvariantCulture)}, " +
+                   $"\"WasDiscovered\":{(discovered ? "true" : "false")}, \"WasMapped\":false");
 
     private static List<string> Notable(GameState state) => state.NotableBodies.Select(b => b.Name).ToList();
 
@@ -257,18 +259,19 @@ public sealed class ExplorationTests
     }
 
     [Fact]
-    public void A_scanned_water_world_earth_like_or_terraformable_is_left_to_the_panel_the_most_precious_first_until_mapped()
+    public void A_scanned_planet_above_the_threshold_is_left_to_the_panel_the_best_paid_first_until_mapped()
     {
         var state = Replay(Jump("19:00:00", "Praea Euq TY-S b3-1", 2869977687585), Honk("19:00:10", "Praea Euq TY-S b3-1", 2869977687585),
             Scan("19:01:00", "Praea Euq TY-S b3-1 2", 2869977687585, "Rocky body"),
             Scan("19:01:10", "Praea Euq TY-S b3-1 3", 2869977687585, "High metal content body", "Terraformable", ls: 300));
         Assert.Equal(["Praea Euq TY-S b3-1 3"], Notable(state));
         // The panel on the left lists them: the banner does not repeat the most precious.
-        Assert.DoesNotContain(Briefing.Banner(state, Flying(), PadBattery.None, Arrival.AddSeconds(5)), c => c.Text.StartsWith("Terraformable"));
+        Assert.DoesNotContain(Briefing.Banner(state, Flying(), PadBattery.None, Arrival.AddSeconds(5)), c => c.Text.StartsWith("Corps"));
 
         state.Apply(Scan("19:01:20", "Praea Euq TY-S b3-1 5", 2869977687585, "Water world", "Terraformable", discovered: false, ls: 2500));
         state.Apply(Scan("19:01:30", "Praea Euq TY-S b3-1 4", 2869977687585, "Earthlike body", ls: 1800));
-        Assert.Equal(["Praea Euq TY-S b3-1 4", "Praea Euq TY-S b3-1 5", "Praea Euq TY-S b3-1 3"], Notable(state));
+        // A first discovery pays more than an earth-like found before.
+        Assert.Equal(["Praea Euq TY-S b3-1 5", "Praea Euq TY-S b3-1 4", "Praea Euq TY-S b3-1 3"], Notable(state));
 
         state.Apply(Map("19:10:00", "Praea Euq TY-S b3-1 4", 2869977687585));
         state.Apply(Map("19:20:00", "Praea Euq TY-S b3-1 5", 2869977687585));
@@ -300,15 +303,21 @@ public sealed class ExplorationTests
     public void EDSM_tells_the_planets_of_a_known_system_before_any_scan()
     {
         // Their value is told apart, see A_notable_planet_is_worth_what_mapping_it_well_pays_whoever_tells_of_it.
-        Assert.Equal(new[] { new NotableBody("LHS 3447 A 5", PlanetKind.Water, false, 92190), new NotableBody("LHS 3447 B 1", PlanetKind.Terraformable, true, 1200) },
-            NotableBodies.Parse(Bodies).Select(b => b with { Value = 0 }));
+        Assert.Equal(new[]
+            {
+                new NotableBody("LHS 3447 A 5", PlanetClass.Water, false, 92190),
+                new NotableBody("LHS 3447 B 1", PlanetClass.HighMetal, true, 1200),
+                new NotableBody("LHS 3447 B 2", PlanetClass.Icy, false, 1300),
+            },
+            NotableBodies.Parse(Bodies));
         Assert.Empty(NotableBodies.Parse("{}"));
         Assert.Empty(NotableBodies.Parse("[]"));
 
         var state = Replay(Jump("19:00:00", "LHS 3447", 5306465653474));
         state.SetNotableBodies(5306465653474, NotableBodies.Parse(Bodies));
         state.SetSystemValue(5306465653474, SystemValues.Parse(Valuable));
-        Assert.Equal(["LHS 3447 A 5", "LHS 3447 B 1"], Notable(state));
+        // Without their mass, their value is not known: all told, the nearest first.
+        Assert.Equal(["LHS 3447 B 1", "LHS 3447 B 2", "LHS 3447 A 5"], Notable(state));
         // Both are in the panel: the value's chip leaves them out.
         Assert.Equal("Système 354 k Cr", ValueChip(state)?.Text);
 
@@ -327,19 +336,6 @@ public sealed class ExplorationTests
         Assert.Equal(["Alpha 2", "Alpha 1"], Notable(state));
     }
 
-    [Fact]
-    public void A_gas_giant_is_not_told_too_long_to_map()
-    {
-        var state = Replay(Jump("19:00:00", "Alpha", 1),
-            Scan("19:01:00", "Alpha 1", 1, "Sudarsky class II gas giant", ls: 100),
-            Scan("19:01:10", "Alpha 2", 1, "Sudarsky class I gas giant", ls: 200),
-            Scan("19:01:20", "Alpha 3", 1, "Gas giant with water based life", ls: 300),
-            Scan("19:01:30", "Alpha 4", 1, "Rocky body", "Terraformable", ls: 4000));
-        Assert.Equal(["Alpha 4"], Notable(state));
-
-        Assert.Empty(NotableBodies.ParseSpansh("""{"results":[{"name":"Beta 5","subtype":"Class II gas giant","terraforming_state":null,"distance_to_arrival":800,"system_id64":2}]}"""));
-    }
-
     // Two bodies as Spansh's api/bodies/search gives them, cut down to what is read; the second system's id64 is past 2^53.
     private const string Spansh = """
         {"count":2,"results":[
@@ -353,10 +349,11 @@ public sealed class ExplorationTests
     {
         Assert.Equal(new[]
             {
-                (2L, new NotableBody("Beta 3", PlanetKind.Water, false, 540.5)),
-                (9007199254740993L, new NotableBody("Delta 1", PlanetKind.Terraformable, true, 12)),
+                (2L, new NotableBody("Beta 3", PlanetClass.Water, false, 540.5)),
+                (9007199254740993L, new NotableBody("Delta 1", PlanetClass.HighMetal, true, 12)),
+                (9007199254740993L, new NotableBody("Delta 2", PlanetClass.Icy, false, 30)),
             },
-            NotableBodies.ParseSpansh(Spansh).Select(p => (p.System, p.Body with { Value = 0 })));
+            NotableBodies.ParseSpansh(Spansh));
         Assert.Empty(NotableBodies.ParseSpansh("{}"));
     }
 
@@ -372,18 +369,19 @@ public sealed class ExplorationTests
 
         state.SetRouteNotable(new Dictionary<long, List<NotableBody>>
         {
-            [2] = [new NotableBody("Beta 3", PlanetKind.Water, false, 540)],
-            [4] = [new NotableBody("Delta 1", PlanetKind.Terraformable, true, 12), new NotableBody("Delta 2", PlanetKind.EarthLike, false, 3000)],
+            [2] = [new NotableBody("Beta 3", PlanetClass.Water, false, 540, Value: 1_100_000)],
+            // Delta 2's mass is not known: its system pays at least Delta 1's value.
+            [4] = [new NotableBody("Delta 1", PlanetClass.Rocky, true, 12, Value: 900_000), new NotableBody("Delta 2", PlanetClass.EarthLike, false, 3000)],
         });
         state.Apply(Scan("19:01:00", "Alpha 1", 1, "Ammonia world", discovered: false, ls: 900));
 
         Assert.Equal(new[]
             {
                 new PanelLine("Ici (1)", Tone.Info, Header: true),
-                new PanelLine($"Monde ammoniaqué · 1 · {Ls(900)} ls · 1re découverte, 1re cartographie", Tone.Good, Loud: true),
+                new PanelLine($"Monde ammoniaqué · 1 · {Ls(900)} ls · 2,4 M Cr · 1re découverte, 1re cartographie", Tone.Good, Loud: true),
                 new PanelLine("Sur la route", Tone.Info, Header: true),
-                new PanelLine("1 saut · Beta (1)", Tone.Good),
-                new PanelLine("3 sauts · Delta (2)", Tone.Good),
+                new PanelLine("1 saut · Beta (1) · 1,1 M Cr", Tone.Good),
+                new PanelLine("3 sauts · Delta (2) · 900 k Cr +", Tone.Good),
             },
             Briefing.Panel(state, Flying(), Arrival));
         Assert.Empty(Briefing.Panel(state, Docked(), Arrival));
@@ -391,22 +389,26 @@ public sealed class ExplorationTests
         // Beta passed and its water world mapped there: the route counts from Beta.
         state.Apply(Jump("19:05:00", "Beta", 2));
         state.Apply(Map("19:10:00", "Beta 3", 2));
-        Assert.Equal(new[] { "Sur la route", "2 sauts · Delta (2)" },
+        Assert.Equal(new[] { "Sur la route", "2 sauts · Delta (2) · 900 k Cr +" },
             Briefing.Panel(state, Flying(), Arrival).Select(l => l.Text));
     }
 
     [Fact]
-    public void The_panel_lists_the_bodies_as_the_system_map_does_star_then_planet_then_moon()
+    public void Planets_whose_orbit_is_not_known_come_by_their_distance()
     {
         var state = Replay(Jump("19:00:00", "Alpha", 1));
         state.SetNotableBodies(1, [
-            new NotableBody("Alpha B 1", PlanetKind.EarthLike, false, 9000),
-            new NotableBody("Alpha A 10", PlanetKind.Water, false, 700),
-            new NotableBody("Alpha A 5 a", PlanetKind.Water, false, 500),
-            new NotableBody("Alpha A 4", PlanetKind.Terraformable, false, 100),
+            new NotableBody("Alpha B 1", PlanetClass.EarthLike, false, 9000, Value: 3_000_000),
+            new NotableBody("Alpha A 10", PlanetClass.Water, false, 700),
+            new NotableBody("Alpha A 5 a", PlanetClass.Water, false, 500),
+            new NotableBody("Alpha A 4", PlanetClass.Rocky, true, 100),
         ]);
 
-        Assert.Equal(new[] { "Ici (4)", "Terraformable · A 4 · 100 ls", "Monde aquatique · A 5 a · 500 ls", "Monde aquatique · A 10 · 700 ls", $"Terre respirable · B 1 · {Ls(9000)} ls" },
+        Assert.Equal(new[]
+            {
+                "Ici (4)", "Corps rocheux terraformable · A 4 · 100 ls · valeur inconnue", "Monde aquatique · A 5 a · 500 ls · valeur inconnue",
+                "Monde aquatique · A 10 · 700 ls · valeur inconnue", $"Terre respirable · B 1 · {Ls(9000)} ls · 3,0 M Cr",
+            },
             Here(state));
     }
 
@@ -414,24 +416,25 @@ public sealed class ExplorationTests
     public void The_system_map_keeps_the_panel_for_the_planets_here_only()
     {
         var state = Replay(Jump("19:00:00", "Alpha", 1), NavRoute("19:00:05", ("Alpha", 1), ("Beta", 2)));
-        state.SetRouteNotable(new Dictionary<long, List<NotableBody>> { [2] = [new NotableBody("Beta 3", PlanetKind.Water, false, 540)] });
-        state.SetNotableBodies(1, [new NotableBody("Alpha 2", PlanetKind.Water, false, 300)]);
+        state.SetRouteNotable(new Dictionary<long, List<NotableBody>> { [2] = [new NotableBody("Beta 3", PlanetClass.Water, false, 540)] });
+        state.SetNotableBodies(1, [new NotableBody("Alpha 2", PlanetClass.Water, false, 300)]);
         GameStatus Focus(int gui) => new(1L << 24, 0, gui, 16, 50_000_000, "Clean");
 
         Assert.True(Briefing.PanelVisible(Focus(7)));
         Assert.False(Briefing.BannerVisible(Focus(7)));
         Assert.True(Briefing.PanelVisible(Flying()));
         Assert.False(Briefing.PanelVisible(Focus(6)));
-        Assert.Equal(new[] { "Ici (1)", "Monde aquatique · 2 · 300 ls" }, Briefing.Panel(state, Focus(7), Arrival).Select(l => l.Text));
+        Assert.Equal(new[] { "Ici (1)", "Monde aquatique · 2 · 300 ls · valeur inconnue" }, Briefing.Panel(state, Focus(7), Arrival).Select(l => l.Text));
     }
 
     private static string StarScan(string time, string body, long address, bool discovered = true, int ls = 0) =>
         Line(time, $"\"event\":\"Scan\", \"ScanType\":\"AutoScan\", \"BodyName\":\"{body}\", \"BodyID\":0, \"SystemAddress\":{address}, " +
                    $"\"DistanceFromArrivalLS\":{ls}, \"StarType\":\"M\", \"WasDiscovered\":{(discovered ? "true" : "false")}, \"WasMapped\":false");
 
-    private static string RiceScan(string time, string body, long address, string planetClass = "Icy body", bool discovered = true, bool mapped = true, int ls = 1200) =>
+    private static string RiceScan(string time, string body, long address, string planetClass = "Icy body", bool discovered = true, bool mapped = true, int ls = 1200, double mass = 0.01) =>
         Line(time, $"\"event\":\"Scan\", \"ScanType\":\"Detailed\", \"BodyName\":\"{body}\", \"BodyID\":4, \"SystemAddress\":{address}, " +
-                   $"\"DistanceFromArrivalLS\":{ls}, \"TerraformState\":\"\", \"PlanetClass\":\"{planetClass}\", \"WasDiscovered\":{(discovered ? "true" : "false")}, \"WasMapped\":{(mapped ? "true" : "false")}");
+                   $"\"DistanceFromArrivalLS\":{ls}, \"TerraformState\":\"\", \"PlanetClass\":\"{planetClass}\", \"MassEM\":{mass.ToString(CultureInfo.InvariantCulture)}, " +
+                   $"\"WasDiscovered\":{(discovered ? "true" : "false")}, \"WasMapped\":{(mapped ? "true" : "false")}");
 
     private static string BeltScan(string time, string body, long address) =>
         Line(time, $"\"event\":\"Scan\", \"ScanType\":\"AutoScan\", \"BodyName\":\"{body}\", \"BodyID\":2, \"SystemAddress\":{address}, \"DistanceFromArrivalLS\":4, \"WasDiscovered\":true, \"WasMapped\":false");
@@ -448,6 +451,7 @@ public sealed class ExplorationTests
     {
         // Mapped within the probes of the target: what the formula of the players gives, a first mapping eight times the scan.
         var state = Replay(Jump("19:00:00", "Alpha", 1), WaterWorld("19:01:00", "Alpha 1", mapped: true), WaterWorld("19:01:10", "Alpha 2", mapped: false));
+        state.MinNotableValue = 0;
         Assert.Equal([548_928, 1_333_171], state.NotableBodies.OrderBy(b => b.Name).Select(b => b.Value));
 
         Assert.Equal(1_594_270, NotableBodies.ParseSpansh("""{"results":[{"name":"Beta 7","subtype":"Water world","terraforming_state":"Terraformable","earth_masses":1.642756,"distance_to_arrival":1147,"system_id64":2}]}""").Single().Body.Value);
@@ -461,11 +465,11 @@ public sealed class ExplorationTests
             NavRoute("19:02:00", ("Alpha", 1), ("Beta", 2)));
         state.SetRouteNotable(new Dictionary<long, List<NotableBody>>
         {
-            [2] = [new NotableBody("Beta 7", PlanetKind.Water, true, 1147, Value: 1_594_270), new NotableBody("Beta 8", PlanetKind.Water, false, 1416, Value: 548_928)],
+            [2] = [new NotableBody("Beta 7", PlanetClass.Water, true, 1147, Value: 1_594_270), new NotableBody("Beta 8", PlanetClass.Water, false, 1416, Value: 548_928)],
         });
         state.MinNotableValue = 700_000;
 
-        Assert.Equal(new[] { "Ici (1)", "Monde aquatique · 2 · 500 ls · 1re cartographie", "Sur la route", "1 saut · Beta (1)" },
+        Assert.Equal(new[] { "Ici (1)", "Monde aquatique · 2 · 500 ls · 1,3 M Cr · 1re cartographie", "Sur la route", "1 saut · Beta (1) · 1,6 M Cr" },
             Briefing.Panel(state, Flying(), Arrival).Select(l => l.Text));
     }
 
@@ -520,20 +524,20 @@ public sealed class ExplorationTests
             RiceScan("19:01:10", "Alpha 2", 1, discovered: false, mapped: false, ls: 900),
             RiceScan("19:01:20", "Alpha 3", 1, "High metal content body", mapped: false, ls: 300),
             Scan("19:01:40", "Alpha 4", 1, "Water world", discovered: false, ls: 2000),
-            RiceScan("19:01:50", "Alpha 4", 1, "Water world", discovered: false, mapped: false, ls: 2000));
-        // One EDSM tells of, not scanned yet: worth mapping, but no bonus known.
-        state.SetNotableBodies(1, [new NotableBody("Alpha 5", PlanetKind.Terraformable, true, 3000)]);
+            RiceScan("19:01:50", "Alpha 4", 1, "Water world", discovered: false, mapped: false, ls: 2000, mass: 1));
+        // One EDSM tells of, not scanned yet: its value not known, it may pass the threshold.
+        state.SetNotableBodies(1, [new NotableBody("Alpha 5", PlanetClass.Rocky, true, 3000)]);
 
         Assert.Equal(new[]
             {
                 new PanelLine("Ici (2)", Tone.Info, Header: true),
-                new PanelLine($"Monde aquatique · 4 · {Ls(2000)} ls · 1re découverte, 1re cartographie", Tone.Good, Loud: true),
-                new PanelLine($"Terraformable · 5 · {Ls(3000)} ls", Tone.Good),
+                new PanelLine($"Monde aquatique · 4 · {Ls(2000)} ls · 1,6 M Cr · 1re découverte, 1re cartographie", Tone.Good, Loud: true),
+                new PanelLine($"Corps rocheux terraformable · 5 · {Ls(3000)} ls · valeur inconnue", Tone.Good),
             },
             Briefing.Panel(state, Flying(), Arrival));
 
         state.Apply(Map("19:10:00", "Alpha 4", 1));
-        Assert.Equal(new[] { "Ici (1)", $"Terraformable · 5 · {Ls(3000)} ls" }, Here(state));
+        Assert.Equal(new[] { "Ici (1)", $"Corps rocheux terraformable · 5 · {Ls(3000)} ls · valeur inconnue" }, Here(state));
 
         // A system left takes its planets with it.
         state.Apply(Jump("19:20:00", "Beta", 2));
@@ -544,20 +548,20 @@ public sealed class ExplorationTests
     public void A_system_of_the_route_with_a_first_discovery_is_filled()
     {
         var state = Replay(Jump("19:00:00", "Alpha", 1), NavRoute("19:00:05", ("Alpha", 1), ("Beta", 2)));
-        state.SetRouteNotable(new Dictionary<long, List<NotableBody>> { [2] = [new NotableBody("Beta 3", PlanetKind.Water, false, 540, FirstDiscovery: true)] });
+        state.SetRouteNotable(new Dictionary<long, List<NotableBody>> { [2] = [new NotableBody("Beta 3", PlanetClass.Water, false, 540, FirstDiscovery: true)] });
 
-        Assert.Contains(new PanelLine("1 saut · Beta (1)", Tone.Good, Loud: true), Briefing.Panel(state, Flying(), Arrival));
+        Assert.Contains(new PanelLine("1 saut · Beta (1) · valeur inconnue", Tone.Good, Loud: true), Briefing.Panel(state, Flying(), Arrival));
     }
 
     [Fact]
     public void A_system_of_the_route_reached_tells_its_planets_here_from_what_Spansh_said()
     {
         var state = Replay(Jump("19:00:00", "Alpha", 1), NavRoute("19:00:05", ("Alpha", 1), ("Beta", 2)));
-        state.SetRouteNotable(new Dictionary<long, List<NotableBody>> { [2] = [new NotableBody("Beta 3", PlanetKind.Water, false, 540)] });
+        state.SetRouteNotable(new Dictionary<long, List<NotableBody>> { [2] = [new NotableBody("Beta 3", PlanetClass.Water, false, 540)] });
 
         // EDSM does not know Beta: Spansh did.
         state.Apply(Jump("19:05:00", "Beta", 2));
-        Assert.Equal(["Ici (1)", "Monde aquatique · 3 · 540 ls"], Here(state));
+        Assert.Equal(["Ici (1)", "Monde aquatique · 3 · 540 ls · valeur inconnue"], Here(state));
 
         state.Apply(Map("19:10:00", "Beta 3", 2));
         Assert.Empty(Here(state));
@@ -567,15 +571,15 @@ public sealed class ExplorationTests
     public void The_planet_targeted_stands_out_in_the_game_s_orange()
     {
         var state = Replay(Jump("19:00:00", "Alpha", 1));
-        state.SetNotableBodies(1, [new NotableBody("Alpha 2", PlanetKind.Water, false, 300), new NotableBody("Alpha 3", PlanetKind.Terraformable, true, 400)]);
+        state.SetNotableBodies(1, [new NotableBody("Alpha 2", PlanetClass.Water, false, 300, Value: 1_200_000), new NotableBody("Alpha 3", PlanetClass.Rocky, true, 400)]);
         var status = GameStatus.Parse("""{ "event":"Status", "Flags":16777216, "GuiFocus":0, "Destination":{ "System":1, "Body":3, "Name":"Alpha 3" } }""")!;
 
         Assert.Equal("Alpha 3", status.Destination);
         Assert.Equal(new[]
             {
                 new PanelLine("Ici (2)", Tone.Info, Header: true),
-                new PanelLine("Monde aquatique · 2 · 300 ls", Tone.Good),
-                new PanelLine("› Terraformable · 3 · 400 ls", Tone.Info, Targeted: true),
+                new PanelLine("Monde aquatique · 2 · 300 ls · 1,2 M Cr", Tone.Good),
+                new PanelLine("› Corps rocheux terraformable · 3 · 400 ls · valeur inconnue", Tone.Info, Targeted: true),
             },
             Briefing.Panel(state, status, Arrival));
     }
@@ -585,7 +589,7 @@ public sealed class ExplorationTests
     {
         var hops = Enumerable.Range(1, 10).Select(i => ($"S{i}", (long)i)).ToArray();
         var state = Replay(Jump("19:00:00", "S0", 100), NavRoute("19:00:05", [("S0", 100L), .. hops]));
-        state.SetRouteNotable(hops.ToDictionary(h => h.Item2, h => new List<NotableBody> { new($"{h.Item1} 1", PlanetKind.Water, false, 100) }));
+        state.SetRouteNotable(hops.ToDictionary(h => h.Item2, h => new List<NotableBody> { new($"{h.Item1} 1", PlanetClass.Water, false, 100) }));
 
         Assert.Equal(8, Briefing.Panel(state, Flying(), Arrival).Count(l => l.Text.Contains(" sauts · ") || l.Text.Contains(" saut · ")));
     }

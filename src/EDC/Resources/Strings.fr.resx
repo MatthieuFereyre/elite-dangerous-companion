@@ -477,6 +477,9 @@
   <data name="BUsualLimpets" xml:space="preserve">
     <value>D'habitude {0} à bord</value>
   </data>
+  <data name="BValueUnknown" xml:space="preserve">
+    <value>valeur inconnue</value>
+  </data>
   <data name="BVeryCold" xml:space="preserve">
     <value>Très froid</value>
   </data>
@@ -572,6 +575,18 @@
   </data>
   <data name="ExplorationSessionLabel" xml:space="preserve">
     <value>EXPLORATION DE LA SESSION</value>
+  </data>
+  <data name="FirstDiscoveriesSetting" xml:space="preserve">
+    <value>Aussi les premières découvertes</value>
+  </data>
+  <data name="FirstDiscoveriesSettingTip" xml:space="preserve">
+    <value>Une planète que personne n'avait trouvée est signalée quoi qu'elle rapporte</value>
+  </data>
+  <data name="FirstMappingsSetting" xml:space="preserve">
+    <value>Aussi les premières cartographies</value>
+  </data>
+  <data name="FirstMappingsSettingTip" xml:space="preserve">
+    <value>Une planète que personne n'avait cartographiée est signalée quoi qu'elle rapporte</value>
   </data>
   <data name="FolderEnabledTip" xml:space="preserve">
     <value>Coché : ses morceaux sont joués. Décoché : gardés et triés, mais plus joués.</value>
@@ -861,17 +876,47 @@
   <data name="PlanetEarthLike" xml:space="preserve">
     <value>Terre respirable</value>
   </data>
+  <data name="PlanetGasGiant" xml:space="preserve">
+    <value>Géante gazeuse</value>
+  </data>
+  <data name="PlanetGasGiantLife" xml:space="preserve">
+    <value>Géante gazeuse à vie</value>
+  </data>
+  <data name="PlanetHeliumGiant" xml:space="preserve">
+    <value>Géante d'hélium</value>
+  </data>
+  <data name="PlanetHighMetal" xml:space="preserve">
+    <value>Corps à forte teneur en métaux</value>
+  </data>
+  <data name="PlanetIcy" xml:space="preserve">
+    <value>Corps glacé</value>
+  </data>
+  <data name="PlanetMetalRich" xml:space="preserve">
+    <value>Corps riche en métaux</value>
+  </data>
+  <data name="PlanetRocky" xml:space="preserve">
+    <value>Corps rocheux</value>
+  </data>
+  <data name="PlanetRockyIce" xml:space="preserve">
+    <value>Corps rocheux glacé</value>
+  </data>
   <data name="PlanetTerraformable" xml:space="preserve">
     <value>Terraformable</value>
+  </data>
+  <data name="PlanetTerraformableOf" xml:space="preserve">
+    <value>{0} terraformable</value>
   </data>
   <data name="PlanetThreshold" xml:space="preserve">
     <value>Planètes signalées dès</value>
   </data>
   <data name="PlanetThresholdTip" xml:space="preserve">
-    <value>Ce que la planète rapporte cartographiée avec l'efficacité ; en dessous, le panneau ne la signale pas</value>
+    <value>Ce que la planète rapporte cartographiée avec l'efficacité ; en dessous, le panneau ne la signale pas. Une planète de valeur inconnue l'est toujours</value>
   </data>
   <data name="PlanetWater" xml:space="preserve">
     <value>Monde aquatique</value>
+  </data>
+  <data name="PlanetWaterGiant" xml:space="preserve">
+    <value>Géante aquatique</value>
   </data>
   <data name="PlanetWaterTerraformable" xml:space="preserve">
     <value>Monde aquatique terraformable</value>

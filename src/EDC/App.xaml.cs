@@ -155,6 +155,8 @@ public partial class App : Application
         {
             var now = DateTime.UtcNow;
             _companion.State.MinNotableValue = settings.PanelMinValue;
+            _companion.State.FirstDiscoveries = settings.PanelFirstDiscoveries;
+            _companion.State.FirstMappings = settings.PanelFirstMappings;
             var visible = settings.CompanionBanner && _controller.InGame && Briefing.BannerVisible(_companion.Status);
             _banner.Update(Briefing.Banner(_companion.State, _companion.Status, settings.ControllerInBanner ? _pad.Current : PadBattery.None, now), visible);
             _warning.Update(Briefing.Warning(_companion.State, _companion.Status, now, settings.HonkReminder), visible);

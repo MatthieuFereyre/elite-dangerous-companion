@@ -219,8 +219,9 @@ public sealed class GameState
     }
 
     /// <summary>
-    /// The Earth-like, ammonia, water and terraformable worlds of the current system not mapped yet: the most precious
-    /// first, then the nearest.
+    /// The planets of the current system not mapped yet that are worth telling: mapping them pays the
+    /// threshold or more, or they are a first discovery or a first mapping when the player asked for those.
+    /// The most precious first.
     /// </summary>
     public IReadOnlyList<NotableBody> NotableBodies =>
         // What Spansh said of it on the route, for a system EDSM does not know; the journal's scans over both.
@@ -229,13 +230,23 @@ public sealed class GameState
             .Where(b => !_scannedNotable.ContainsKey(b.Name))
             .DistinctBy(b => b.Name, StringComparer.OrdinalIgnoreCase)
             .Concat(_scannedNotable.Values)
-            .Where(b => !_mappedBodies.ContainsKey(b.Name) && b.Value >= MinNotableValue)
-            .OrderBy(b => b.Kind)
+            .Where(b => !_mappedBodies.ContainsKey(b.Name) && Worth(b))
+            .OrderByDescending(b => b.Value ?? -1)
             .ThenBy(b => b.Distance)
             .ToList();
 
-    /// <summary>Below what mapping it pays, a notable planet is not told, here nor on the route; the player's setting.</summary>
+    // A value not known is told: it may well pass the threshold.
+    private bool Worth(NotableBody b) =>
+        b.Value is null || b.Value >= MinNotableValue || (FirstDiscoveries && b.FirstDiscovery) || (FirstMappings && b.FirstMapping);
+
+    /// <summary>Below what mapping it pays, a planet is not told, here nor on the route; the player's setting.</summary>
     public long MinNotableValue { get; set; }
+
+    /// <summary>A planet nobody had found is told whatever it pays; the player's setting.</summary>
+    public bool FirstDiscoveries { get; set; }
+
+    /// <summary>A planet nobody had mapped is told whatever it pays; the player's setting.</summary>
+    public bool FirstMappings { get; set; }
 
     /// <summary>EDSM's answer, asked with the value; one for a system left since is dropped.</summary>
     /// <summary>The bodies of the current system as scanned, placed on their orbits.</summary>
@@ -289,8 +300,8 @@ public sealed class GameState
     public IReadOnlyList<(int Jumps, RouteHop Hop, IReadOnlyList<NotableBody> Bodies)> RouteNotable =>
         HopsAhead
             .Select((hop, i) => (Jumps: i + 1, Hop: hop, Bodies: (IReadOnlyList<NotableBody>)(_routeNotable.GetValueOrDefault(hop.Address) ?? [])
-                .Where(b => !_mappedBodies.ContainsKey(b.Name) && b.Value >= MinNotableValue)
-                .OrderBy(b => b.Kind)
+                .Where(b => !_mappedBodies.ContainsKey(b.Name) && Worth(b))
+                .OrderByDescending(b => b.Value ?? -1)
                 .ThenBy(b => b.Distance)
                 .ToList()))
             .Where(h => h.Bodies.Count > 0)
