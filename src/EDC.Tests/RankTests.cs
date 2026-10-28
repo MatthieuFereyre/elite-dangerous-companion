@@ -61,12 +61,12 @@ public sealed class RankTests
 
         var empire = Row(state, RankKind.Empire);
         Assert.Equal(("Marine impériale", "Serf"), (empire.Title, empire.Name));
-        Assert.Equal("100 % : une mission de promotion pour devenir Master", empire.Next);
-        Assert.Equal("Master débloque : Imperial Courier", empire.Unlocks);
+        Assert.Equal("100 % · mission de promotion pour Master", empire.Next);
+        Assert.Equal("Débloque : Imperial Courier", empire.Unlocks);
 
         var federation = Row(state, RankKind.Federation);
         Assert.Equal(("Petty Officer", "16 % vers Chief Petty Officer"), (federation.Name, federation.Next));
-        Assert.Equal("Chief Petty Officer débloque : Federal Assault Ship, permis Vega, permis Beta Hydri", federation.Unlocks);
+        Assert.Equal("Débloque : Federal Assault Ship, permis Vega, permis Beta Hydri", federation.Unlocks);
 
         // A rank that gives nothing says nothing.
         state.Apply(Line("\"event\":\"Promotion\", \"Federation\":8"));

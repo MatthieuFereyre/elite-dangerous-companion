@@ -95,7 +95,7 @@ public static class Commander
             : Navy(kind) && progress >= 100 ? string.Format(Strings.RankPromotion, next)
             : string.Format(Strings.RankProgressTo, progress, next);
         return new CommanderRank(kind, Title(kind), name, progress, text, How(kind),
-            next is not null && Unlocks.TryGetValue((kind, rank + 1), out var unlock) ? string.Format(Strings.RankUnlocks, next, Describe(unlock)) : null);
+            next is not null && Unlocks.TryGetValue((kind, rank + 1), out var unlock) ? string.Format(Strings.RankUnlocks, Describe(unlock)) : null);
     }
 
     private static string Describe(Unlock unlock) => string.Join(", ",

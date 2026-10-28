@@ -292,14 +292,20 @@ public sealed class NeutronTests
     [Fact]
     public void One_tab_shown_hides_all_the_others()
     {
+        Assert.True(new PlayerViewModel().ShowMusic);
+
         var model = new PlayerViewModel { ShowNeutron = true };
-        Assert.Equal((false, false, false, true, false), (model.ShowMusic, model.ShowCombat, model.ShowExploration, model.ShowNeutron, model.ShowSettings));
+        Assert.Equal((false, false, false, false, true, false),
+            (model.ShowMusic, model.ShowCommander, model.ShowCombat, model.ShowExploration, model.ShowNeutron, model.ShowSettings));
+        model.ShowCommander = true;
+        Assert.Equal((true, false), (model.ShowCommander, model.ShowNeutron));
 
         // The radio group unchecking a tab writes false: it must change nothing.
         model.ShowMusic = false;
-        Assert.True(model.ShowNeutron);
+        Assert.True(model.ShowCommander);
         model.ShowSettings = true;
-        Assert.Equal((false, false, false, false, true), (model.ShowMusic, model.ShowCombat, model.ShowExploration, model.ShowNeutron, model.ShowSettings));
+        Assert.Equal((false, false, false, false, false, true),
+            (model.ShowMusic, model.ShowCommander, model.ShowCombat, model.ShowExploration, model.ShowNeutron, model.ShowSettings));
     }
 
     [Fact]

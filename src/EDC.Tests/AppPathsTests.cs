@@ -51,11 +51,11 @@ public sealed class AppPathsTests : IDisposable
     public void Every_setting_of_the_window_is_kept()
     {
         var file = Path.Combine(_root, "settings.json");
-        new PlayerSettings { Force = ForceMode.Combat, Tab = "Folders", LikeWeight = 4 }.Save(file);
+        new PlayerSettings { Force = ForceMode.Combat, Language = "fr", LikeWeight = 4 }.Save(file);
 
         var read = PlayerSettings.Load(file);
 
-        Assert.Equal((ForceMode.Combat, "Folders", 4), (read.Force, read.Tab, read.LikeWeight));
+        Assert.Equal((ForceMode.Combat, "fr", 4), (read.Force, read.Language, read.LikeWeight));
         Assert.Contains("\"force\": \"Combat\"", File.ReadAllText(file));
     }
 

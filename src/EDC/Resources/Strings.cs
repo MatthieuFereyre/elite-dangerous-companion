@@ -265,7 +265,6 @@ public static class Strings
     public static string ModeCalm => Get(nameof(ModeCalm));
     public static string ModeCombat => Get(nameof(ModeCombat));
     public static string ModeLabel => Get(nameof(ModeLabel));
-    public static string NavyRanksLabel => Get(nameof(NavyRanksLabel));
     public static string Nearest => Get(nameof(Nearest));
     public static string NeutronArrival => Get(nameof(NeutronArrival));
     public static string NeutronClickStep => Get(nameof(NeutronClickStep));
@@ -308,7 +307,6 @@ public static class Strings
     public static string Pause => Get(nameof(Pause));
     public static string Percent => Get(nameof(Percent));
     public static string PerHour => Get(nameof(PerHour));
-    public static string PilotRanksLabel => Get(nameof(PilotRanksLabel));
     public static string PlanetAmmonia => Get(nameof(PlanetAmmonia));
     public static string PlanetEarthLike => Get(nameof(PlanetEarthLike));
     public static string PlanetGasGiant => Get(nameof(PlanetGasGiant));

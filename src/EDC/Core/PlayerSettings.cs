@@ -37,9 +37,6 @@ public sealed class PlayerSettings
     /// <summary>"auto" (as Windows), "en" or "fr"; applied on the next start.</summary>
     public string Language { get; set; } = "auto";
 
-    /// <summary>The tab of the window last shown.</summary>
-    public string? Tab { get; set; }
-
     /// <summary>The track's title over the game when it starts.</summary>
     public bool TrackToast { get; set; } = true;
 

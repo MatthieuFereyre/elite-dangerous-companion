@@ -762,9 +762,6 @@
   <data name="ModeLabel" xml:space="preserve">
     <value>MODE</value>
   </data>
-  <data name="NavyRanksLabel" xml:space="preserve">
-    <value>Marines</value>
-  </data>
   <data name="Nearest" xml:space="preserve">
     <value>LE PLUS PROCHE</value>
   </data>
@@ -890,9 +887,6 @@
   </data>
   <data name="PerHour" xml:space="preserve">
     <value>{0} / h</value>
-  </data>
-  <data name="PilotRanksLabel" xml:space="preserve">
-    <value>Pilots Federation</value>
   </data>
   <data name="PlanetAmmonia" xml:space="preserve">
     <value>Monde ammoniaqué</value>
@@ -1057,7 +1051,7 @@
     <value>{0} % vers {1}</value>
   </data>
   <data name="RankPromotion" xml:space="preserve">
-    <value>100 % : une mission de promotion pour devenir {0}</value>
+    <value>100 % · mission de promotion pour {0}</value>
   </data>
   <data name="RankSoldier" xml:space="preserve">
     <value>Mercenaire</value>
@@ -1078,7 +1072,7 @@
     <value>rang inconnu</value>
   </data>
   <data name="RankUnlocks" xml:space="preserve">
-    <value>{0} débloque : {1}</value>
+    <value>Débloque : {0}</value>
   </data>
   <data name="RateWaiting" xml:space="preserve">
     <value>— / h (10 min minimum)</value>
@@ -1282,7 +1276,7 @@
     <value>COMBAT</value>
   </data>
   <data name="TabCommander" xml:space="preserve">
-    <value>Commandeur</value>
+    <value>COMMANDEUR</value>
   </data>
   <data name="TabExploration" xml:space="preserve">
     <value>EXPLORATION</value>

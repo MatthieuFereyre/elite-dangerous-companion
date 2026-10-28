@@ -53,7 +53,6 @@ public sealed partial class PlayerViewModel : ObservableObject
         _settings = settings;
         _saveSettings = saveSettings;
         Companion = companion;
-        Shown = Enum.TryParse<Tab>(settings.Tab, out var tab) ? tab : Tab.Music;
         var dispatcher = System.Windows.Threading.Dispatcher.CurrentDispatcher;
         _durations.Changed += () => dispatcher.BeginInvoke(Refresh);
         controller.StateChanged += Refresh;
@@ -84,9 +83,9 @@ public sealed partial class PlayerViewModel : ObservableObject
     [ObservableProperty] private string _playlistText = "";
     [ObservableProperty] private PadBattery _pad = PadBattery.None;
 
-    public enum Tab { Music, Combat, Exploration, Neutron, Commander, Settings }
+    public enum Tab { Music, Commander, Combat, Exploration, Neutron, Settings }
 
-    /// <summary>The tab shown.</summary>
+    /// <summary>The tab shown: the music at each start.</summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ShowMusic))]
     [NotifyPropertyChangedFor(nameof(ShowCombat))]
@@ -193,14 +192,6 @@ public sealed partial class PlayerViewModel : ObservableObject
     {
         get => Force == ForceMode.Combat;
         set { if (value) SetForce(ForceMode.Combat); }
-    }
-
-    partial void OnShownChanged(Tab value)
-    {
-        if (_settings is null || _settings.Tab == value.ToString())
-            return;
-        _settings.Tab = value.ToString();
-        _saveSettings?.Invoke();
     }
 
     partial void OnInGameChanged(bool value) => OnPropertyChanged(nameof(InGameText));
