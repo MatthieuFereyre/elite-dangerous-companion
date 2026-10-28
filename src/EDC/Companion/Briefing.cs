@@ -591,19 +591,22 @@ public static class Briefing
     }
 
     /// <summary>
-    /// A system the discovery scanner has not sounded in, or whose data went down with the ship: still
-    /// while the FSD charges, the last moment to think of it; not in the jump.
+    /// The jump charging while a valuable planet here is still to map: the time to cancel it. Not in the jump, too
+    /// late, and where Status.json still says it for a moment after arriving, with the planets of the new system.
     /// </summary>
-    /// <summary>The jump charging while a valuable planet here is still to map: the time to cancel it.</summary>
     private static Warning? LeavingValuable(GameState state, GameStatus status)
     {
-        if (!status.HyperdriveCharging || state.NotableBodies is not { Count: > 0 } left)
+        if (!status.HyperdriveCharging || status.FsdJump || state.NotableBodies is not { Count: > 0 } left)
             return null;
 
         var names = string.Join(", ", left.Select(b => ShortName(b.Name, state.System)));
         return new Warning(Strings.BLeavingValuable, string.Format(Strings.BLeavingValuableTip, names, Credits(left.Sum(b => b.Value ?? 0))), Big: true, Tone.Warn);
     }
 
+    /// <summary>
+    /// A system the discovery scanner has not sounded in, or whose data went down with the ship: still
+    /// while the FSD charges, the last moment to think of it; not in the jump.
+    /// </summary>
     private static Warning? Honk(GameState state, GameStatus status, DateTime nowUtc)
     {
         if (state.Honked || state.System is null || status.FsdJump)

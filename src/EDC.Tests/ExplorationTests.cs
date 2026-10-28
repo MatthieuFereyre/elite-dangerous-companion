@@ -193,6 +193,19 @@ public sealed class ExplorationTests
         Assert.Null(Warning(state, 400, Leaving()));
     }
 
+    // In the jump (Flags bit 30), the hyperdrive bit still up: what Status.json says for a moment after the FSDJump line.
+    private static GameStatus InTheJump() => new((1L << 24) | (1L << 30), 1L << 19, 0, 16, 50_000_000, "Clean");
+
+    [Fact]
+    public void In_the_jump_nothing_is_left_behind_any_more_nor_the_planets_of_the_system_arrived_in()
+    {
+        var state = Replay(Jump("19:00:00", "Itela", 5336236820851),
+            Scan("19:00:01", "Itela A 4", 5336236820851, "Water world", "Terraformable"));
+
+        Assert.Null(Warning(state, 1, InTheJump()));
+        Assert.Equal("Coup de klaxon", Warning(state, 2)?.Title);
+    }
+
     [Fact]
     public void A_scanned_planet_above_the_threshold_is_left_to_the_panel_the_best_paid_first_until_mapped()
     {
