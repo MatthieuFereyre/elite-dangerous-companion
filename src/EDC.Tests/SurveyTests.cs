@@ -111,6 +111,21 @@ public sealed class SurveyTests
     }
 
     [Fact]
+    public void A_planet_mapped_before_stays_so_when_the_scan_after_the_commander_s_mapping_says_otherwise()
+    {
+        // As the game wrote it for Col 173 Sector MO-Q d5-48 B 2: mapped before, then « not mapped » once probed.
+        var state = Replay(
+            Scan("Epsilon 1", "High metal content body", "").Replace("\"Detailed\"", "\"AutoScan\""),
+            Line($"\"event\":\"SAAScanComplete\", \"BodyName\":\"Epsilon 1\", \"SystemAddress\":{Address}, \"BodyID\":4, \"ProbesUsed\":4, \"EfficiencyTarget\":6"),
+            Scan("Epsilon 1", "High metal content body", "").Replace("\"WasMapped\":true", "\"WasMapped\":false"));
+        var before = Replay(Scan("Epsilon 1", "High metal content body", "")).PlanetHere("Epsilon 1");
+
+        Assert.False(state.ScannedHere("Epsilon 1")?.FirstMapping);
+        Assert.Equal((false, before?.Value), (state.PlanetHere("Epsilon 1")?.FirstMapping, state.PlanetHere("Epsilon 1")?.Value));
+        Assert.DoesNotContain(Card(state), l => l.Contains("1re cartographie"));
+    }
+
+    [Fact]
     public void A_planet_not_known_shows_nothing()
     {
         var state = Replay(Scan("Epsilon 1", "Rocky body", Rock));

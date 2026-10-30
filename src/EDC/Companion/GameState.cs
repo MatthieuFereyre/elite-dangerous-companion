@@ -913,10 +913,17 @@ public sealed class GameState
                 if (Long(e, "SystemAddress") != SystemAddress)
                     break;
                 Orbits.Add(e);
+                // The scan the game writes after the commander's own mapping says « not mapped » of a planet
+                // an earlier scan said was: a first can go, never come back.
                 if (Companion.NotableBodies.FromScan(e) is { } notable)
-                    _scannedNotable[notable.Name] = notable;
+                    _scannedNotable[notable.Name] = _scannedNotable.GetValueOrDefault(notable.Name) is { } known
+                        && ((notable.FirstMapping && !known.FirstMapping) || (notable.FirstDiscovery && !known.FirstDiscovery))
+                        ? known
+                        : notable;
                 if (Companion.NotableBodies.Scanned(e) is { } scanned)
-                    _scannedBodies[scanned.Name] = scanned;
+                    _scannedBodies[scanned.Name] = _scannedBodies.GetValueOrDefault(scanned.Name) is { FirstMapping: false } mappedBefore
+                        ? mappedBefore
+                        : scanned;
                 if (Str(e, "BodyName") is { } described && BodyDetails.FromScan(e) is { } details)
                     _bodyDetails[described] = details;
                 break;
