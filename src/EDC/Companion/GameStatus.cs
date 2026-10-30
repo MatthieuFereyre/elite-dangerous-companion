@@ -43,6 +43,9 @@ public sealed record GameStatus(long Flags, long Flags2, int GuiFocus, double? F
     public bool SystemMap => GuiFocus == 7;
     public bool GalaxyMap => GuiFocus == 6;
 
+    /// <summary>The detailed surface scanner's view, probes at the ready.</summary>
+    public bool SurfaceScan => GuiFocus == 10;
+
     private static bool Has(long flags, int bit) => (flags & (1L << bit)) != 0;
 
     public static GameStatus? Parse(string json)

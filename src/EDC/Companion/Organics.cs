@@ -8,6 +8,22 @@ public static class Organics
 {
     public static long? Value(string? species) => species is not null && Values.TryGetValue(species, out var value) ? value : null;
 
+    /// <summary>
+    /// What a genus pays, from its cheapest species to its dearest: the surface scanner names the genera,
+    /// the species only show on sampling. Brain trees are « Brancae » as a genus, « Seed » as species.
+    /// </summary>
+    public static (long Min, long Max)? GenusValues(string? genus)
+    {
+        if (genus is null)
+            return null;
+        var prefix = genus.Equals("$Codex_Ent_Brancae_Name;", StringComparison.OrdinalIgnoreCase) ? "$Codex_Ent_Seed"
+            : genus.EndsWith("_Genus_Name;", StringComparison.OrdinalIgnoreCase) ? genus[..^"Genus_Name;".Length]
+            : genus.EndsWith("_Name;", StringComparison.OrdinalIgnoreCase) ? genus[..^"_Name;".Length]
+            : genus;
+        var values = Values.Where(v => v.Key.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)).Select(v => v.Value).ToList();
+        return values.Count > 0 ? (values.Min(), values.Max()) : null;
+    }
+
     /// <summary>The colony range, in metres: the next sample must be taken further than that from the others.</summary>
     public static int? Range(string? genus) => genus is not null && Ranges.TryGetValue(genus, out var range) ? range : null;
 

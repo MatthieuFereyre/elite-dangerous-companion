@@ -43,7 +43,7 @@ public static class Briefing
 
     /// <summary>Whether the panel on the left shows: where the banner does, and on the system and galaxy maps.</summary>
     public static bool PanelVisible(GameStatus status) =>
-        !status.InMenu && (status.InMainShip || status.InSrv || status.OnFoot) && (!status.FullScreenView || status.SystemMap || status.GalaxyMap);
+        !status.InMenu && (status.InMainShip || status.InSrv || status.OnFoot) && (!status.FullScreenView || status.SystemMap || status.GalaxyMap || status.SurfaceScan);
 
     /// <summary>The banner, most important first: what does not fit on the right is left out.</summary>
     public static List<Chip> Banner(GameState state, GameStatus status, PadBattery pad, DateTime nowUtc)
@@ -459,6 +459,8 @@ public static class Briefing
         var lines = new List<PanelLine>();
         if (status.GalaxyMap)
             return GalaxyTarget(state);
+        if (status.SurfaceScan)
+            return Survey(state, nowUtc, status.Destination ?? state.NearBody);
         if (status.OnFoot || status.Docked)
             return lines;
 
@@ -474,14 +476,6 @@ public static class Briefing
 
         if (!state.HasSurfaceScanner)
             return lines;
-
-        static string Bonus(bool firstDiscovery, bool firstMapping) => (firstDiscovery, firstMapping) switch
-        {
-            (true, true) => Strings.BFirstBoth,
-            (true, false) => Strings.BFirstDiscovery,
-            (false, true) => Strings.BFirstMapping,
-            _ => "",
-        };
 
         // Here, the planets worth the trip, as the system map lists them; the others are not told, bonus or
         // not. A body with a bonus to take stands out: filled, like the band's loud chips.
@@ -513,6 +507,84 @@ public static class Briefing
 
         return lines;
     }
+
+    private static string Bonus(bool firstDiscovery, bool firstMapping) => (firstDiscovery, firstMapping) switch
+    {
+        (true, true) => Strings.BFirstBoth,
+        (true, false) => Strings.BFirstDiscovery,
+        (false, true) => Strings.BFirstMapping,
+        _ => "",
+    };
+
+    /// <summary>Above it, landing is a risk: the gravity is told in red.</summary>
+    private const double HeavyGravity = 2;
+
+    /// <summary>
+    /// In the surface scanner's view, the planet probed, the one targeted: what mapping it pays; where a
+    /// ship lands, its gravity, heat and air and its rarer materials; its signals, the genera of its life
+    /// with what they pay; last, what is mapped and left to map here, and the next planet.
+    /// </summary>
+    private static List<PanelLine> Survey(GameState state, DateTime nowUtc, string? name)
+    {
+        if (name is null || state.PlanetHere(name) is not { } planet)
+            return [];
+
+        var details = state.DetailsHere(name);
+        var landable = details?.Landable ?? planet.Landable;
+        var bonus = Bonus(planet.FirstDiscovery, state.ScannedHere(name) is { FirstMapping: true });
+        var lines = new List<PanelLine>
+        {
+            new($"{ShortName(name, state.System)} · {planet.Label}", Tone.Info, Header: true, Landable: landable),
+            new(Worth(planet.Value) + bonus, Tone.Good, Loud: bonus != ""),
+        };
+
+        if (landable && details is not null)
+        {
+            var landing = new List<string>();
+            if (details.Gravity is { } gravity)
+                landing.Add($"{gravity.ToString("0.##", Loc.Culture)} g");
+            if (details.Temperature is { } kelvins)
+                landing.Add($"{kelvins.ToString("0", Loc.Culture)} K");
+            landing.Add(details.Atmosphere == "" ? Strings.AtmosphereNone
+                : details.Atmosphere.Contains("thin", StringComparison.OrdinalIgnoreCase) ? Strings.AtmosphereThin
+                : Strings.AtmosphereThick);
+            lines.Add(new PanelLine(string.Join(" · ", landing), details.Gravity > HeavyGravity ? Tone.Alert : Tone.Good));
+
+            var rare = details.RareMaterials(4).Select(m => $"{m.Name} {m.Percent.ToString("0.0", Loc.Culture)} %").ToList();
+            if (rare.Count > 0)
+                lines.Add(new PanelLine(string.Join(" · ", rare), Tone.Good));
+        }
+
+        if (state.SignalsHere(name) is { } signals && (signals.Biological > 0 || signals.Geological > 0))
+        {
+            var counts = new List<string>();
+            if (signals.Biological > 0)
+                counts.Add(string.Format(Strings.SignalBiological, signals.Biological));
+            if (signals.Geological > 0)
+                counts.Add(string.Format(Strings.SignalGeological, signals.Geological));
+            lines.Add(new PanelLine(string.Join(" · ", counts), Tone.Info));
+            lines.AddRange(signals.Genera.Select(g => new PanelLine(
+                Organics.GenusValues(g.Id) is { } pays ? $"{g.Name} · {Pays(pays)}" : g.Name, Tone.Good)));
+        }
+
+        // What is left here, the planet probed among it until mapped; the next, the nearest by supercruise.
+        var left = state.NotableBodies.Count;
+        var progress = new List<string>();
+        if (state.MappedHere > 0)
+            progress.Add(Loc.Plural(state.MappedHere, Strings.SurveyMappedOne, Strings.SurveyMappedMany));
+        if (left > 0)
+            progress.Add(string.Format(Strings.SurveyToMap, left));
+        if (state.VisitPlan(nowUtc).Select(p => p.Body).FirstOrDefault(b => !string.Equals(b.Name, name, StringComparison.OrdinalIgnoreCase)) is { } next)
+            progress.Add(string.Format(Strings.SurveyNext, $"{ShortName(next.Name, state.System)} · {next.Distance.ToString("N0", Loc.Culture)} ls"));
+        if (progress.Count > 0)
+            lines.Add(new PanelLine(string.Join(" · ", progress), Tone.Info));
+        return lines;
+    }
+
+    /// <summary>« 1,0 à 8,4 M Cr »: what a genus pays, its species told apart only on sampling.</summary>
+    private static string Pays((long Min, long Max) values) => values.Min == values.Max
+        ? Credits(values.Min)
+        : string.Format(Strings.GenusPays, (values.Min / 1e6).ToString("0.0", Loc.Culture), (values.Max / 1e6).ToString("0.0", Loc.Culture));
 
     /// <summary>On the galaxy map, what EDSM knows of the system targeted, and its planets worth the trip.</summary>
     private static List<PanelLine> GalaxyTarget(GameState state)

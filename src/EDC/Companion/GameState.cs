@@ -73,6 +73,9 @@ public sealed class GameState
     private IReadOnlyList<NotableBody> _edsmNotable = [];
     // The current system's stars and planets the journal scanned, whatever their worth.
     private readonly Dictionary<string, ScannedBody> _scannedBodies = new(StringComparer.OrdinalIgnoreCase);
+    // The current system's planets as the journal scanned them, and their signals: for the surface scanner's view.
+    private readonly Dictionary<string, BodyDetails> _bodyDetails = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, BodySignals> _bodySignals = new(StringComparer.OrdinalIgnoreCase);
     // The route's systems Spansh knows a notable planet in, by address.
     private readonly Dictionary<long, IReadOnlyList<NotableBody>> _routeNotable = [];
 
@@ -268,6 +271,21 @@ public sealed class GameState
 
     /// <summary>A star or planet of the current system as the journal scanned it, if it did.</summary>
     public ScannedBody? ScannedHere(string name) => _scannedBodies.GetValueOrDefault(name);
+
+    /// <summary>A planet of the current system with its worth, whatever it is: the journal's scan, else EDSM's or Spansh's.</summary>
+    public NotableBody? PlanetHere(string name) =>
+        _scannedNotable.GetValueOrDefault(name)
+        ?? _edsmNotable.Concat(_routeNotable.GetValueOrDefault(SystemAddress) ?? [])
+            .FirstOrDefault(b => string.Equals(b.Name, name, StringComparison.OrdinalIgnoreCase));
+
+    /// <summary>A planet of the current system as the journal's scan describes it: landing, materials.</summary>
+    public BodyDetails? DetailsHere(string name) => _bodyDetails.GetValueOrDefault(name);
+
+    /// <summary>A planet's signals, counted by the FSS, its genera named once probed.</summary>
+    public BodySignals? SignalsHere(string name) => _bodySignals.GetValueOrDefault(name);
+
+    /// <summary>The planets of the current system mapped by the commander.</summary>
+    public int MappedHere => _mappedBodies.Count(b => string.Equals(b.Value.System, System, StringComparison.OrdinalIgnoreCase));
 
     /// <summary>Raised by a new route: the caller asks Spansh for its systems and calls <see cref="SetRouteNotable"/>.</summary>
     public bool RouteNotableWanted { get; set; }
@@ -899,6 +917,15 @@ public sealed class GameState
                     _scannedNotable[notable.Name] = notable;
                 if (Companion.NotableBodies.Scanned(e) is { } scanned)
                     _scannedBodies[scanned.Name] = scanned;
+                if (Str(e, "BodyName") is { } described && BodyDetails.FromScan(e) is { } details)
+                    _bodyDetails[described] = details;
+                break;
+
+            // Counted by the FSS, then named by the surface scanner: the later says more.
+            case "FSSBodySignals":
+            case "SAASignalsFound":
+                if (Long(e, "SystemAddress") == SystemAddress && Str(e, "BodyName") is { } signalled)
+                    _bodySignals[signalled] = BodySignals.FromEvent(e);
                 break;
 
             case "SellOrganicData":
@@ -1007,6 +1034,8 @@ public sealed class GameState
             _scannedNotable.Clear();
             _edsmNotable = [];
             _scannedBodies.Clear();
+            _bodyDetails.Clear();
+            _bodySignals.Clear();
             Orbits = new SystemOrbits();
         }
 

@@ -66,6 +66,15 @@
   <data name="AppName" xml:space="preserve">
     <value>Elite Dangerous Companion</value>
   </data>
+  <data name="AtmosphereNone" xml:space="preserve">
+    <value>no atmosphere</value>
+  </data>
+  <data name="AtmosphereThick" xml:space="preserve">
+    <value>atmosphere</value>
+  </data>
+  <data name="AtmosphereThin" xml:space="preserve">
+    <value>thin atmosphere</value>
+  </data>
   <data name="AtStation" xml:space="preserve">
     <value>TO DO AT THE STATION</value>
   </data>
@@ -612,6 +621,9 @@
   <data name="FromPlaceholder" xml:space="preserve">
     <value>Current system</value>
   </data>
+  <data name="GenusPays" xml:space="preserve">
+    <value>{0} to {1} M Cr</value>
+  </data>
   <data name="HonkSetting" xml:space="preserve">
     <value>Honk reminder on entering a system</value>
   </data>
@@ -1059,6 +1071,48 @@
   <data name="RateWaiting" xml:space="preserve">
     <value>— / h (10 min minimum)</value>
   </data>
+  <data name="RawAntimony" xml:space="preserve">
+    <value>Antimony</value>
+  </data>
+  <data name="RawBoron" xml:space="preserve">
+    <value>Boron</value>
+  </data>
+  <data name="RawCadmium" xml:space="preserve">
+    <value>Cadmium</value>
+  </data>
+  <data name="RawMercury" xml:space="preserve">
+    <value>Mercury</value>
+  </data>
+  <data name="RawMolybdenum" xml:space="preserve">
+    <value>Molybdenum</value>
+  </data>
+  <data name="RawNiobium" xml:space="preserve">
+    <value>Niobium</value>
+  </data>
+  <data name="RawPolonium" xml:space="preserve">
+    <value>Polonium</value>
+  </data>
+  <data name="RawRuthenium" xml:space="preserve">
+    <value>Ruthenium</value>
+  </data>
+  <data name="RawSelenium" xml:space="preserve">
+    <value>Selenium</value>
+  </data>
+  <data name="RawTechnetium" xml:space="preserve">
+    <value>Technetium</value>
+  </data>
+  <data name="RawTellurium" xml:space="preserve">
+    <value>Tellurium</value>
+  </data>
+  <data name="RawTin" xml:space="preserve">
+    <value>Tin</value>
+  </data>
+  <data name="RawTungsten" xml:space="preserve">
+    <value>Tungsten</value>
+  </data>
+  <data name="RawYttrium" xml:space="preserve">
+    <value>Yttrium</value>
+  </data>
   <data name="RemoveFolderAsk" xml:space="preserve">
     <value>Remove “{0}”? Its tracks leave the library, with their likes and their sorting.</value>
   </data>
@@ -1188,11 +1242,17 @@
   <data name="SettingsGame" xml:space="preserve">
     <value>GAME</value>
   </data>
+  <data name="SignalBiological" xml:space="preserve">
+    <value>Biological {0}</value>
+  </data>
   <data name="SignalDegraded" xml:space="preserve">
     <value>Degraded emissions</value>
   </data>
   <data name="SignalEncoded" xml:space="preserve">
     <value>Encoded emissions</value>
+  </data>
+  <data name="SignalGeological" xml:space="preserve">
+    <value>Geological {0}</value>
   </data>
   <data name="SignalHighGrade" xml:space="preserve">
     <value>High grade emissions</value>
@@ -1250,6 +1310,18 @@
   </data>
   <data name="StepsOne" xml:space="preserve">
     <value>{0} step</value>
+  </data>
+  <data name="SurveyMappedMany" xml:space="preserve">
+    <value>{0} mapped</value>
+  </data>
+  <data name="SurveyMappedOne" xml:space="preserve">
+    <value>{0} mapped</value>
+  </data>
+  <data name="SurveyNext" xml:space="preserve">
+    <value>next: {0}</value>
+  </data>
+  <data name="SurveyToMap" xml:space="preserve">
+    <value>{0} to map</value>
   </data>
   <data name="SwitchAt" xml:space="preserve">
     <value>{0}, at {1:HH:mm:ss}</value>
