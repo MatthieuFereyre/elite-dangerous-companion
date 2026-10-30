@@ -105,14 +105,12 @@ public sealed class CompanionPanel : Window
                 Foreground = line.Loud ? new SolidColorBrush(CompanionBanner.Ink) : CompanionBanner.ToneBrush(line.Tone),
             };
             text.Inlines.Add(new Run(line.Text));
-            // Where a ship can land: a small grey car, for the SRV, after the value.
+            // Where a ship can land: a small grey SRV after the value.
             if (line.Landable)
-                text.Inlines.Add(new Run(" " + PanelRow.LandGlyph)
+                text.Inlines.Add(new InlineUIContainer(SrvIcon.Make(
+                    line.Loud ? new SolidColorBrush(CompanionBanner.Ink) : CompanionBanner.ToneBrush(Tone.Muted), fontSize * 0.7))
                 {
-                    FontFamily = PanelRow.Glyphs,
-                    FontSize = fontSize * 0.8,
-                    FontWeight = FontWeights.Normal,
-                    Foreground = line.Loud ? new SolidColorBrush(CompanionBanner.Ink) : CompanionBanner.ToneBrush(Tone.Muted),
+                    BaselineAlignment = BaselineAlignment.Center,
                 });
             var margin = line.Header
                 ? new Thickness(0, _lines.Children.Count > 0 ? fontSize * 0.5 : 0, 0, 0)

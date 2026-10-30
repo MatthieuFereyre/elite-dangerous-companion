@@ -5,6 +5,7 @@
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
                  xmlns:vm="clr-namespace:EDC.ViewModels"
                  xmlns:companion="clr-namespace:EDC.Companion"
+                 xmlns:views="clr-namespace:EDC.Views"
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  mc:Ignorable="d"
@@ -604,8 +605,10 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="{x:Type vm:PanelRow}">
                                 <TextBlock x:Name="Line" FontSize="13" TextWrapping="Wrap" Margin="0,1" Foreground="{Binding Foreground}">
-                                    <Run Text="{Binding Text, Mode=OneWay}" /><Run FontFamily="Segoe MDL2 Assets" FontSize="11" FontWeight="Normal"
-                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding LandIcon, Mode=OneWay}" />
+                                    <Run Text="{Binding Text, Mode=OneWay}" /><InlineUIContainer BaselineAlignment="Center">
+                                        <Path Data="{x:Static views:SrvIcon.Geometry}" Fill="{DynamicResource TextFillColorTertiaryBrush}" Stretch="Uniform"
+                                              Height="9" Margin="5,0,0,0" Visibility="{Binding Landable, Converter={StaticResource BoolToVis}}" />
+                                    </InlineUIContainer>
                                 </TextBlock>
                                 <DataTemplate.Triggers>
                                     <DataTrigger Binding="{Binding Header}" Value="True">
