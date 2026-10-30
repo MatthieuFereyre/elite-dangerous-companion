@@ -286,6 +286,20 @@ public sealed class NeutronTests
     }
 
     [Fact]
+    public void A_step_copied_on_its_own_is_announced_over_the_game_a_click_is_not()
+    {
+        var harness = new Harness(Route);
+        var announced = new List<string>();
+        harness.Model.NextCopied += announced.Add;
+
+        harness.Model.Refresh(InRoss());
+        harness.Model.Refresh(Replay(Jump("PSR J1752-2806")));
+        harness.Model.CopyStepCommand.Execute(harness.Model.Steps[3]);
+
+        Assert.Equal(["PSR J1752-2806", "Nova Aquila No 3"], announced);
+    }
+
+    [Fact]
     public void Copying_the_next_step_is_on_by_default() =>
         Assert.True(new PlayerSettings().NeutronAutoCopy);
 

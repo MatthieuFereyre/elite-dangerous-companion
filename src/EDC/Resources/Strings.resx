@@ -816,6 +816,9 @@
   <data name="Next" xml:space="preserve">
     <value>Next</value>
   </data>
+  <data name="NextCopied" xml:space="preserve">
+    <value>Next system copied</value>
+  </data>
   <data name="NextStep" xml:space="preserve">
     <value>NEXT STEP</value>
   </data>

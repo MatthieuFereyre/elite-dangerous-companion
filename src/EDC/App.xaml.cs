@@ -32,6 +32,7 @@ public partial class App : Application
     private CompanionService? _companion;
     private CompanionBanner? _banner;
     private CompanionWarning? _warning;
+    private CopyNotice? _notice;
     private CompanionPanel? _panel;
     private Updater? _updater;
     private PlayerWindow? _window;
@@ -181,6 +182,8 @@ public partial class App : Application
         // The companion's band and warning over the game, refreshed with each read of the game's files.
         _banner = new CompanionBanner();
         _warning = new CompanionWarning();
+        _notice = new CopyNotice();
+        companion.Neutron.NextCopied += _notice.Announce;
         _panel = new CompanionPanel();
         _companion.Changed += () =>
         {
@@ -191,6 +194,7 @@ public partial class App : Application
             var visible = settings.CompanionBanner && _controller.InGame && Briefing.BannerVisible(_companion.Status);
             _banner.Update(Briefing.Banner(_companion.State, _companion.Status, settings.ControllerInBanner ? _pad.Current : PadBattery.None, now), visible);
             _warning.Update(Briefing.Warning(_companion.State, _companion.Status, now, settings.HonkReminder), visible);
+            _notice.Update(visible);
             _panel.Update(Briefing.Panel(_companion.State, _companion.Status, now), settings.ExplorationPanel && _controller.InGame && Briefing.PanelVisible(_companion.Status),
                 compact: _companion.Status.SystemMap);
         };
@@ -308,6 +312,7 @@ public partial class App : Application
         _companion?.Dispose();
         _banner?.Close();
         _warning?.Close();
+        _notice?.Close();
         _panel?.Close();
         _pad?.Dispose();
         _tray?.Dispose();

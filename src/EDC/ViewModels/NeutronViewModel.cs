@@ -88,6 +88,9 @@ public sealed partial class NeutronViewModel : ObservableObject
 
     public ObservableCollection<NeutronRow> Steps { get; } = [];
 
+    /// <summary>A step copied on its own, not by a click: told over the game, where the player is.</summary>
+    public event Action<string>? NextCopied;
+
     // What the commander types stays: the game no longer fills it.
     partial void OnFromChanged(string value) => _fromTyped |= !_filling;
     partial void OnRangeTextChanged(string value) => _rangeTyped |= !_filling;
@@ -125,7 +128,7 @@ public sealed partial class NeutronViewModel : ObservableObject
         if (advanced.Reached == _route.Reached)
         {
             if (!_nextCopied && state.System is not null && AutoCopy && _route.Next is { } pending)
-                Copy(pending.System);
+                CopyNext(pending.System);
             _nextCopied |= state.System is not null;
             return;
         }
@@ -135,7 +138,7 @@ public sealed partial class NeutronViewModel : ObservableObject
         _save();
         Mark();
         if (AutoCopy && advanced.Next is { } next)
-            Copy(next.System);
+            CopyNext(next.System);
         _nextCopied = true;
     }
 
@@ -209,7 +212,7 @@ public sealed partial class NeutronViewModel : ObservableObject
             Show(route);
             StatusText = string.Format(Strings.RouteLoaded, Loc.Plural(route.Steps.Count, Strings.StepsOne, Strings.StepsMany));
             if (AutoCopy && route.Next is { } next)
-                Copy(next.System);
+                CopyNext(next.System);
             _nextCopied = true;
         }
         catch (NeutronException ex)
@@ -245,10 +248,18 @@ public sealed partial class NeutronViewModel : ObservableObject
         Summary = "";
     }
 
-    private void Copy(string system) =>
-        StatusText = _copy(system)
-            ? string.Format(Strings.Copied, system)
-            : Strings.ClipboardBusy;
+    private bool Copy(string system)
+    {
+        var copied = _copy(system);
+        StatusText = copied ? string.Format(Strings.Copied, system) : Strings.ClipboardBusy;
+        return copied;
+    }
+
+    private void CopyNext(string system)
+    {
+        if (Copy(system))
+            NextCopied?.Invoke(system);
+    }
 
     private void Show(NeutronRoute route)
     {

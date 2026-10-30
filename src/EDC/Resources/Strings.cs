@@ -283,6 +283,7 @@ public static class Strings
     public static string NeutronTimeout => Get(nameof(NeutronTimeout));
     public static string NeutronUnreadable => Get(nameof(NeutronUnreadable));
     public static string Next => Get(nameof(Next));
+    public static string NextCopied => Get(nameof(NextCopied));
     public static string NextStep => Get(nameof(NextStep));
     public static string NoBounty => Get(nameof(NoBounty));
     public static string NoGameRead => Get(nameof(NoGameRead));
