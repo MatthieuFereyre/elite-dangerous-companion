@@ -46,6 +46,8 @@ public sealed partial class NeutronViewModel : ObservableObject
     private readonly Func<string, CancellationToken, Task<NeutronRoute>> _import;
     private NeutronRoute? _route;
     private string? _system;
+    // The clipboard of an earlier session is gone: the next step goes back in once the journals are read.
+    private bool _nextCopied;
     private bool _fromTyped;
     private bool _rangeTyped;
     private long _rangeShip = -1;
@@ -121,7 +123,12 @@ public sealed partial class NeutronViewModel : ObservableObject
 
         var advanced = _route.Advance(state.System);
         if (advanced.Reached == _route.Reached)
+        {
+            if (!_nextCopied && state.System is not null && AutoCopy && _route.Next is { } pending)
+                Copy(pending.System);
+            _nextCopied |= state.System is not null;
             return;
+        }
 
         _route = advanced;
         _settings.NeutronRoute = advanced;
@@ -129,6 +136,7 @@ public sealed partial class NeutronViewModel : ObservableObject
         Mark();
         if (AutoCopy && advanced.Next is { } next)
             Copy(next.System);
+        _nextCopied = true;
     }
 
     [RelayCommand]
@@ -160,6 +168,8 @@ public sealed partial class NeutronViewModel : ObservableObject
             _settings.NeutronRoute = route;
             _save();
             Show(route);
+            // Its message stays: the first step is copied by a click.
+            _nextCopied = true;
             // Over a short way no neutron star saves time: Spansh then gives the end alone.
             StatusText = route.Steps.Any(s => s.Neutron) || route.Next is not { } end
                 ? Strings.NeutronClickStep
@@ -200,6 +210,7 @@ public sealed partial class NeutronViewModel : ObservableObject
             StatusText = string.Format(Strings.RouteLoaded, Loc.Plural(route.Steps.Count, Strings.StepsOne, Strings.StepsMany));
             if (AutoCopy && route.Next is { } next)
                 Copy(next.System);
+            _nextCopied = true;
         }
         catch (NeutronException ex)
         {

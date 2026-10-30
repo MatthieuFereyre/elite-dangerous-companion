@@ -267,6 +267,25 @@ public sealed class NeutronTests
     }
 
     [Fact]
+    public void At_start_a_route_kept_puts_its_next_step_back_in_the_clipboard_once()
+    {
+        var harness = new Harness(Route);
+
+        // Before the journals are read, nothing: the route may have moved on since.
+        harness.Model.Refresh(new GameState());
+        Assert.Empty(harness.Copied);
+
+        harness.Model.Refresh(InRoss());
+        harness.Model.Refresh(InRoss());
+        Assert.Equal(["PSR J1752-2806"], harness.Copied);
+
+        var unticked = new Harness(Route);
+        unticked.Model.AutoCopy = false;
+        unticked.Model.Refresh(InRoss());
+        Assert.Empty(unticked.Copied);
+    }
+
+    [Fact]
     public void Copying_the_next_step_is_on_by_default() =>
         Assert.True(new PlayerSettings().NeutronAutoCopy);
 
