@@ -770,7 +770,9 @@
                             </Border>
                             <TextBlock Style="{StaticResource Label}" FontSize="14" Margin="0,0,0,1" Text="{Binding Title}" />
                         </DockPanel>
-                        <TextBlock FontSize="14" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{Binding Name}" />
+                        <TextBlock FontSize="14" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+                            <Run Text="{Binding Name, Mode=OneWay}" /> <Run FontWeight="Normal" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding Level, Mode=OneWay}" />
+                        </TextBlock>
                         <ProgressBar Margin="0,5,0,3" Height="4" Minimum="0" Maximum="100" Value="{Binding Progress, Mode=OneWay}" />
                         <TextBlock FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource EliteOrangeBrush}" Text="{Binding Next}" />
                         <TextBlock FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding Unlocks}"

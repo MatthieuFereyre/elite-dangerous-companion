@@ -37,6 +37,23 @@ public sealed class RankTests
     }
 
     [Fact]
+    public void Each_rank_tells_its_number_out_of_elite_or_of_the_navy_s_last()
+    {
+        var state = Replay(Rank, Progress);
+
+        Assert.Equal("(4/8)", Row(state, RankKind.Combat).Level);
+        Assert.Equal("(7/8)", Row(state, RankKind.Explore).Level);
+        Assert.Equal("(2/14)", Row(state, RankKind.Empire).Level);
+        Assert.Equal("(4/14)", Row(state, RankKind.Federation).Level);
+
+        // Elite is the last; the five after it say their number in their name.
+        state.Apply(Line("\"event\":\"Promotion\", \"Explore\":8"));
+        Assert.Equal("(8/8)", Row(state, RankKind.Explore).Level);
+        state.Apply(Line("\"event\":\"Promotion\", \"Explore\":10"));
+        Assert.Null(Row(state, RankKind.Explore).Level);
+    }
+
+    [Fact]
     public void Nothing_is_told_before_the_game_gives_the_ranks()
     {
         Assert.Empty(Commander.Ranks(new GameState()));

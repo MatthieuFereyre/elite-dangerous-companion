@@ -6,8 +6,11 @@ namespace EDC.Companion;
 /// <summary>The ranks the journal's Rank and Progress events give, in the order of the game's status panel.</summary>
 public enum RankKind { Combat, Trade, Explore, Soldier, Exobiologist, Cqc, Federation, Empire }
 
-/// <summary>A rank as the Commander tab shows it: <paramref name="Unlocks"/> only for a navy rank whose next gives something.</summary>
-public sealed record CommanderRank(RankKind Kind, string Title, string Name, int Progress, string Next, string How, string? Unlocks = null);
+/// <summary>
+/// A rank as the Commander tab shows it: <paramref name="Unlocks"/> only for a navy rank whose next gives
+/// something; <paramref name="Level"/>, « (4/8) », its number out of Elite or of the navy's last.
+/// </summary>
+public sealed record CommanderRank(RankKind Kind, string Title, string Name, int Progress, string Next, string How, string? Unlocks = null, string? Level = null);
 
 /// <summary>
 /// The ranks with their progress, and the reputation with each superpower. The rank names are the game's
@@ -94,8 +97,11 @@ public static class Commander
         var text = next is null ? Strings.RankTop
             : Navy(kind) && progress >= 100 ? string.Format(Strings.RankPromotion, next)
             : string.Format(Strings.RankProgressTo, progress, next);
+        // Elite is the pilot's last: the five after it carry their number in their name.
+        var last = Navy(kind) ? names.Length - 1 : names.Length - Elite.Length;
         return new CommanderRank(kind, Title(kind), name, progress, text, How(kind),
-            next is not null && Unlocks.TryGetValue((kind, rank + 1), out var unlock) ? string.Format(Strings.RankUnlocks, Describe(unlock)) : null);
+            next is not null && Unlocks.TryGetValue((kind, rank + 1), out var unlock) ? string.Format(Strings.RankUnlocks, Describe(unlock)) : null,
+            rank >= 0 && rank <= last ? $"({rank}/{last})" : null);
     }
 
     private static string Describe(Unlock unlock) => string.Join(", ",
