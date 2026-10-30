@@ -11,8 +11,8 @@ public sealed class NotableClassTests
 
     private static string Line(string body) => $"{{ \"timestamp\":\"2026-10-09T19:00:00Z\", {body} }}";
 
-    private static string Planet(string name, string planetClass, double mass, bool discovered = true, bool mapped = true, string terraform = "") =>
-        Line($"\"event\":\"Scan\", \"ScanType\":\"Detailed\", \"StarSystem\":\"Epsilon\", \"SystemAddress\":{Address}, \"BodyName\":\"{name}\", \"BodyID\":4, " +
+    private static string Planet(string name, string planetClass, double mass, bool discovered = true, bool mapped = true, string terraform = "", bool landable = false) =>
+        Line($"\"event\":\"Scan\", \"ScanType\":\"Detailed\", \"StarSystem\":\"Epsilon\", \"SystemAddress\":{Address}, \"BodyName\":\"{name}\", \"BodyID\":4, \"Landable\":{(landable ? "true" : "false")}, " +
              $"\"DistanceFromArrivalLS\":800, \"PlanetClass\":\"{planetClass}\", \"TerraformState\":\"{terraform}\", \"MassEM\":{mass.ToString(System.Globalization.CultureInfo.InvariantCulture)}, " +
              $"\"WasDiscovered\":{(discovered ? "true" : "false")}, \"WasMapped\":{(mapped ? "true" : "false")}");
 
@@ -31,15 +31,46 @@ public sealed class NotableClassTests
         return NotableBodies.FromScan(document.RootElement);
     }
 
+    // Short, for a line of the panel to hold on one line over the game.
     [Theory]
-    [InlineData("High metal content body", "", "Corps à forte teneur en métaux")]
-    [InlineData("Rocky body", "Terraformable", "Corps rocheux terraformable")]
-    [InlineData("Water world", "Terraformable", "Monde aquatique terraformable")]
+    [InlineData("High metal content body", "", "Métallique")]
+    [InlineData("High metal content body", "Terraformable", "Métallique terraformable")]
+    [InlineData("Metal rich body", "", "Riche en métaux")]
+    [InlineData("Rocky body", "Terraformable", "Rocheux terraformable")]
+    [InlineData("Rocky ice body", "", "Roche et glace")]
+    [InlineData("Water world", "Terraformable", "Aquatique terraformable")]
+    [InlineData("Earthlike body", "", "Terre")]
+    [InlineData("Ammonia world", "", "Ammoniac")]
     [InlineData("Sudarsky class II gas giant", "", "Géante gazeuse")]
-    [InlineData("Icy body", "", "Corps glacé")]
+    [InlineData("Icy body", "", "Glacé")]
     public void Every_planet_class_is_known_and_named(string planetClass, string terraform, string label)
     {
         Assert.Equal(label, FromScan(Planet("Epsilon 1", planetClass, 1, terraform: terraform))?.Label);
+    }
+
+    [Fact]
+    public void A_planet_says_whether_a_ship_can_land_there_from_the_journal_edsm_and_spansh()
+    {
+        Assert.True(FromScan(Planet("Epsilon 1", "Rocky body", 1, landable: true))?.Landable);
+        Assert.False(FromScan(Planet("Epsilon 1", "Rocky body", 1))?.Landable);
+
+        var edsm = NotableBodies.Parse("""{"bodies":[{"name":"Epsilon 2","subType":"Rocky body","isLandable":true},{"name":"Epsilon 3","subType":"Icy body","isLandable":false}]}""");
+        Assert.Equal([true, false], edsm.Select(b => b.Landable));
+
+        var spansh = NotableBodies.ParseSpansh("""{"results":[{"system_id64":5,"name":"Zeta 1","subtype":"Rocky body","is_landable":true}]}""");
+        Assert.True(spansh.Single().Body.Landable);
+    }
+
+    [Fact]
+    public void The_panel_marks_a_planet_a_ship_can_land_on()
+    {
+        var state = Replay(Planet("Epsilon 1", "Rocky body", 1, landable: true), Planet("Epsilon 2", "Water world", 1));
+        state.MinNotableValue = 0;
+
+        var lines = Briefing.Panel(state, new GameStatus(1L << 24, 0, 0, 16, 50_000_000, "Clean"), DateTime.UtcNow).Where(l => !l.Header).ToList();
+
+        Assert.True(lines.Single(l => l.Text.StartsWith("Rocheux")).Landable);
+        Assert.False(lines.Single(l => l.Text.StartsWith("Aquatique")).Landable);
     }
 
     [Fact]

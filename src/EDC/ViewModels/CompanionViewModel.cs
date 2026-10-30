@@ -20,12 +20,19 @@ public sealed record ChipRow(string Text, string? Detail, Brush Foreground)
     public static ChipRow From(Chip chip) => new(chip.Text, chip.Detail, CompanionBanner.ToneBrush(chip.Tone));
 }
 
-/// <summary>A line of the exploration tab: what the panel over the game says.</summary>
-public sealed record PanelRow(string Text, Brush Foreground, bool Header, bool Loud)
+/// <summary>A line of the exploration tab: what the panel over the game says, the landing icon included.</summary>
+public sealed record PanelRow(string Text, Brush Foreground, bool Header, bool Loud, bool Landable = false)
 {
+    /// <summary>An arrow down to the ground, of Segoe MDL2 Assets: there on Windows 10 and 11.</summary>
+    public const string LandGlyph = "\uE896";
+
+    public static readonly FontFamily Glyphs = new("Segoe MDL2 Assets");
+
+    public string LandIcon => Landable ? " " + LandGlyph : "";
+
     public static IReadOnlyList<PanelRow> From(IReadOnlyList<PanelLine> lines) => lines.Count == 0
         ? [new PanelRow(Strings.NothingHere, CompanionBanner.ToneBrush(Tone.Muted), false, false)]
-        : lines.Select(l => new PanelRow(l.Text, CompanionBanner.ToneBrush(l.Tone), l.Header, l.Loud)).ToList();
+        : lines.Select(l => new PanelRow(l.Text, CompanionBanner.ToneBrush(l.Tone), l.Header, l.Loud, l.Landable)).ToList();
 }
 
 /// <summary>A system of the route still to come.</summary>

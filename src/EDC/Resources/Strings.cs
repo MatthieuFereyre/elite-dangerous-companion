@@ -315,13 +315,11 @@ public static class Strings
     public static string PlanetRockyIce => Get(nameof(PlanetRockyIce));
     public static string PlanetsMany => Get(nameof(PlanetsMany));
     public static string PlanetsOne => Get(nameof(PlanetsOne));
-    public static string PlanetTerraformable => Get(nameof(PlanetTerraformable));
     public static string PlanetTerraformableOf => Get(nameof(PlanetTerraformableOf));
     public static string PlanetThreshold => Get(nameof(PlanetThreshold));
     public static string PlanetThresholdTip => Get(nameof(PlanetThresholdTip));
     public static string PlanetWater => Get(nameof(PlanetWater));
     public static string PlanetWaterGiant => Get(nameof(PlanetWaterGiant));
-    public static string PlanetWaterTerraformable => Get(nameof(PlanetWaterTerraformable));
     public static string Play => Get(nameof(Play));
     public static string PlayNowTip => Get(nameof(PlayNowTip));
     public static string Plot => Get(nameof(Plot));

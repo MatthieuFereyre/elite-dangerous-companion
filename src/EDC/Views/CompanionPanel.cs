@@ -1,7 +1,9 @@
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 using EDC.Companion;
+using EDC.ViewModels;
 
 namespace EDC.Views;
 
@@ -98,11 +100,20 @@ public sealed class CompanionPanel : Window
         {
             var text = new TextBlock
             {
-                Text = line.Text,
                 FontSize = fontSize,
                 FontWeight = line.Header || line.Loud || line.Targeted ? FontWeights.SemiBold : FontWeights.Normal,
                 Foreground = line.Loud ? new SolidColorBrush(CompanionBanner.Ink) : CompanionBanner.ToneBrush(line.Tone),
             };
+            text.Inlines.Add(new Run(line.Text));
+            // Where a ship can land: a small grey arrow to the ground, after the value.
+            if (line.Landable)
+                text.Inlines.Add(new Run(" " + PanelRow.LandGlyph)
+                {
+                    FontFamily = PanelRow.Glyphs,
+                    FontSize = fontSize * 0.8,
+                    FontWeight = FontWeights.Normal,
+                    Foreground = line.Loud ? new SolidColorBrush(CompanionBanner.Ink) : CompanionBanner.ToneBrush(Tone.Muted),
+                });
             var margin = line.Header
                 ? new Thickness(0, _lines.Children.Count > 0 ? fontSize * 0.5 : 0, 0, 0)
                 : new Thickness(fontSize * 0.8, 0, 0, 0);

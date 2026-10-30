@@ -22,9 +22,10 @@ public sealed record Warning(string Title, string Detail, bool Big = true, Tone 
 /// <summary>
 /// A line of the panel on the left: a system's name as <paramref name="Header"/>, or one of its planets.
 /// <paramref name="Loud"/> when it holds a bonus to take, a first discovery or a first mapping. <paramref name="Targeted"/>
-/// for the planet the ship targets, in the game's orange.
+/// for the planet the ship targets, in the game's orange. <paramref name="Landable"/> for a planet a ship
+/// can land on, marked by a discreet icon.
 /// </summary>
-public sealed record PanelLine(string Text, Tone Tone, bool Header = false, bool Loud = false, bool Targeted = false);
+public sealed record PanelLine(string Text, Tone Tone, bool Header = false, bool Loud = false, bool Targeted = false, bool Landable = false);
 
 /// <summary>
 /// What the companion says, from what it knows: the banner over the game and the reminders at the
@@ -487,7 +488,7 @@ public static class Briefing
         // In the order that takes the least supercruise from where the ship is; without its time, which the
         // FSD's engineering, or an overcharged one, puts beyond any estimate.
         var here = state.VisitPlan(nowUtc)
-            .Select(p => (p.Body.Name, p.Body.Label, p.Body.Distance, p.Body.Value,
+            .Select(p => (p.Body.Name, p.Body.Label, p.Body.Distance, p.Body.Value, p.Body.Landable,
                 Bonus: Bonus(p.Body.FirstDiscovery, state.ScannedHere(p.Body.Name) is { FirstMapping: true })))
             .ToList();
         if (here.Count > 0)
@@ -497,7 +498,7 @@ public static class Briefing
             {
                 var targeted = string.Equals(b.Name, status.Destination, StringComparison.OrdinalIgnoreCase);
                 return new PanelLine($"{(targeted ? "› " : "")}{b.Label} · {ShortName(b.Name, state.System)} · {b.Distance.ToString("N0", Loc.Culture)} ls · {Worth(b.Value)}{b.Bonus}",
-                    targeted ? Tone.Info : Tone.Good, Loud: b.Bonus != "", Targeted: targeted);
+                    targeted ? Tone.Info : Tone.Good, Loud: b.Bonus != "", Targeted: targeted, Landable: b.Landable);
             }));
         }
 

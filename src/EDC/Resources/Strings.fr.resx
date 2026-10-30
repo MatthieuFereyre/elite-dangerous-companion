@@ -877,43 +877,40 @@
     <value>{0} / h</value>
   </data>
   <data name="PlanetAmmonia" xml:space="preserve">
-    <value>Monde ammoniaqué</value>
+    <value>Ammoniac</value>
   </data>
   <data name="PlanetEarthLike" xml:space="preserve">
-    <value>Terre respirable</value>
+    <value>Terre</value>
   </data>
   <data name="PlanetGasGiant" xml:space="preserve">
     <value>Géante gazeuse</value>
   </data>
   <data name="PlanetGasGiantLife" xml:space="preserve">
-    <value>Géante gazeuse à vie</value>
+    <value>Géante à vie</value>
   </data>
   <data name="PlanetHeliumGiant" xml:space="preserve">
     <value>Géante d'hélium</value>
   </data>
   <data name="PlanetHighMetal" xml:space="preserve">
-    <value>Corps à forte teneur en métaux</value>
+    <value>Métallique</value>
   </data>
   <data name="PlanetIcy" xml:space="preserve">
-    <value>Corps glacé</value>
+    <value>Glacé</value>
   </data>
   <data name="PlanetMetalRich" xml:space="preserve">
-    <value>Corps riche en métaux</value>
+    <value>Riche en métaux</value>
   </data>
   <data name="PlanetRocky" xml:space="preserve">
-    <value>Corps rocheux</value>
+    <value>Rocheux</value>
   </data>
   <data name="PlanetRockyIce" xml:space="preserve">
-    <value>Corps rocheux glacé</value>
+    <value>Roche et glace</value>
   </data>
   <data name="PlanetsMany" xml:space="preserve">
     <value>{0} planètes</value>
   </data>
   <data name="PlanetsOne" xml:space="preserve">
     <value>{0} planète</value>
-  </data>
-  <data name="PlanetTerraformable" xml:space="preserve">
-    <value>Terraformable</value>
   </data>
   <data name="PlanetTerraformableOf" xml:space="preserve">
     <value>{0} terraformable</value>
@@ -925,13 +922,10 @@
     <value>Ce que la planète rapporte cartographiée avec l'efficacité ; en dessous, le panneau ne la signale pas. Une planète de valeur inconnue l'est toujours</value>
   </data>
   <data name="PlanetWater" xml:space="preserve">
-    <value>Monde aquatique</value>
+    <value>Aquatique</value>
   </data>
   <data name="PlanetWaterGiant" xml:space="preserve">
     <value>Géante aquatique</value>
-  </data>
-  <data name="PlanetWaterTerraformable" xml:space="preserve">
-    <value>Monde aquatique terraformable</value>
   </data>
   <data name="Play" xml:space="preserve">
     <value>Lecture</value>

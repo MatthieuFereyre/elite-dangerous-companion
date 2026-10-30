@@ -323,7 +323,7 @@ public sealed class ExplorationTests
         Assert.Equal(new[]
             {
                 new PanelLine("Ici (1)", Tone.Info, Header: true),
-                new PanelLine($"Monde ammoniaqué · 1 · {Ls(900)} ls · 2,4 M Cr · 1re découverte, 1re cartographie", Tone.Good, Loud: true),
+                new PanelLine($"Ammoniac · 1 · {Ls(900)} ls · 2,4 M Cr · 1re découverte, 1re cartographie", Tone.Good, Loud: true),
                 new PanelLine("Sur la route", Tone.Info, Header: true),
                 new PanelLine("1 saut · Beta (1) · 1,1 M Cr", Tone.Good),
                 new PanelLine("3 sauts · Delta (2) · 900 k Cr +", Tone.Good),
@@ -351,8 +351,8 @@ public sealed class ExplorationTests
 
         Assert.Equal(new[]
             {
-                "Ici (4)", "Corps rocheux terraformable · A 4 · 100 ls · valeur inconnue", "Monde aquatique · A 5 a · 500 ls · valeur inconnue",
-                "Monde aquatique · A 10 · 700 ls · valeur inconnue", $"Terre respirable · B 1 · {Ls(9000)} ls · 3,0 M Cr",
+                "Ici (4)", "Rocheux terraformable · A 4 · 100 ls · valeur inconnue", "Aquatique · A 5 a · 500 ls · valeur inconnue",
+                "Aquatique · A 10 · 700 ls · valeur inconnue", $"Terre · B 1 · {Ls(9000)} ls · 3,0 M Cr",
             },
             Here(state));
     }
@@ -369,7 +369,7 @@ public sealed class ExplorationTests
         Assert.False(Briefing.BannerVisible(Focus(7)));
         Assert.True(Briefing.PanelVisible(Flying()));
         Assert.False(Briefing.PanelVisible(Focus(8)));
-        Assert.Equal(new[] { "Ici (1)", "Monde aquatique · 2 · 300 ls · valeur inconnue" }, Briefing.Panel(state, Focus(7), Arrival).Select(l => l.Text));
+        Assert.Equal(new[] { "Ici (1)", "Aquatique · 2 · 300 ls · valeur inconnue" }, Briefing.Panel(state, Focus(7), Arrival).Select(l => l.Text));
     }
 
     private static string StarScan(string time, string body, long address, bool discovered = true, int ls = 0) =>
@@ -414,7 +414,7 @@ public sealed class ExplorationTests
         });
         state.MinNotableValue = 700_000;
 
-        Assert.Equal(new[] { "Ici (1)", "Monde aquatique · 2 · 500 ls · 1,3 M Cr · 1re cartographie", "Sur la route", "1 saut · Beta (1) · 1,6 M Cr" },
+        Assert.Equal(new[] { "Ici (1)", "Aquatique · 2 · 500 ls · 1,3 M Cr · 1re cartographie", "Sur la route", "1 saut · Beta (1) · 1,6 M Cr" },
             Briefing.Panel(state, Flying(), Arrival).Select(l => l.Text));
     }
 
@@ -476,13 +476,13 @@ public sealed class ExplorationTests
         Assert.Equal(new[]
             {
                 new PanelLine("Ici (2)", Tone.Info, Header: true),
-                new PanelLine($"Monde aquatique · 4 · {Ls(2000)} ls · 1,6 M Cr · 1re découverte, 1re cartographie", Tone.Good, Loud: true),
-                new PanelLine($"Corps rocheux terraformable · 5 · {Ls(3000)} ls · valeur inconnue", Tone.Good),
+                new PanelLine($"Aquatique · 4 · {Ls(2000)} ls · 1,6 M Cr · 1re découverte, 1re cartographie", Tone.Good, Loud: true),
+                new PanelLine($"Rocheux terraformable · 5 · {Ls(3000)} ls · valeur inconnue", Tone.Good),
             },
             Briefing.Panel(state, Flying(), Arrival));
 
         state.Apply(Map("19:10:00", "Alpha 4", 1));
-        Assert.Equal(new[] { "Ici (1)", $"Corps rocheux terraformable · 5 · {Ls(3000)} ls · valeur inconnue" }, Here(state));
+        Assert.Equal(new[] { "Ici (1)", $"Rocheux terraformable · 5 · {Ls(3000)} ls · valeur inconnue" }, Here(state));
 
         // A system left takes its planets with it.
         state.Apply(Jump("19:20:00", "Beta", 2));
@@ -506,7 +506,7 @@ public sealed class ExplorationTests
 
         // EDSM does not know Beta: Spansh did.
         state.Apply(Jump("19:05:00", "Beta", 2));
-        Assert.Equal(["Ici (1)", "Monde aquatique · 3 · 540 ls · valeur inconnue"], Here(state));
+        Assert.Equal(["Ici (1)", "Aquatique · 3 · 540 ls · valeur inconnue"], Here(state));
 
         state.Apply(Map("19:10:00", "Beta 3", 2));
         Assert.Empty(Here(state));
@@ -523,8 +523,8 @@ public sealed class ExplorationTests
         Assert.Equal(new[]
             {
                 new PanelLine("Ici (2)", Tone.Info, Header: true),
-                new PanelLine("Monde aquatique · 2 · 300 ls · 1,2 M Cr", Tone.Good),
-                new PanelLine("› Corps rocheux terraformable · 3 · 400 ls · valeur inconnue", Tone.Info, Targeted: true),
+                new PanelLine("Aquatique · 2 · 300 ls · 1,2 M Cr", Tone.Good),
+                new PanelLine("› Rocheux terraformable · 3 · 400 ls · valeur inconnue", Tone.Info, Targeted: true),
             },
             Briefing.Panel(state, status, Arrival));
     }

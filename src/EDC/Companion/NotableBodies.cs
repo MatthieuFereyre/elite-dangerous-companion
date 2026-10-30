@@ -13,10 +13,11 @@ public enum PlanetClass { EarthLike, Water, Ammonia, WaterGiant, GasGiantLife, H
 /// A planet of the current system, or of the route, with what mapping it efficiently pays.
 /// <paramref name="FirstDiscovery"/> and <paramref name="FirstMapping"/> when the journal's scan says nobody
 /// had found, or mapped, it before; EDSM and Spansh only know bodies already found. <paramref name="Value"/>
-/// is null when the mass is not known: the planet may pay above any threshold.
+/// is null when the mass is not known: the planet may pay above any threshold. <paramref name="Landable"/>
+/// when a ship can land there.
 /// </summary>
 public sealed record NotableBody(string Name, PlanetClass Class, bool Terraformable, double Distance, bool FirstDiscovery = false,
-    long? Value = null, bool FirstMapping = false)
+    long? Value = null, bool FirstMapping = false, bool Landable = false)
 {
     public string Label
     {
@@ -87,7 +88,7 @@ public static class NotableBodies
         var firstDiscovery = GameState.Bool(e, "WasDiscovered") == false;
         var firstMapping = GameState.Bool(e, "WasMapped") == false;
         return new NotableBody(name, kind, terraformable, GameState.Dbl(e, "DistanceFromArrivalLS") ?? 0, firstDiscovery,
-            Value(planetClass, terraformable, GameState.Dbl(e, "MassEM"), firstDiscovery, firstMapping), firstMapping);
+            Value(planetClass, terraformable, GameState.Dbl(e, "MassEM"), firstDiscovery, firstMapping), firstMapping, GameState.Bool(e, "Landable") == true);
     }
 
     /// <summary>What mapping it efficiently pays; null without its mass.</summary>
@@ -161,7 +162,7 @@ public static class NotableBodies
             if (b.TryGetProperty("system_id64", out var id) && id.ValueKind == JsonValueKind.Number && id.TryGetInt64(out var system)
                 && GameState.Str(b, "name") is { } name && GameState.Str(b, "subtype") is { } subtype && Classify(subtype) is { } kind)
                 bodies.Add((system, new NotableBody(name, kind, terraformable, GameState.Dbl(b, "distance_to_arrival") ?? 0,
-                    Value: Value(subtype, terraformable, GameState.Dbl(b, "earth_masses"), false, false))));
+                    Value: Value(subtype, terraformable, GameState.Dbl(b, "earth_masses"), false, false), Landable: GameState.Bool(b, "is_landable") == true)));
         }
 
         return bodies;
@@ -182,7 +183,7 @@ public static class NotableBodies
             .Select(b => (Name: GameState.Str(b, "name"), Terraformable: GameState.Str(b, "terraformingState") == "Candidate for terraforming", Body: b))
             .Select(b => b.Name is not null && GameState.Str(b.Body, "subType") is { } subType && Classify(subType) is { } kind
                 ? new NotableBody(b.Name, kind, b.Terraformable, GameState.Dbl(b.Body, "distanceToArrival") ?? 0,
-                    Value: Value(subType, b.Terraformable, GameState.Dbl(b.Body, "earthMasses"), false, false))
+                    Value: Value(subType, b.Terraformable, GameState.Dbl(b.Body, "earthMasses"), false, false), Landable: GameState.Bool(b.Body, "isLandable") == true)
                 : null)
             .OfType<NotableBody>()
             .ToList();

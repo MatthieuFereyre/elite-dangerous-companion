@@ -880,40 +880,37 @@
     <value>Ammonia world</value>
   </data>
   <data name="PlanetEarthLike" xml:space="preserve">
-    <value>Earth-like world</value>
+    <value>Earth-like</value>
   </data>
   <data name="PlanetGasGiant" xml:space="preserve">
     <value>Gas giant</value>
   </data>
   <data name="PlanetGasGiantLife" xml:space="preserve">
-    <value>Gas giant with life</value>
+    <value>Gas giant, life</value>
   </data>
   <data name="PlanetHeliumGiant" xml:space="preserve">
-    <value>Helium gas giant</value>
+    <value>Helium giant</value>
   </data>
   <data name="PlanetHighMetal" xml:space="preserve">
-    <value>High metal content body</value>
+    <value>High metal</value>
   </data>
   <data name="PlanetIcy" xml:space="preserve">
-    <value>Icy body</value>
+    <value>Icy</value>
   </data>
   <data name="PlanetMetalRich" xml:space="preserve">
-    <value>Metal-rich body</value>
+    <value>Metal-rich</value>
   </data>
   <data name="PlanetRocky" xml:space="preserve">
-    <value>Rocky body</value>
+    <value>Rocky</value>
   </data>
   <data name="PlanetRockyIce" xml:space="preserve">
-    <value>Rocky ice body</value>
+    <value>Rocky ice</value>
   </data>
   <data name="PlanetsMany" xml:space="preserve">
     <value>{0} planets</value>
   </data>
   <data name="PlanetsOne" xml:space="preserve">
     <value>{0} planet</value>
-  </data>
-  <data name="PlanetTerraformable" xml:space="preserve">
-    <value>Terraformable</value>
   </data>
   <data name="PlanetTerraformableOf" xml:space="preserve">
     <value>{0}, terraformable</value>
@@ -929,9 +926,6 @@
   </data>
   <data name="PlanetWaterGiant" xml:space="preserve">
     <value>Water giant</value>
-  </data>
-  <data name="PlanetWaterTerraformable" xml:space="preserve">
-    <value>Terraformable water world</value>
   </data>
   <data name="Play" xml:space="preserve">
     <value>Play</value>
