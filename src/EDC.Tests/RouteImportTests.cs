@@ -169,19 +169,6 @@ public sealed class RouteImportTests
         Assert.Equal(4, harness.Model.Steps.Count);
     }
 
-    [Fact]
-    public void The_neutron_plotter_is_shown_unless_unticked_and_kept_so()
-    {
-        var harness = new Harness();
-        Assert.True(harness.Model.ShowPlotter);
-
-        harness.Model.ShowPlotter = false;
-
-        Assert.False(harness.Settings.ShowNeutronPlotter);
-        Assert.Equal(1, harness.Saves);
-        Assert.False(new NeutronViewModel(harness.Settings, () => { }).ShowPlotter);
-    }
-
     // ------------------------------------------------------------------------------- --route
 
     [Fact]

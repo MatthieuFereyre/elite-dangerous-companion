@@ -61,7 +61,6 @@ public sealed partial class NeutronViewModel : ObservableObject
         _plot = plot ?? NeutronPlotter.PlotAsync;
         _import = import ?? NeutronPlotter.ImportAsync;
         _autoCopy = settings.NeutronAutoCopy;
-        _showPlotter = settings.ShowNeutronPlotter;
         if (settings.NeutronRoute is { } kept)
         {
             _filling = true;
@@ -84,7 +83,6 @@ public sealed partial class NeutronViewModel : ObservableObject
     [ObservableProperty] private bool _autoCopy;
     [ObservableProperty] private bool _plotting;
     [ObservableProperty] private string _link = "";
-    [ObservableProperty] private bool _showPlotter;
 
     public ObservableCollection<NeutronRow> Steps { get; } = [];
 
@@ -95,12 +93,6 @@ public sealed partial class NeutronViewModel : ObservableObject
     partial void OnAutoCopyChanged(bool value)
     {
         _settings.NeutronAutoCopy = value;
-        _save();
-    }
-
-    partial void OnShowPlotterChanged(bool value)
-    {
-        _settings.ShowNeutronPlotter = value;
         _save();
     }
 

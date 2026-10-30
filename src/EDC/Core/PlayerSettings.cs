@@ -80,9 +80,6 @@ public sealed class PlayerSettings
     /// <summary>The next step copied on reaching one, ready to paste into the galaxy map.</summary>
     public bool NeutronAutoCopy { get; set; } = true;
 
-    /// <summary>The neutron plotter in the Route tab: hidden, the tab only follows the routes it is given.</summary>
-    public bool ShowNeutronPlotter { get; set; } = true;
-
     public static PlayerSettings Load(string path)
     {
         try

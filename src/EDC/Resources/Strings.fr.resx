@@ -781,10 +781,10 @@
     <value>Système de départ introuvable</value>
   </data>
   <data name="NeutronPlotterBox" xml:space="preserve">
-    <value>Route neutronique</value>
+    <value>ROUTE NEUTRONIQUE</value>
   </data>
   <data name="NeutronPlotterTip" xml:space="preserve">
-    <value>Calculer ici un itinéraire par les étoiles à neutrons, qui survoltent chacune le saut suivant. Décochée, l'onglet ne suit que les routes qu'on lui donne.</value>
+    <value>Un itinéraire par les étoiles à neutrons, qui survoltent chacune le saut suivant, calculé par Spansh d'après la portée du vaisseau</value>
   </data>
   <data name="NeutronPlotting" xml:space="preserve">
     <value>Calcul de {0} à {1}…</value>

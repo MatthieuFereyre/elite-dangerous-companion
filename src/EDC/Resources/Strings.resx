@@ -781,10 +781,10 @@
     <value>Starting system not found</value>
   </data>
   <data name="NeutronPlotterBox" xml:space="preserve">
-    <value>Neutron route</value>
+    <value>NEUTRON ROUTE</value>
   </data>
   <data name="NeutronPlotterTip" xml:space="preserve">
-    <value>Plot here a route through neutron stars, each one boosting the next jump. Unticked, the tab follows only the routes it is given.</value>
+    <value>A route through neutron stars, each one boosting the next jump, plotted by Spansh from your ship's range</value>
   </data>
   <data name="NeutronPlotting" xml:space="preserve">
     <value>Plotting from {0} to {1}…</value>
