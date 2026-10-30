@@ -46,8 +46,9 @@ the route on the left.*
   hazardous resource extraction site (and the nearest one held by your power), the nearest station
   with every service.
 - Exploration: credits per hour from the bodies scanned this session, data to sell, valuable planets.
-- Neutron route: plotted by Spansh from your ship's range, the next step copied to the clipboard as
-  you reach each one.
+- Route: any route plotted on Spansh (road to riches, tourist planner, neutron plotter…), given by the
+  link of its results, or a neutron route plotted from your ship's range; the next step copied to the
+  clipboard as you reach each one, and where you stand kept from one session to the next.
 - Commander: every rank with its progress to the next and how to earn it, what the next navy rank
   unlocks, and your reputation with each superpower.
 - English and French.
@@ -73,7 +74,8 @@ Everything EDC writes is in `Saved Games\Elite Dangerous Companion`, next to the
 | `library.json` | your music folders and how each track is sorted |
 | `edc.log` | what EDC did: tracks, switches and why |
 
-`--data-dir <folder>` points EDC at another folder.
+`--data-dir <folder>` points EDC at another folder. `--route "<Spansh link>"` loads a route into the
+Route tab, EDC running or not: a script or a tool can hand it routes.
 
 ## Online services
 
@@ -82,7 +84,8 @@ EDC asks public sites, sending system names only — nothing about you:
 - on its own: [EDSM](https://www.edsm.net) for what each new system and the system targeted on the
   galaxy map hold, and
   [Spansh](https://spansh.co.uk) for the valuable planets along each new route;
-- from a button of the window: Spansh for neutron routes and the nearest full station,
+- from a button of the window: Spansh for neutron routes, the routes you give it and the nearest
+  full station,
   [edtools.cc](https://edtools.cc) with Spansh for hazardous resource sites.
 
 If [EDMarketConnector](https://github.com/EDCD/EDMarketConnector) is installed, EDC can start it

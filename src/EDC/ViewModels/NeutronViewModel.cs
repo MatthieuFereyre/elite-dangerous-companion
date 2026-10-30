@@ -32,8 +32,9 @@ public sealed partial class NeutronRow(int number, NeutronStep step, string? pre
 }
 
 /// <summary>
-/// The neutron tab: a route plotted by Spansh from here to a system, each step copied by a click, the
-/// steps reached as the ship jumps, and the route kept for the next session.
+/// The Route tab: a route plotted by Spansh through neutron stars from here to a system, or any route of
+/// Spansh's given by the link of its results (pasted here, or passed with --route); each step copied by
+/// a click, the steps reached as the ship arrives there, and the route kept for the next session.
 /// </summary>
 public sealed partial class NeutronViewModel : ObservableObject
 {
@@ -42,20 +43,25 @@ public sealed partial class NeutronViewModel : ObservableObject
     private readonly Action _save;
     private readonly Func<string, bool> _copy;
     private readonly Func<string, string, double, CancellationToken, Task<NeutronRoute>> _plot;
+    private readonly Func<string, CancellationToken, Task<NeutronRoute>> _import;
     private NeutronRoute? _route;
+    private string? _system;
     private bool _fromTyped;
     private bool _rangeTyped;
     private long _rangeShip = -1;
     private bool _filling;
 
     public NeutronViewModel(PlayerSettings settings, Action save, Func<string, bool>? copy = null,
-        Func<string, string, double, CancellationToken, Task<NeutronRoute>>? plot = null)
+        Func<string, string, double, CancellationToken, Task<NeutronRoute>>? plot = null,
+        Func<string, CancellationToken, Task<NeutronRoute>>? import = null)
     {
         _settings = settings;
         _save = save;
         _copy = copy ?? CopyToClipboard;
         _plot = plot ?? NeutronPlotter.PlotAsync;
+        _import = import ?? NeutronPlotter.ImportAsync;
         _autoCopy = settings.NeutronAutoCopy;
+        _showPlotter = settings.ShowNeutronPlotter;
         if (settings.NeutronRoute is { } kept)
         {
             _filling = true;
@@ -77,6 +83,8 @@ public sealed partial class NeutronViewModel : ObservableObject
     [ObservableProperty] private NeutronRow? _next;
     [ObservableProperty] private bool _autoCopy;
     [ObservableProperty] private bool _plotting;
+    [ObservableProperty] private string _link = "";
+    [ObservableProperty] private bool _showPlotter;
 
     public ObservableCollection<NeutronRow> Steps { get; } = [];
 
@@ -90,12 +98,19 @@ public sealed partial class NeutronViewModel : ObservableObject
         _save();
     }
 
+    partial void OnShowPlotterChanged(bool value)
+    {
+        _settings.ShowNeutronPlotter = value;
+        _save();
+    }
+
     /// <summary>
     /// From the game, twice a second: the start until typed, the range until typed for this ship
     /// (another ship brings its own), and the steps reached.
     /// </summary>
     public void Refresh(GameState state)
     {
+        _system = state.System;
         if (state.ShipId != _rangeShip)
         {
             _rangeShip = state.ShipId;
@@ -166,6 +181,42 @@ public sealed partial class NeutronViewModel : ObservableObject
         {
             StatusText = string.Format(Strings.NeutronFailed, ex.Message);
             AppLog.Write($"neutrons : calcul impossible de {From} à {To} ({ex.Message})");
+        }
+        finally
+        {
+            Plotting = false;
+        }
+    }
+
+    [RelayCommand]
+    private Task Load() => ImportAsync(Link);
+
+    /// <summary>
+    /// A route of Spansh's from the link of its results. Away from it, its first system is the next;
+    /// from one of its systems, it goes on from there.
+    /// </summary>
+    public async Task ImportAsync(string link)
+    {
+        StatusText = Strings.RouteLoading;
+        Plotting = true;
+        try
+        {
+            var route = ((await _import(link.Trim(), CancellationToken.None)) with { Reached = -1 }).Advance(_system);
+            _settings.NeutronRoute = route;
+            _save();
+            Show(route);
+            StatusText = string.Format(Strings.RouteLoaded, Loc.Plural(route.Steps.Count, Strings.StepsOne, Strings.StepsMany));
+            if (AutoCopy && route.Next is { } next)
+                Copy(next.System);
+        }
+        catch (NeutronException ex)
+        {
+            StatusText = ex.Message;
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
+        {
+            StatusText = string.Format(Strings.NeutronFailed, ex.Message);
+            AppLog.Write($"route Spansh : lecture impossible de {link} ({ex.Message})");
         }
         finally
         {

@@ -726,6 +726,9 @@
   <data name="ListeningProgress" xml:space="preserve">
     <value>{0} : écoute, {1} / {2}</value>
   </data>
+  <data name="Load" xml:space="preserve">
+    <value>Charger</value>
+  </data>
   <data name="MediumPad" xml:space="preserve">
     <value>pad moyen au plus</value>
   </data>
@@ -776,6 +779,12 @@
   </data>
   <data name="NeutronNoStart" xml:space="preserve">
     <value>Système de départ introuvable</value>
+  </data>
+  <data name="NeutronPlotterBox" xml:space="preserve">
+    <value>Route neutronique</value>
+  </data>
+  <data name="NeutronPlotterTip" xml:space="preserve">
+    <value>Calculer ici un itinéraire par les étoiles à neutrons, qui survoltent chacune le saut suivant. Décochée, l'onglet ne suit que les routes qu'on lui donne.</value>
   </data>
   <data name="NeutronPlotting" xml:space="preserve">
     <value>Calcul de {0} à {1}…</value>
@@ -1119,8 +1128,29 @@
   <data name="RightNow" xml:space="preserve">
     <value>EN CE MOMENT</value>
   </data>
+  <data name="RouteExpired" xml:space="preserve">
+    <value>Spansh n'a plus cette route, et le lien ne dit pas comment la recalculer</value>
+  </data>
   <data name="RouteLabel" xml:space="preserve">
-    <value>ROUTE</value>
+    <value>TRAJET DU JEU</value>
+  </data>
+  <data name="RouteLink" xml:space="preserve">
+    <value>LIEN SPANSH</value>
+  </data>
+  <data name="RouteLinkPlaceholder" xml:space="preserve">
+    <value>Coller le lien d'une route tracée sur Spansh</value>
+  </data>
+  <data name="RouteLinkTip" xml:space="preserve">
+    <value>Une route tracée sur spansh.co.uk (route des richesses, itinéraire touristique, route neutronique…) : le lien de sa page de résultats. Expiré, la route est recalculée d'après le lien.</value>
+  </data>
+  <data name="RouteLinkUnknown" xml:space="preserve">
+    <value>Ce n'est pas le lien d'une route Spansh</value>
+  </data>
+  <data name="RouteLoaded" xml:space="preserve">
+    <value>Route chargée : {0}</value>
+  </data>
+  <data name="RouteLoading" xml:space="preserve">
+    <value>Lecture de la route sur Spansh…</value>
   </data>
   <data name="RouteTo" xml:space="preserve">
     <value>{0} · {1}</value>
@@ -1264,7 +1294,7 @@
     <value>MUSIQUE</value>
   </data>
   <data name="TabNeutron" xml:space="preserve">
-    <value>ROUTE NEUTRONIQUE</value>
+    <value>ROUTE</value>
   </data>
   <data name="TabSettings" xml:space="preserve">
     <value>PARAMÈTRES</value>

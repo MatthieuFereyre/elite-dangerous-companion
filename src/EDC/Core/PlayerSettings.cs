@@ -74,11 +74,14 @@ public sealed class PlayerSettings
 
     public double? WindowTop { get; set; }
 
-    /// <summary>The neutron route last plotted, and how far along: a long one spans several sessions.</summary>
+    /// <summary>The route last plotted or given by a Spansh link, and how far along: a long one spans several sessions.</summary>
     public Companion.NeutronRoute? NeutronRoute { get; set; }
 
     /// <summary>The next step copied on reaching one, ready to paste into the galaxy map.</summary>
     public bool NeutronAutoCopy { get; set; } = true;
+
+    /// <summary>The neutron plotter in the Route tab: hidden, the tab only follows the routes it is given.</summary>
+    public bool ShowNeutronPlotter { get; set; } = true;
 
     public static PlayerSettings Load(string path)
     {

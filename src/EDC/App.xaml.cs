@@ -23,6 +23,7 @@ public partial class App : Application
 {
     private Mutex? _instanceMutex;
     private EventWaitHandle? _showEvent;
+    private EventWaitHandle? _routeEvent;
     private TrackLibrary? _library;
     private MusicController? _controller;
     private TrayIconHost? _tray;
@@ -49,13 +50,24 @@ public partial class App : Application
             return;
         }
 
-        // One player per data folder: a second launch only brings the window of the first one up.
+        // One player per data folder: a second launch only brings the window of the first one up, and
+        // hands it the route given with --route.
+        var routeLink = Option(args, "--route");
         var key = Convert.ToHexString(MD5.HashData(Encoding.UTF8.GetBytes(paths.Folder.ToLowerInvariant())))[..16];
         _instanceMutex = new Mutex(initiallyOwned: true, $@"Local\EDC.{key}", out var first);
         if (!first)
         {
-            try { EventWaitHandle.OpenExisting($@"Local\EDC.Show.{key}").Set(); }
-            catch (WaitHandleCannotBeOpenedException) { }
+            try
+            {
+                if (routeLink is not null)
+                {
+                    RouteRequest.Put(paths, routeLink);
+                    EventWaitHandle.OpenExisting($@"Local\EDC.Route.{key}").Set();
+                }
+                else
+                    EventWaitHandle.OpenExisting($@"Local\EDC.Show.{key}").Set();
+            }
+            catch (Exception ex) when (ex is WaitHandleCannotBeOpenedException or IOException or UnauthorizedAccessException) { }
             _instanceMutex.Dispose();
             _instanceMutex = null;
             Shutdown();
@@ -77,7 +89,8 @@ public partial class App : Application
         _companion = new CompanionService(JournalTail.DefaultDirectory);
         _updater = new Updater(settings);
         var companion = new CompanionViewModel(_companion, () => _pad.Current, settings, () => settings.Save(paths.SettingsFile), _updater);
-        _window = new PlayerWindow(new PlayerViewModel(_controller, _pad, companion, settings, () => settings.Save(paths.SettingsFile)));
+        var player = new PlayerViewModel(_controller, _pad, companion, settings, () => settings.Save(paths.SettingsFile));
+        _window = new PlayerWindow(player);
         RestoreWindowPosition(settings);
         // Closing to the tray only hides the window (PlayerWindow.OnClosing raises no Closing then).
         _window.IsVisibleChanged += (_, e) =>
@@ -147,6 +160,24 @@ public partial class App : Application
                 Dispatcher.BeginInvoke(() => _window?.ShowAndActivate());
         }) { IsBackground = true, Name = "EDC.ShowListener" }.Start();
 
+        // A route given to a second launch: the Route tab shown, the route loaded.
+        void OpenRoute(string? link)
+        {
+            if (link is null || _window is null)
+                return;
+            AppLog.Write($"route reçue : {link}");
+            player.ShowNeutron = true;
+            _window.ShowAndActivate();
+            _ = companion.Neutron.ImportAsync(link);
+        }
+
+        _routeEvent = new EventWaitHandle(false, EventResetMode.AutoReset, $@"Local\EDC.Route.{key}");
+        new Thread(() =>
+        {
+            while (_routeEvent.WaitOne())
+                Dispatcher.BeginInvoke(() => OpenRoute(RouteRequest.Take(paths)));
+        }) { IsBackground = true, Name = "EDC.RouteListener" }.Start();
+
         // The companion's band and warning over the game, refreshed with each read of the game's files.
         _banner = new CompanionBanner();
         _warning = new CompanionWarning();
@@ -172,6 +203,7 @@ public partial class App : Application
 
         if (args.Contains("--show", StringComparer.OrdinalIgnoreCase))
             _window.ShowAndActivate();
+        OpenRoute(routeLink);
     }
 
     // Where it was last, if that still lands on a screen: a monitor unplugged since sends it back to the centre.
@@ -282,6 +314,7 @@ public partial class App : Application
         _controller?.Dispose();
         _library?.Dispose();
         _showEvent?.Dispose();
+        _routeEvent?.Dispose();
         if (_instanceMutex is not null)
         {
             _instanceMutex.ReleaseMutex();

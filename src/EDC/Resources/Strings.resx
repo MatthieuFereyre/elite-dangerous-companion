@@ -726,6 +726,9 @@
   <data name="ListeningProgress" xml:space="preserve">
     <value>{0}: listening, {1} / {2}</value>
   </data>
+  <data name="Load" xml:space="preserve">
+    <value>Load</value>
+  </data>
   <data name="MediumPad" xml:space="preserve">
     <value>medium pad at most</value>
   </data>
@@ -776,6 +779,12 @@
   </data>
   <data name="NeutronNoStart" xml:space="preserve">
     <value>Starting system not found</value>
+  </data>
+  <data name="NeutronPlotterBox" xml:space="preserve">
+    <value>Neutron route</value>
+  </data>
+  <data name="NeutronPlotterTip" xml:space="preserve">
+    <value>Plot here a route through neutron stars, each one boosting the next jump. Unticked, the tab follows only the routes it is given.</value>
   </data>
   <data name="NeutronPlotting" xml:space="preserve">
     <value>Plotting from {0} to {1}…</value>
@@ -1119,8 +1128,29 @@
   <data name="RightNow" xml:space="preserve">
     <value>RIGHT NOW</value>
   </data>
+  <data name="RouteExpired" xml:space="preserve">
+    <value>Spansh no longer has this route, and the link does not say how to plot it again</value>
+  </data>
   <data name="RouteLabel" xml:space="preserve">
-    <value>ROUTE</value>
+    <value>IN-GAME ROUTE</value>
+  </data>
+  <data name="RouteLink" xml:space="preserve">
+    <value>SPANSH LINK</value>
+  </data>
+  <data name="RouteLinkPlaceholder" xml:space="preserve">
+    <value>Paste the link of a route plotted on Spansh</value>
+  </data>
+  <data name="RouteLinkTip" xml:space="preserve">
+    <value>A route plotted on spansh.co.uk (road to riches, tourist planner, neutron plotter…): the link of its results page. Expired, the route is plotted again from the link.</value>
+  </data>
+  <data name="RouteLinkUnknown" xml:space="preserve">
+    <value>Not the link of a Spansh route</value>
+  </data>
+  <data name="RouteLoaded" xml:space="preserve">
+    <value>Route loaded: {0}</value>
+  </data>
+  <data name="RouteLoading" xml:space="preserve">
+    <value>Reading the route on Spansh…</value>
   </data>
   <data name="RouteTo" xml:space="preserve">
     <value>{0} · {1}</value>
@@ -1264,7 +1294,7 @@
     <value>MUSIC</value>
   </data>
   <data name="TabNeutron" xml:space="preserve">
-    <value>NEUTRON ROUTE</value>
+    <value>ROUTE</value>
   </data>
   <data name="TabSettings" xml:space="preserve">
     <value>SETTINGS</value>

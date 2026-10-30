@@ -655,7 +655,7 @@
             </DockPanel>
         </Grid>
 
-        <!-- The neutron route: where from, where to and the range on the left, with the next step; every step on the right. -->
+        <!-- The route: a Spansh link to load, or the neutron plotter, on the left, with the next step; every step on the right. -->
         <Border Visibility="{Binding ShowNeutron, Converter={StaticResource BoolToHidden}}">
         <Grid DataContext="{Binding Companion.Neutron}">
             <Grid.ColumnDefinitions>
@@ -665,6 +665,22 @@
 
             <DockPanel Grid.Column="0" Margin="20,4,20,18" Height="{Binding ActualHeight, ElementName=Body}">
                 <StackPanel DockPanel.Dock="Top">
+                    <TextBlock Style="{StaticResource Label}" Margin="2,0,0,6" Text="{x:Static res:Strings.RouteLink}" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <ui:TextBox Text="{Binding Link, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="{x:Static res:Strings.RouteLinkPlaceholder}"
+                                    ToolTip="{x:Static res:Strings.RouteLinkTip}" />
+                        <ui:Button Grid.Column="1" Margin="8,0,0,0" Padding="16,6" Appearance="Primary" Content="{x:Static res:Strings.Load}"
+                                   Command="{Binding LoadCommand}" ToolTip="{x:Static res:Strings.RouteLinkTip}" />
+                    </Grid>
+
+                    <!-- The neutron plotter, for those who boost on neutron stars. -->
+                    <CheckBox Margin="0,12,0,0" Content="{x:Static res:Strings.NeutronPlotterBox}" IsChecked="{Binding ShowPlotter}"
+                              ToolTip="{x:Static res:Strings.NeutronPlotterTip}" />
+                    <StackPanel Visibility="{Binding ShowPlotter, Converter={StaticResource BoolToVis}}">
                     <TextBlock Style="{StaticResource Label}" Margin="2,0,0,6" Text="{x:Static res:Strings.From}" />
                     <ui:TextBox Text="{Binding From, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="{x:Static res:Strings.FromPlaceholder}" />
                     <TextBlock Style="{StaticResource Label}" Text="{x:Static res:Strings.To}" />
@@ -681,6 +697,7 @@
                         <ui:Button Grid.Column="2" HorizontalAlignment="Right" Padding="16,6" Appearance="Primary" Content="{x:Static res:Strings.Plot}"
                                    Command="{Binding PlotCommand}" ToolTip="{x:Static res:Strings.PlotTip}" />
                     </Grid>
+                    </StackPanel>
                     <TextBlock Margin="2,10,0,0" FontSize="12" TextWrapping="Wrap"
                                Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding StatusText}" />
                 </StackPanel>

@@ -253,6 +253,7 @@ public static class Strings
     public static string LikeTip => Get(nameof(LikeTip));
     public static string Listening => Get(nameof(Listening));
     public static string ListeningProgress => Get(nameof(ListeningProgress));
+    public static string Load => Get(nameof(Load));
     public static string MediumPad => Get(nameof(MediumPad));
     public static string MenuMode => Get(nameof(MenuMode));
     public static string ModeCalm => Get(nameof(ModeCalm));
@@ -270,6 +271,8 @@ public static class Strings
     public static string NeutronNoEnd => Get(nameof(NeutronNoEnd));
     public static string NeutronNoGain => Get(nameof(NeutronNoGain));
     public static string NeutronNoStart => Get(nameof(NeutronNoStart));
+    public static string NeutronPlotterBox => Get(nameof(NeutronPlotterBox));
+    public static string NeutronPlotterTip => Get(nameof(NeutronPlotterTip));
     public static string NeutronPlotting => Get(nameof(NeutronPlotting));
     public static string NeutronStar => Get(nameof(NeutronStar));
     public static string NeutronStart => Get(nameof(NeutronStart));
@@ -384,7 +387,14 @@ public static class Strings
     public static string RepUnfriendly => Get(nameof(RepUnfriendly));
     public static string ReputationLabel => Get(nameof(ReputationLabel));
     public static string RightNow => Get(nameof(RightNow));
+    public static string RouteExpired => Get(nameof(RouteExpired));
     public static string RouteLabel => Get(nameof(RouteLabel));
+    public static string RouteLink => Get(nameof(RouteLink));
+    public static string RouteLinkPlaceholder => Get(nameof(RouteLinkPlaceholder));
+    public static string RouteLinkTip => Get(nameof(RouteLinkTip));
+    public static string RouteLinkUnknown => Get(nameof(RouteLinkUnknown));
+    public static string RouteLoaded => Get(nameof(RouteLoaded));
+    public static string RouteLoading => Get(nameof(RouteLoading));
     public static string RouteTo => Get(nameof(RouteTo));
     public static string ScannedMany => Get(nameof(ScannedMany));
     public static string ScannedOne => Get(nameof(ScannedOne));
