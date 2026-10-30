@@ -23,8 +23,8 @@ public sealed record ChipRow(string Text, string? Detail, Brush Foreground)
 /// <summary>A line of the exploration tab: what the panel over the game says, the landing icon included.</summary>
 public sealed record PanelRow(string Text, Brush Foreground, bool Header, bool Loud, bool Landable = false)
 {
-    /// <summary>An arrow down to the ground, of Segoe MDL2 Assets: there on Windows 10 and 11.</summary>
-    public const string LandGlyph = "\uE896";
+    /// <summary>A car, for the SRV, of Segoe MDL2 Assets: there on Windows 10 and 11.</summary>
+    public const string LandGlyph = "\uE804";
 
     public static readonly FontFamily Glyphs = new("Segoe MDL2 Assets");
 

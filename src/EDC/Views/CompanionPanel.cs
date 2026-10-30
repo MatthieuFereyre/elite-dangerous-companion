@@ -105,7 +105,7 @@ public sealed class CompanionPanel : Window
                 Foreground = line.Loud ? new SolidColorBrush(CompanionBanner.Ink) : CompanionBanner.ToneBrush(line.Tone),
             };
             text.Inlines.Add(new Run(line.Text));
-            // Where a ship can land: a small grey arrow to the ground, after the value.
+            // Where a ship can land: a small grey car, for the SRV, after the value.
             if (line.Landable)
                 text.Inlines.Add(new Run(" " + PanelRow.LandGlyph)
                 {
