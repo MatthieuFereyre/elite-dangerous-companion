@@ -686,10 +686,22 @@
                     <!-- Or the neutron plotter, for those who boost on neutron stars. -->
                     <TextBlock Margin="2,22,0,0" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                Text="{x:Static res:Strings.NeutronPlotterBox}" ToolTip="{x:Static res:Strings.NeutronPlotterTip}" Background="Transparent" />
-                    <TextBlock Style="{StaticResource Label}" Margin="2,8,0,6" Text="{x:Static res:Strings.From}" />
-                    <ui:TextBox Text="{Binding From, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="{x:Static res:Strings.FromPlaceholder}" />
-                    <TextBlock Style="{StaticResource Label}" Text="{x:Static res:Strings.To}" />
-                    <ui:TextBox Text="{Binding To, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="{x:Static res:Strings.ToPlaceholder}" />
+                    <!-- Where from and where to side by side: the next step below keeps its height. -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Style="{StaticResource Label}" Margin="2,8,0,6" Text="{x:Static res:Strings.From}" />
+                            <ui:TextBox Text="{Binding From, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="{x:Static res:Strings.FromPlaceholder}" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Style="{StaticResource Label}" Margin="2,8,0,6" Text="{x:Static res:Strings.To}" />
+                            <ui:TextBox Text="{Binding To, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="{x:Static res:Strings.ToPlaceholder}" />
+                        </StackPanel>
+                    </Grid>
                     <Grid Margin="0,14,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
