@@ -63,6 +63,10 @@ public sealed class GameState
     private readonly List<string> _organicUnsold = [];
     private readonly Dictionary<string, ScanValue> _explorationUnsold = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, bool> _mappedEfficient = new(StringComparer.OrdinalIgnoreCase);
+    // Where each system visited is, and where the last sale was made until leaving the station: what Universal
+    // Cartographics could buy there and was not sold is gone (the journal of the commander never sold it later).
+    private readonly Dictionary<string, StarPos> _systemPositions = new(StringComparer.OrdinalIgnoreCase);
+    private StarPos? _soldFrom;
     // The bodies scanned since the game was loaded, kept once sold: what this session's exploration is worth.
     private readonly Dictionary<string, ScanValue> _sessionScans = new(StringComparer.OrdinalIgnoreCase);
     // The systems honked and the bodies mapped, each with whether its data is sold: the rest goes down with the ship.
@@ -564,6 +568,9 @@ public sealed class GameState
 
             case "Undocked":
                 Station = null;
+                if (_soldFrom is { } soldFrom)
+                    ForgetUnsoldFarFrom(soldFrom);
+                _soldFrom = null;
                 break;
 
             case "Loadout":
@@ -884,6 +891,7 @@ public sealed class GameState
                     foreach (var sold in discovered.EnumerateArray())
                         if (Str(sold, "SystemName") is { } soldSystem)
                             Sold(soldSystem);
+                _soldFrom = Position;
                 break;
 
             case "FSSDiscoveryScan":
@@ -1017,6 +1025,21 @@ public sealed class GameState
         };
     }
 
+    /// <summary>
+    /// What was not sold at a station that could buy it: Universal Cartographics refuses only the data of systems
+    /// within 20 ly, and what it could buy and did not never comes up in a later sale. A system whose place is unknown is kept.
+    /// </summary>
+    private void ForgetUnsoldFarFrom(StarPos station)
+    {
+        foreach (var body in _explorationUnsold
+                     .Where(b => _systemPositions.TryGetValue(b.Value.System, out var at) && at.DistanceTo(station) > 20)
+                     .Select(b => b.Key).ToList())
+        {
+            _explorationUnsold.Remove(body);
+            _mappedEfficient.Remove(body);
+        }
+    }
+
     private void Sold(string system)
     {
         if (_honked.ContainsKey(system))
@@ -1048,6 +1071,8 @@ public sealed class GameState
 
         // SupercruiseEntry and SupercruiseExit carry no StarPos.
         Position = Pos(e) ?? (address == SystemAddress ? Position : null);
+        if (Pos(e) is { } at && Str(e, "StarSystem") is { } named)
+            _systemPositions[named] = at;
         System = Str(e, "StarSystem") ?? System;
         SystemAddress = address;
 

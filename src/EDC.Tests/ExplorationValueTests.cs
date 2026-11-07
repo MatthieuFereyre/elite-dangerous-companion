@@ -65,6 +65,29 @@ public class ExplorationValueTests
         Assert.Equal(0, state.ExplorationUnsold);
     }
 
+    private static string Arrive(string time, string system, double x) =>
+        Line(time, $"\"event\":\"FSDJump\", \"StarSystem\":\"{system}\", \"SystemAddress\":{(long)x + 1}, \"StarPos\":[{x.ToString(System.Globalization.CultureInfo.InvariantCulture)},0,0]");
+
+    // The journal of the commander: data from far enough to sell, left out of a sale, never came up in a later one.
+    [Fact]
+    public void Leaving_the_station_after_a_sale_forgets_the_data_it_could_have_bought_but_not_what_was_too_close()
+    {
+        var state = Replay(
+            Arrive("19:00:00", "Far", 0), Star("19:00:05", "Far", "M", 0.4),
+            Arrive("19:10:00", "Near", 90), Star("19:10:05", "Near", "M", 0.4),
+            Arrive("19:20:00", "Station", 100), Star("19:20:05", "Station", "M", 0.4),
+            Sell("19:21:00", "Other"));
+
+        Assert.Equal(3, state.ExplorationUnsoldCount);
+
+        state.Apply(Line("19:22:00", "\"event\":\"Undocked\", \"StationName\":\"Hencke Orbital\""));
+        Assert.Equal(2, state.ExplorationUnsoldCount);
+
+        state.Apply(Line("19:30:00", "\"event\":\"Docked\", \"StationName\":\"Hencke Orbital\""));
+        state.Apply(Line("19:31:00", "\"event\":\"Undocked\", \"StationName\":\"Hencke Orbital\""));
+        Assert.Equal(2, state.ExplorationUnsoldCount);
+    }
+
     [Fact]
     public void A_navigation_beacon_scan_is_worth_nothing_Universal_Cartographics_does_not_buy_it()
     {
