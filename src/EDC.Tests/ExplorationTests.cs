@@ -552,4 +552,17 @@ public sealed class ExplorationTests
         state.Apply(Loadout("19:03:00", "int_fuelscoop_size5_class5"));
         Assert.Empty(Briefing.Panel(state, Flying(), Arrival));
     }
+
+    [Fact]
+    public void Leaving_a_valuable_planet_warns_only_in_a_ship_with_a_surface_scanner()
+    {
+        var state = Replay(Jump("19:00:00", "Itela", 5336236820851), Honk("19:00:10", "Itela", 5336236820851),
+            Scan("19:01:00", "Itela A 4", 5336236820851, "Water world", "Terraformable"),
+            Loadout("19:02:00", "int_fuelscoop_size5_class5"));
+
+        Assert.Null(Warning(state, 120, Leaving()));
+
+        state.Apply(Loadout("19:03:00", "int_fuelscoop_size5_class5", "int_detailedsurfacescanner_tiny"));
+        Assert.Equal("Planètes de valeur laissées ici", Warning(state, 180, Leaving())?.Title);
+    }
 }

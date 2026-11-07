@@ -666,10 +666,11 @@ public static class Briefing
     /// <summary>
     /// The jump charging while a valuable planet here is still to map: the time to cancel it. Not in the jump, too
     /// late, and where Status.json still says it for a moment after arriving, with the planets of the new system.
+    /// Not in a ship without a surface scanner either: it could not map them.
     /// </summary>
     private static Warning? LeavingValuable(GameState state, GameStatus status)
     {
-        if (!status.HyperdriveCharging || status.FsdJump || state.NotableBodies is not { Count: > 0 } left)
+        if (!state.HasSurfaceScanner || !status.HyperdriveCharging || status.FsdJump || state.NotableBodies is not { Count: > 0 } left)
             return null;
 
         var names = string.Join(", ", left.Select(b => ShortName(b.Name, state.System)));
