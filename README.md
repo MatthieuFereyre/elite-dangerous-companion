@@ -55,7 +55,7 @@ the route on the left.*
 
 ## Install
 
-Windows 10 or later, with the [.NET 9 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/9.0).
+Windows 10 or later, with the [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0).
 Download the installer from the [latest release](https://github.com/MatthieuFereyre/elite-dangerous-companion/releases/latest)
 and run it: EDC installs for the current user, without administrator rights, and starts
 with Windows, waiting in the notification area for the game. It updates itself from the releases
